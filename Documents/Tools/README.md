@@ -125,5 +125,6 @@
 * 廖雪峰，终端版本的原始git教程，一些基础概念，https://www.liaoxuefeng.com/wiki/896043488029600
 * Sourcetree的使用教程，以及收录了一些工具的对比，https://www.cnblogs.com/Can-daydayup/p/13128633.html
 * 视频，【狂神说Java】Git最新教程通俗易懂 https://www.bilibili.com/video/BV1FE411P7B3/?share_source=copy_web&vd_source=78d5b40571e8075c3fd3be5c1e52ed15
+* Sourcetree视频教程，【Git/SourceTree版本管理】 https://www.bilibili.com/video/BV1Ev411j7e5/?p=3&share_source=copy_web&vd_source=78d5b40571e8075c3fd3be5c1e52ed15
 
    
