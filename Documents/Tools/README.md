@@ -43,7 +43,7 @@
 
 2. 使用GUI找到克隆![image-20230730212248749](./image-20230730212248749.png)![image-20230730212354073](./image-20230730212354073.png)
 
-3. 克隆工程![image-20230730212641050](/Users/qiuyanjia/Library/Application Support/typora-user-images/image-20230730212641050.png)
+3. 克隆工程![image-20230730212641050](./image-20230730212641050.png)
 
    1. 粘贴刚刚Github复制的Url；
    2. 找到一个空的合适的文件夹；
