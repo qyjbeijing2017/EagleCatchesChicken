@@ -8,7 +8,11 @@ public class Player : NetworkBehaviour
     private NetworkVariable<Vector3> Forward = new NetworkVariable<Vector3>();
 
     [SerializeField]
+    [Tooltip("Base move speed in meters per second")]
     private float BaseMoveSpeed = 1f;
+
+
+    private PlayerInputAction InputActions;
 
 
     static Vector3 GetRandomPositionOnPlane()
@@ -23,6 +27,10 @@ public class Player : NetworkBehaviour
             var randomPosition = GetRandomPositionOnPlane();
             transform.position = randomPosition;
             Position.Value = randomPosition;
+            Forward.Value = transform.forward;
+
+            InputActions = new PlayerInputAction();
+            InputActions.Player.Enable();
         }
     }
 
@@ -31,14 +39,28 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
-            var inputAxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            var moveSpeed = BaseMoveSpeed * Time.deltaTime;
-            var moveVector = inputAxis * moveSpeed;
-            var newPosition = transform.position + moveVector;
-            Position.Value = newPosition;
-            Forward.Value = moveVector.normalized;
+            // var inputAxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+            var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
+            if (inputAxis.magnitude > 0f)
+            {
+                var moveSpeed = BaseMoveSpeed * Time.deltaTime;
+                var moveVector = inputAxis * moveSpeed;
+                var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
+                Position.Value = newPosition;
+                Forward.Value = new Vector3(moveVector.x, 0, moveVector.y);
+            }
+
         }
         transform.position = Position.Value;
         transform.forward = Forward.Value;
+    }
+
+    void OnDestory()
+    {
+        if (IsOwner)
+        {
+            InputActions.Dispose();
+        }
     }
 }
