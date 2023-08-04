@@ -20,15 +20,21 @@ public class Player : NetworkBehaviour
         {
             InputActions = new PlayerInputAction();
             InputActions.Player.Enable();
+            InputActions.Player.Jump.performed += OnJump;
         }
     }
 
-    [ServerRpc]
-    void SubmitPositionRequestServerRpc(Vector3 position, Vector3 forward)
+    void OnJump(InputAction.CallbackContext context)
     {
-        Position.Value = position;
-        Forward.Value = forward;
+        this.GetComponent<Rigidbody>().velocity = Vector3.up * 5f;
     }
+
+    // [ServerRpc]
+    // void SubmitPositionRequestServerRpc(Vector3 position, Vector3 forward)
+    // {
+    //     Position.Value = position;
+    //     Forward.Value = forward;
+    // }
 
     // Update is called once per frame
     void Update()
@@ -43,22 +49,17 @@ public class Player : NetworkBehaviour
                 var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
                 transform.position = newPosition;
                 transform.forward = new Vector3(moveVector.x, 0, moveVector.y);
-                SubmitPositionRequestServerRpc(newPosition, transform.forward);
             }
-        }
-        else
-        {
-            transform.position = Position.Value;
-            if (Forward.Value.magnitude > 0f)
-                transform.forward = Forward.Value;
         }
     }
 
-    void OnDestory()
+    public override void OnDestroy()
     {
         if (IsOwner)
         {
+            InputActions.Player.Disable();
             InputActions.Dispose();
         }
+        base.OnDestroy();
     }
 }
