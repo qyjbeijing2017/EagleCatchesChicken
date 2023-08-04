@@ -38,13 +38,13 @@ public class Player : NetworkBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if(collision.gameObject.tag == "Ground")
-        JumpCount = 0;
+        if (collision.gameObject.tag == "Ground")
+            JumpCount = 0;
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if(JumpCount >= JumpSpeeds.Count) return;
+        if (JumpCount >= JumpSpeeds.Count) return;
         var jumpSpeed = JumpSpeeds[JumpCount];
         rigidbody.velocity = Vector3.up * jumpSpeed;
         JumpCount++;
@@ -62,8 +62,25 @@ public class Player : NetworkBehaviour
                 var moveVector = inputAxis * moveSpeed;
                 var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
                 transform.position = newPosition;
-                transform.forward = new Vector3(moveVector.x, 0, moveVector.y);
             }
+            var inputForward = InputActions.Player.Look.ReadValue<Vector2>();
+            if (inputForward.magnitude > 0f)
+            {
+                Debug.Log("inputForward: " + inputForward);
+                transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
+            }
+            else
+            {
+                var inputPointPosition = InputActions.Player.PointPosition.ReadValue<Vector2>();
+                var ray = Camera.main.ScreenPointToRay(inputPointPosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit)) {
+                    var inputWorldPosition = hit.point;
+                    transform.forward = new Vector3(inputWorldPosition.x - transform.position.x, 0, inputWorldPosition.z - transform.position.z);
+                }
+
+            }
+
         }
     }
 
