@@ -320,3 +320,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BaseMoveSpeed: 1
+  JumpSpeeds:
+  - 5

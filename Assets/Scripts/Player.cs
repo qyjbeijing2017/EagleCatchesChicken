@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 public class Player : NetworkBehaviour
 {
@@ -10,9 +11,18 @@ public class Player : NetworkBehaviour
     [SerializeField]
     [Tooltip("Base move speed in meters per second")]
     private float BaseMoveSpeed = 1f;
+    [SerializeField]
+    [Tooltip("Base turn speed in degrees per second")]
+    private List<float> JumpSpeeds = new List<float> { 5 };
+    private int JumpCount = 0;
+
+
+    Rigidbody rigidbody;
+
 
 
     private PlayerInputAction InputActions;
+
 
     public override void OnNetworkSpawn()
     {
@@ -21,20 +31,24 @@ public class Player : NetworkBehaviour
             InputActions = new PlayerInputAction();
             InputActions.Player.Enable();
             InputActions.Player.Jump.performed += OnJump;
+
+            rigidbody = GetComponent<Rigidbody>();
         }
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if(collision.gameObject.tag == "Ground")
+        JumpCount = 0;
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        this.GetComponent<Rigidbody>().velocity = Vector3.up * 5f;
+        if(JumpCount >= JumpSpeeds.Count) return;
+        var jumpSpeed = JumpSpeeds[JumpCount];
+        rigidbody.velocity = Vector3.up * jumpSpeed;
+        JumpCount++;
     }
-
-    // [ServerRpc]
-    // void SubmitPositionRequestServerRpc(Vector3 position, Vector3 forward)
-    // {
-    //     Position.Value = position;
-    //     Forward.Value = forward;
-    // }
 
     // Update is called once per frame
     void Update()
