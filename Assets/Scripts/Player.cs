@@ -14,12 +14,6 @@ public class Player : NetworkBehaviour
 
     private PlayerInputAction InputActions;
 
-
-    static Vector3 GetRandomPositionOnPlane()
-    {
-        return new Vector3(Random.Range(-3f, 3f), 1f, Random.Range(-3f, 3f));
-    }
-
     public override void OnNetworkSpawn()
     {
         if (IsOwner)
@@ -29,24 +23,11 @@ public class Player : NetworkBehaviour
         }
     }
 
-
-    void Move(Vector3 position, Vector2 rotation) {
-        if (NetworkManager.Singleton.IsServer)
-        {
-            Position.Value = position;
-            Forward.Value = new Vector3(rotation.x, 0, rotation.y);
-        }
-        else
-        {
-            SubmitPositionRequestServerRpc(position, rotation);
-        }
-    }
-
     [ServerRpc]
-    void SubmitPositionRequestServerRpc(Vector3 position, Vector2 rotation)
+    void SubmitPositionRequestServerRpc(Vector3 position, Vector3 forward)
     {
         Position.Value = position;
-        Forward.Value = new Vector3(rotation.x, 0, rotation.y);
+        Forward.Value = forward;
     }
 
     // Update is called once per frame
@@ -60,11 +41,17 @@ public class Player : NetworkBehaviour
                 var moveSpeed = BaseMoveSpeed * Time.deltaTime;
                 var moveVector = inputAxis * moveSpeed;
                 var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
-                Move(newPosition, inputAxis);
+                transform.position = newPosition;
+                transform.forward = new Vector3(moveVector.x, 0, moveVector.y);
+                SubmitPositionRequestServerRpc(newPosition, transform.forward);
             }
         }
-        transform.position = Position.Value;
-        transform.forward = Forward.Value;
+        else
+        {
+            transform.position = Position.Value;
+            if (Forward.Value.magnitude > 0f)
+                transform.forward = Forward.Value;
+        }
     }
 
     void OnDestory()
