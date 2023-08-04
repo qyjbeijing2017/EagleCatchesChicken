@@ -32,6 +32,7 @@ public class ECCManager : MonoBehaviour
         }
         else
         {
+            StatusLabels();
         }
         GUILayout.EndArea();
     }

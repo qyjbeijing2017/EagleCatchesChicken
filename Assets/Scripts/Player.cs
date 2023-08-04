@@ -24,14 +24,29 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
-            var randomPosition = GetRandomPositionOnPlane();
-            transform.position = randomPosition;
-            Position.Value = randomPosition;
-            Forward.Value = transform.forward;
-
             InputActions = new PlayerInputAction();
             InputActions.Player.Enable();
         }
+    }
+
+
+    void Move(Vector3 position, Vector2 rotation) {
+        if (NetworkManager.Singleton.IsServer)
+        {
+            Position.Value = position;
+            Forward.Value = new Vector3(rotation.x, 0, rotation.y);
+        }
+        else
+        {
+            SubmitPositionRequestServerRpc(position, rotation);
+        }
+    }
+
+    [ServerRpc]
+    void SubmitPositionRequestServerRpc(Vector3 position, Vector2 rotation)
+    {
+        Position.Value = position;
+        Forward.Value = new Vector3(rotation.x, 0, rotation.y);
     }
 
     // Update is called once per frame
@@ -39,18 +54,14 @@ public class Player : NetworkBehaviour
     {
         if (IsOwner)
         {
-            // var inputAxis = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-
             var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
             if (inputAxis.magnitude > 0f)
             {
                 var moveSpeed = BaseMoveSpeed * Time.deltaTime;
                 var moveVector = inputAxis * moveSpeed;
                 var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
-                Position.Value = newPosition;
-                Forward.Value = new Vector3(moveVector.x, 0, moveVector.y);
+                Move(newPosition, inputAxis);
             }
-
         }
         transform.position = Position.Value;
         transform.forward = Forward.Value;
