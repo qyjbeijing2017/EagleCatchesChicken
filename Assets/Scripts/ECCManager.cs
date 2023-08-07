@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 
-public class ECCManager : MonoBehaviour
+public class ECCManager : MonoSingleton<ECCManager>
 {
 
     static void StartButtons()
