@@ -176,8 +176,8 @@ MonoBehaviour:
   m_MaxConnectAttempts: 60
   m_DisconnectTimeoutMS: 30000
   ConnectionData:
-    Address: 127.0.0.1
-    Port: 7777
+    Address: 111.198.66.41
+    Port: 8569
     ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
@@ -614,7 +614,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  port: 7777
+  port: 8569
   NoDelay: 1
   SendTimeout: 5000
   ReceiveTimeout: 30000
@@ -660,7 +660,7 @@ MonoBehaviour:
   offlineScene: 
   onlineScene: 
   transport: {fileID: 1127004202}
-  networkAddress: localhost
+  networkAddress: 111.198.66.41
   maxConnections: 100
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 3267146673417420693, guid: 294f94e6680482b43829b1304d48751a,
