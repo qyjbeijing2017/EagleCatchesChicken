@@ -8,7 +8,7 @@ public class Move : NetworkBehaviour
 {
     [SerializeField]
     [Tooltip("Base move speed in meters per second")]
-    private float BaseMoveSpeed = 1f;
+    private float BaseMoveSpeed = 10f;
     [SerializeField]
     [Tooltip("Base turn speed in degrees per second")]
     private List<float> JumpSpeeds = new List<float> { 5 };
