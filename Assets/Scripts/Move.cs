@@ -1,9 +1,10 @@
-using UnityEngine;
-using Unity.Netcode;
-using UnityEngine.InputSystem;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using Mirror;
+using UnityEngine.InputSystem;
 
-public class PlayerMove : NetworkBehaviour
+public class Move : NetworkBehaviour
 {
     [SerializeField]
     [Tooltip("Base move speed in meters per second")]
@@ -12,15 +13,14 @@ public class PlayerMove : NetworkBehaviour
     [Tooltip("Base turn speed in degrees per second")]
     private List<float> JumpSpeeds = new List<float> { 5 };
     private int JumpCount = 0;
+    // Start is called before the first frame update
 
 
-    Rigidbody rigidbody;
+    private Rigidbody rigidbody;
     private PlayerInputAction InputActions;
-
-    public override void OnNetworkSpawn()
+    void Start()
     {
-        if (IsOwner)
-        {
+        if(isLocalPlayer) {
             InputActions = new PlayerInputAction();
             InputActions.Player.Enable();
             InputActions.Player.Jump.performed += OnJump;
@@ -29,11 +29,14 @@ public class PlayerMove : NetworkBehaviour
         }
     }
 
+    
+
     void OnCollisionEnter(Collision collision)
     {
-        if(!IsOwner) return;
+       if(isLocalPlayer) {
         if (collision.gameObject.tag == "Ground")
             JumpCount = 0;
+       }
     }
 
     void OnJump(InputAction.CallbackContext context)
@@ -44,10 +47,12 @@ public class PlayerMove : NetworkBehaviour
         JumpCount++;
     }
 
+
     // Update is called once per frame
+
     void Update()
     {
-        if (IsOwner)
+        if (isLocalPlayer)
         {
             var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
             if (inputAxis.magnitude > 0f)
@@ -76,13 +81,12 @@ public class PlayerMove : NetworkBehaviour
         }
     }
 
-    public override void OnDestroy()
+    void OnDestroy()
     {
-        if (IsOwner)
+        if (isLocalPlayer)
         {
             InputActions.Player.Disable();
             InputActions.Dispose();
         }
-        base.OnDestroy();
     }
 }
