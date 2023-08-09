@@ -38,5 +38,6 @@ public class PlayerUIManager : MonoBehaviour
         {
             Destroy(HealthBarList[i].gameObject);
         }
+        HealthBarList.RemoveRange(sources.Length, HealthBarList.Count - sources.Length);
     }
 }
