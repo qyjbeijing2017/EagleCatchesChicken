@@ -16,12 +16,13 @@ public class ECCNetworkManager : NetworkManager
         var id = PlayerList.Count;
         if(id >= RoleList.Count)
         {
-            Debug.LogError("No more roles");
-            NetworkServer.AddPlayerForConnection(conn, null);
+            Debug.LogWarning("No more roles");
+            GameObject player = Instantiate(playerPrefab);
+            NetworkServer.AddPlayerForConnection(conn, player);
             return;
         }
-        GameObject player = Instantiate(RoleList[id].gameObject);
-        NetworkServer.AddPlayerForConnection(conn, player);
-        PlayerList.Add(player.GetComponent<Player>());
+        GameObject charactor = Instantiate(RoleList[id].gameObject);
+        NetworkServer.AddPlayerForConnection(conn, charactor);
+        PlayerList.Add(charactor.GetComponent<Player>());
     }
 }
