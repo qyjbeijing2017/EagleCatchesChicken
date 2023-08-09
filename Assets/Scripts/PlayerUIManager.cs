@@ -32,12 +32,12 @@ public class PlayerUIManager : MonoBehaviour
 
             var screenPos = mainCamera.WorldToScreenPoint(sources[i].HealthBarAnchor.position);
             HealthBarList[i].transform.position = screenPos;
+            HealthBarList[i].gameObject.SetActive(true);
         }
 
         for(int i = sources.Length; i < HealthBarList.Count; i++)
         {
-            Destroy(HealthBarList[i].gameObject);
+            HealthBarList[i].gameObject.SetActive(false);
         }
-        HealthBarList.RemoveRange(sources.Length, HealthBarList.Count - sources.Length);
     }
 }
