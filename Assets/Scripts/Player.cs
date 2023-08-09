@@ -7,10 +7,11 @@ using Mirror;
 [RequireComponent(typeof(Source))]
 public class Player : NetworkBehaviour
 {
+    [SyncVar]
+    public uint PlayerID;
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
