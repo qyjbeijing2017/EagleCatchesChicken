@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class Buff : NetworkManager
+public class Buff : NetworkBehaviour
 {
 
-    
+
 
 
     // Start is called before the first frame update

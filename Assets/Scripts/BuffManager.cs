@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class BuffManager : NetworkManager
+public class BuffManager : NetworkBehaviour
 {
     [SyncVar]
     public List<Buff> BuffList = new List<Buff>();
