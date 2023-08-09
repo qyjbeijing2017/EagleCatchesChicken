@@ -5,6 +5,7 @@ using Mirror;
 
 [RequireComponent(typeof(Move))]
 [RequireComponent(typeof(Source))]
+[RequireComponent(typeof(BuffManager))]
 public class Player : NetworkBehaviour
 {
     [SyncVar]

@@ -22,6 +22,21 @@ public class Source : NetworkBehaviour
         }
     }
 
+
+    public void TakeDamage(int damage)
+    {
+        if(isServer) {
+            Health -= damage;
+            if(Health <= 0) {
+                Health = 0;
+                Destroy(gameObject);
+            }
+            if(Health > MaxHealth) {
+                Health = MaxHealth;
+            }
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
