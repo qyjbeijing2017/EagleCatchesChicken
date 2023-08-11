@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(Move))]
+[RequireComponent(typeof(MoveFromAnimator))]
 [RequireComponent(typeof(Source))]
 [RequireComponent(typeof(BuffManager))]
 [RequireComponent(typeof(SkillManager))]

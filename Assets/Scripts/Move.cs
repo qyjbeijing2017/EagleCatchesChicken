@@ -88,8 +88,9 @@ public class Move : NetworkBehaviour
 
     void OnDestroy()
     {
-        if (isLocalPlayer)
+        if (isLocalPlayer && InputActions != null)
         {
+            Debug.Log(InputActions);
             InputActions.Player.Disable();
             InputActions.Dispose();
         }
