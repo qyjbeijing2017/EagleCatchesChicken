@@ -39,8 +39,10 @@ public class MoveFromAnimator : NetworkBehaviour
             }
 
             var moveVector = InputActions.Player.Move.ReadValue<Vector2>();
-            animator.SetFloat("MoveX", moveVector.x);
-            animator.SetFloat("MoveY", moveVector.y);
+            var localMoveVector = transform.InverseTransformDirection(new Vector3(moveVector.x, 0, moveVector.y));
+
+            animator.SetFloat("MoveX", localMoveVector.x);
+            animator.SetFloat("MoveY", localMoveVector.z);
         }
     }
 
