@@ -8,6 +8,9 @@ public class MoveFromAnimator : NetworkBehaviour
     Animator animator;
     PlayerInputAction InputActions;
 
+    [SerializeField]
+    float CharactorMovePower = 0.0001f;
+
     void Start()
     {
         if(isLocalPlayer) {
@@ -17,7 +20,7 @@ public class MoveFromAnimator : NetworkBehaviour
         }
     }
 
-        void Update()
+    void Update()
     {
         if (isLocalPlayer)
         {
@@ -38,8 +41,12 @@ public class MoveFromAnimator : NetworkBehaviour
 
             }
 
-            var moveVector = InputActions.Player.Move.ReadValue<Vector2>();
-            var localMoveVector = transform.InverseTransformDirection(new Vector3(moveVector.x, 0, moveVector.y));
+            var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();            
+            var localInputAxis = transform.InverseTransformDirection(new Vector3(inputAxis.x, 0, inputAxis.y));
+            var currentMoveVector = new Vector3(animator.GetFloat("MoveX"), 0, animator.GetFloat("MoveY"));
+
+            var localMoveVector = Vector3.MoveTowards(currentMoveVector, localInputAxis, Time.deltaTime * CharactorMovePower);
+            
 
             animator.SetFloat("MoveX", localMoveVector.x);
             animator.SetFloat("MoveY", localMoveVector.z);
@@ -48,7 +55,7 @@ public class MoveFromAnimator : NetworkBehaviour
 
     void OnDestroy()
     {
-        if (isLocalPlayer)
+        if (isLocalPlayer && InputActions != null)
         {
             InputActions.Player.Disable();
             InputActions.Dispose();

@@ -177,6 +177,11 @@ PrefabInstance:
       propertyPath: m_Center.y
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1202731160554643896, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Name
@@ -186,6 +191,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _assetId
       value: 3103489466
+      objectReference: {fileID: 0}
+    - target: {fileID: 3083796084269868744, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4645508796163438494, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
@@ -201,6 +211,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5761512421482988106, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: BaseMoveSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6076571768309708131, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
@@ -252,7 +267,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 547801102886912934, guid: f1e440cc3f333d44590fc1b3499b0789, type: 3}
     m_RemovedGameObjects:
     - {fileID: 4182039139875007427, guid: f1e440cc3f333d44590fc1b3499b0789, type: 3}
     m_AddedGameObjects:
@@ -333,6 +349,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  CharactorMovePower: 4
 --- !u!4 &5764284787746080262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6076571768309708131, guid: f1e440cc3f333d44590fc1b3499b0789,
