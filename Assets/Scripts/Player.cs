@@ -1,96 +1,24 @@
-using UnityEngine;
-using Unity.Netcode;
-using UnityEngine.InputSystem;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using Mirror;
 
+[RequireComponent(typeof(MoveFromAnimator))]
+[RequireComponent(typeof(Source))]
+[RequireComponent(typeof(BuffManager))]
+[RequireComponent(typeof(SkillManager))]
 public class Player : NetworkBehaviour
 {
-    private NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
-    private NetworkVariable<Vector3> Forward = new NetworkVariable<Vector3>();
-
-    [SerializeField]
-    [Tooltip("Base move speed in meters per second")]
-    private float BaseMoveSpeed = 1f;
-    [SerializeField]
-    [Tooltip("Base turn speed in degrees per second")]
-    private List<float> JumpSpeeds = new List<float> { 5 };
-    private int JumpCount = 0;
-
-
-    Rigidbody rigidbody;
-
-
-
-    private PlayerInputAction InputActions;
-
-
-    public override void OnNetworkSpawn()
+    [SyncVar]
+    public uint PlayerID;
+    // Start is called before the first frame update
+    void Start()
     {
-        if (IsOwner)
-        {
-            InputActions = new PlayerInputAction();
-            InputActions.Player.Enable();
-            InputActions.Player.Jump.performed += OnJump;
-
-            rigidbody = GetComponent<Rigidbody>();
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-            JumpCount = 0;
-    }
-
-    void OnJump(InputAction.CallbackContext context)
-    {
-        if (JumpCount >= JumpSpeeds.Count) return;
-        var jumpSpeed = JumpSpeeds[JumpCount];
-        rigidbody.velocity = Vector3.up * jumpSpeed;
-        JumpCount++;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (IsOwner)
-        {
-            var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
-            if (inputAxis.magnitude > 0f)
-            {
-                var moveSpeed = BaseMoveSpeed * Time.deltaTime;
-                var moveVector = inputAxis * moveSpeed;
-                var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
-                transform.position = newPosition;
-            }
-            var inputForward = InputActions.Player.Look.ReadValue<Vector2>();
-            if (inputForward.magnitude > 0f)
-            {
-                Debug.Log("inputForward: " + inputForward);
-                transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
-            }
-            else
-            {
-                var inputPointPosition = InputActions.Player.PointPosition.ReadValue<Vector2>();
-                var ray = Camera.main.ScreenPointToRay(inputPointPosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit)) {
-                    var inputWorldPosition = hit.point;
-                    transform.forward = new Vector3(inputWorldPosition.x - transform.position.x, 0, inputWorldPosition.z - transform.position.z);
-                }
-
-            }
-
-        }
-    }
-
-    public override void OnDestroy()
-    {
-        if (IsOwner)
-        {
-            InputActions.Player.Disable();
-            InputActions.Dispose();
-        }
-        base.OnDestroy();
+        
     }
 }
