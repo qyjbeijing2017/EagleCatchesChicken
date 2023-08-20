@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 public class Move : NetworkBehaviour
 {
     [SerializeField]
+    JumpManager PlayerJumpManager;
+    [SerializeField]
     [Tooltip("Base move speed in meters per second")]
     float BaseMoveSpeed = 10f;
     [SerializeField]
@@ -14,6 +16,23 @@ public class Move : NetworkBehaviour
     List<float> JumpSpeeds = new List<float> { 5 };
     int JumpCount = 0;
     // Start is called before the first frame update
+
+    public int jumpCount{
+        get {
+            return JumpCount;
+        }
+    }
+
+
+    Vector2 MoveVelocity;
+
+    public Vector2 moveVelocity {
+        get {
+            return MoveVelocity;
+        }
+    }
+
+
 
 
     Rigidbody PlayerRigidbody;
@@ -28,17 +47,11 @@ public class Move : NetworkBehaviour
 
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerBuffManager = GetComponent<BuffManager>();
+            PlayerJumpManager = GetComponentInChildren<JumpManager>();
+            PlayerJumpManager.onGrounded += () => {
+                JumpCount = 0;
+            };
         }
-    }
-
-    
-
-    void OnCollisionEnter(Collision collision)
-    {
-       if(isLocalPlayer) {
-        if (collision.gameObject.tag == "Ground")
-            JumpCount = 0;
-       }
     }
 
     void OnJump(InputAction.CallbackContext context)
@@ -58,13 +71,17 @@ public class Move : NetworkBehaviour
         if (isLocalPlayer)
         {
             if(PlayerBuffManager.isStagger) return;
+
+            MoveVelocity = Vector2.zero;
             
             var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
             if (inputAxis.magnitude > 0f)
             {
-                var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * Time.deltaTime * (1 - PlayerBuffManager.slowDownPer);
-                var moveVector = inputAxis * moveSpeed;
-                var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
+                var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * (1 - PlayerBuffManager.slowDownPer);
+                MoveVelocity = inputAxis * moveSpeed;
+
+                var deltaTransform = new Vector3(MoveVelocity.x, 0, MoveVelocity.y) * Time.deltaTime;
+                var newPosition = transform.position + deltaTransform;
                 transform.position = newPosition;
             }
             var inputForward = InputActions.Player.Look.ReadValue<Vector2>();
