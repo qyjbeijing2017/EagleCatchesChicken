@@ -7,43 +7,36 @@ using UnityEngine.InputSystem;
 public class Move : NetworkBehaviour
 {
     [SerializeField]
-    JumpManager PlayerJumpManager;
-    [SerializeField]
     [Tooltip("Base move speed in meters per second")]
     float BaseMoveSpeed = 10f;
     [SerializeField]
     [Tooltip("Base turn speed in degrees per second")]
     List<float> JumpSpeeds = new List<float> { 5 };
-    int JumpCount = 0;
-    // Start is called before the first frame update
 
+    int JumpCount = 0;
     public int jumpCount{
         get {
             return JumpCount;
         }
     }
-
-
     Vector2 MoveVelocity;
-
     public Vector2 moveVelocity {
         get {
             return MoveVelocity;
         }
     }
 
-
-
-
     Rigidbody PlayerRigidbody;
     PlayerInputAction InputActions;
     BuffManager PlayerBuffManager;
+    JumpManager PlayerJumpManager;
+
     void Start()
     {
         if(isLocalPlayer) {
             InputActions = new PlayerInputAction();
-            InputActions.Player.Enable();
-            InputActions.Player.Jump.performed += OnJump;
+            InputActions.Move.Enable();
+            InputActions.Move.Jump.performed += OnJump;
 
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerBuffManager = GetComponent<BuffManager>();
@@ -74,7 +67,7 @@ public class Move : NetworkBehaviour
 
             MoveVelocity = Vector2.zero;
             
-            var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
+            var inputAxis = InputActions.Move.Move.ReadValue<Vector2>();
             if (inputAxis.magnitude > 0f)
             {
                 var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * (1 - PlayerBuffManager.slowDownPer);
@@ -84,14 +77,14 @@ public class Move : NetworkBehaviour
                 var newPosition = transform.position + deltaTransform;
                 transform.position = newPosition;
             }
-            var inputForward = InputActions.Player.Look.ReadValue<Vector2>();
+            var inputForward = InputActions.Move.Look.ReadValue<Vector2>();
             if (inputForward.magnitude > 0f)
             {
                 transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
             }
             else
             {
-                var inputPointPosition = InputActions.Player.PointPosition.ReadValue<Vector2>();
+                var inputPointPosition = InputActions.Move.PointPosition.ReadValue<Vector2>();
                 var ray = Camera.main.ScreenPointToRay(inputPointPosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit)) {
@@ -108,7 +101,7 @@ public class Move : NetworkBehaviour
         if (isLocalPlayer && InputActions != null)
         {
             Debug.Log(InputActions);
-            InputActions.Player.Disable();
+            InputActions.Move.Disable();
             InputActions.Dispose();
         }
     }

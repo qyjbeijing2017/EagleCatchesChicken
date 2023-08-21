@@ -41,8 +41,4 @@ public class MoveFromAnimator : NetworkBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-    }
-
 }

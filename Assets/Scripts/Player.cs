@@ -7,6 +7,7 @@ using Mirror;
 [RequireComponent(typeof(Source))]
 [RequireComponent(typeof(BuffManager))]
 [RequireComponent(typeof(SkillManager))]
+[RequireComponent(typeof(MoveFromAnimator))]
 public class Player : NetworkBehaviour
 {
     [SyncVar]
