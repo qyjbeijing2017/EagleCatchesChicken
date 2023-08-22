@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(MoveFromAnimator))]
+[RequireComponent(typeof(Move))]
 [RequireComponent(typeof(Source))]
 [RequireComponent(typeof(BuffManager))]
 [RequireComponent(typeof(SkillManager))]
+[RequireComponent(typeof(MoveFromAnimator))]
 public class Player : NetworkBehaviour
 {
     [SyncVar]

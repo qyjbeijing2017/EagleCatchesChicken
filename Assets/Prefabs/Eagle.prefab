@@ -182,6 +182,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1202731160554643896, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: syncDirection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Name
@@ -197,6 +202,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4119656883786532282, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.014
+      objectReference: {fileID: 0}
     - target: {fileID: 4645508796163438494, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Enabled
@@ -210,7 +220,7 @@ PrefabInstance:
     - target: {fileID: 5761512421482988106, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5761512421482988106, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
@@ -288,7 +298,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1887525021561930135}
+      addedObject: {fileID: 8459599200539505450}
   m_SourcePrefab: {fileID: 100100000, guid: f1e440cc3f333d44590fc1b3499b0789, type: 3}
 --- !u!1 &744404028788429718 stripped
 GameObject:
@@ -326,7 +336,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: d0b6e54971c215245b25c81f1f18314f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -334,7 +344,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1887525021561930135
+--- !u!114 &8459599200539505450
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -349,7 +359,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  CharactorMovePower: 4
 --- !u!4 &5764284787746080262 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6076571768309708131, guid: f1e440cc3f333d44590fc1b3499b0789,
