@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 598698850458371840}
   - component: {fileID: 5658099593547579209}
   - component: {fileID: 5142777533225124518}
+  - component: {fileID: 5412819010976480947}
   m_Layer: 0
   m_Name: Simple Hit
   m_TagString: Untagged
@@ -154,6 +155,27 @@ MonoBehaviour:
   ImpulseOnExit: {x: 0, y: 0, z: 0}
   IsLocalImpulseOnExit: 0
   Duration: 0.3
+--- !u!95 &5412819010976480947
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3053252771303679886}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &6223493693268126233
 GameObject:
   m_ObjectHideFlags: 0
@@ -170,7 +192,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6970663553861767571
 Transform:
   m_ObjectHideFlags: 0

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(NetworkIdentity))]
 [RequireComponent(typeof(Animator))]
 public abstract class Damage : NetworkBehaviour
 {
