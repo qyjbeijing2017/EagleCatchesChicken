@@ -15,6 +15,7 @@ public class PlayerUIManager : MonoBehaviour
     void Start()
     {
         mainCamera = Camera.main;
+        Button btn = GetComponent<Button>();
     }
 
     // Update is called once per frame

@@ -14,6 +14,10 @@ public class Source : NetworkBehaviour
     [HideInInspector]
     [SyncVar]
     public int Health = 100;
+
+    public event System.Action<int, int> OnHealthChanged;
+    public event System.Action OnHealthZero;
+
     // Start is called before the first frame update
     void Start()
     {

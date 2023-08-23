@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class MoveFromAnimator : NetworkBehaviour
+[RequireComponent(typeof(Animator))]
+public class AnimatorManager : NetworkBehaviour
 {
     Animator animator;
     Rigidbody PlayerRigidbody;
@@ -18,6 +19,9 @@ public class MoveFromAnimator : NetworkBehaviour
             PlayerMove = GetComponent<Move>();
             PlayerJumpManager = GetComponentInChildren<JumpManager>();
 
+            if(PlayerJumpManager == null) {
+                Debug.LogError("PlayerJumpManager is null");
+            }
         }
     }
 
