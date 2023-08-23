@@ -13,7 +13,7 @@ public class AnimatorManager : NetworkBehaviour
     Move PlayerMove;
     JumpManager PlayerJumpManager;
 
-    void Awake()
+    void Start()
     {
         if(isLocalPlayer) {
             animator = GetComponent<Animator>();

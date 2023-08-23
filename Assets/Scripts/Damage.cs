@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 
 [RequireComponent(typeof(NetworkIdentity))]
+[RequireComponent(typeof(Animator))]
 public abstract class Damage : NetworkBehaviour
 {
     [HideInInspector]

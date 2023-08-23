@@ -31,7 +31,7 @@ public class Move : NetworkBehaviour
     BuffManager PlayerBuffManager;
     JumpManager PlayerJumpManager;
 
-    void Awake()
+    void Start()
     {
         if(isLocalPlayer) {
             InputActions = new PlayerInputAction();

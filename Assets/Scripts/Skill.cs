@@ -11,7 +11,6 @@ public struct DamageEvent
     public Damage Damage;
 }
 
-[RequireComponent(typeof(NetworkIdentity))]
 public class Skill : NetworkBehaviour
 {
     [SerializeField]
