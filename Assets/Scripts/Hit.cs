@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class Hit : Damage
 {
@@ -8,27 +9,23 @@ public class Hit : Damage
     [SerializeField]
     float Duration = 0.3f;
 
+    public event Action OnHitStart;
+    public event Action OnHitEnd;
+
     public override void Exec()
     {
         base.Exec();
+        if (OnHitStart != null)
+            OnHitStart();
         StartCoroutine(HitCoroutine());
     }
 
     IEnumerator HitCoroutine()
     {
+        yield return null;
         yield return new WaitForSeconds(Duration);
+        if (OnHitEnd != null)
+            OnHitEnd();
         Stop();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

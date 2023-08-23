@@ -42,7 +42,7 @@ public abstract class Damage : NetworkBehaviour
 
     List<Collider> triggers = new List<Collider>();
 
-    Animator animator;
+    Animator animator = null;
 
     static public Vector3 ImpulseModeToGlobal(ImpulseMode mode, Vector3 impulse, Transform me, Transform target)
     {
@@ -140,7 +140,9 @@ public abstract class Damage : NetworkBehaviour
         {
             trigger.enabled = true;
         }
-        animator.enabled = true;
+        if(animator != null)
+            animator.enabled = true;
+
     }
 
     virtual public void Stop() {
@@ -148,7 +150,8 @@ public abstract class Damage : NetworkBehaviour
         {
             trigger.enabled = false;
         }
-        animator.enabled = false;
+        if(animator != null)
+            animator.enabled = false;
     }
 
     virtual protected void Awake()
@@ -168,14 +171,9 @@ public abstract class Damage : NetworkBehaviour
 
     virtual protected void Start()
     {
+
         if(ExecOnStart){
             Exec();
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

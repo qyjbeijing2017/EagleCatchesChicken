@@ -39,7 +39,6 @@ public class Skill : NetworkBehaviour
         }
     }
 
-    [Command]
     virtual public void exec(DamageType damageType)
     {
         if (isRunning) return;
@@ -49,13 +48,19 @@ public class Skill : NetworkBehaviour
 
     virtual protected IEnumerator SkillCoroutine(DamageType damageType)
     {
+        foreach (DamageEvent damageEvent in DamageEvents)
+        {
+            yield return new WaitForSeconds(damageEvent.Time);
+            Damage damage = damageEvent.Damage;
+            damage.Type = damageType;
+            damage.Exec();
+        }
         yield return null;
         isRunning = false;
         if(isCooldownAfterSkill)
         CooldownTimer = Cooldown;
     }
 
-    [Command]
     virtual public void Stop()
     {
         if(!isRunning) return;
@@ -68,6 +73,7 @@ public class Skill : NetworkBehaviour
     void Start()
     {
         CooldownTimer = Cooldown;
+        DamageEvents.Sort((a, b) => a.Time.CompareTo(b.Time));
     }
 
     // Update is called once per frame
