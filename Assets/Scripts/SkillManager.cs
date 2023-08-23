@@ -6,13 +6,15 @@ using UnityEngine.InputSystem;
 
 public class SkillManager : NetworkBehaviour
 {
+    public DamageType PlayerDamageType;
+
     [SerializeField]
     List<Skill> Skills = new List<Skill>();
 
     PlayerInputAction InputActions;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         if (isLocalPlayer)
         {
@@ -27,19 +29,34 @@ public class SkillManager : NetworkBehaviour
 
     void HandleSkill1(InputAction.CallbackContext context)
     {
+        if(Skills.Count > 0)
+            Skills[0].exec(PlayerDamageType);
     }
 
     void HandleSkill2(InputAction.CallbackContext context)
     {
+        if (Skills.Count > 1)
+            Skills[1].exec(PlayerDamageType);
     }
 
     void HandleSkill3(InputAction.CallbackContext context)
     {
+        if (Skills.Count > 2)
+            Skills[2].exec(PlayerDamageType);
     }
 
     // Update is called once per frame
     void Update()
     {
 
+    }
+
+    void OnDestroy()
+    {
+        if (isLocalPlayer && InputActions != null)
+        {
+            InputActions.Move.Disable();
+            InputActions.Dispose();
+        }
     }
 }

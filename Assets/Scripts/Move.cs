@@ -31,7 +31,7 @@ public class Move : NetworkBehaviour
     BuffManager PlayerBuffManager;
     JumpManager PlayerJumpManager;
 
-    void Start()
+    void Awake()
     {
         if(isLocalPlayer) {
             InputActions = new PlayerInputAction();
@@ -100,7 +100,6 @@ public class Move : NetworkBehaviour
     {
         if (isLocalPlayer && InputActions != null)
         {
-            Debug.Log(InputActions);
             InputActions.Move.Disable();
             InputActions.Dispose();
         }

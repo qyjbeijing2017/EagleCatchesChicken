@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System;
 
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(NetworkAnimator))]
 public class AnimatorManager : NetworkBehaviour
 {
     Animator animator;
@@ -11,7 +13,7 @@ public class AnimatorManager : NetworkBehaviour
     Move PlayerMove;
     JumpManager PlayerJumpManager;
 
-    void Start()
+    void Awake()
     {
         if(isLocalPlayer) {
             animator = GetComponent<Animator>();

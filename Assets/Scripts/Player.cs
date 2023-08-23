@@ -14,6 +14,7 @@ using Mirror.Experimental;
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(NetworkRigidbody))]
+[RequireComponent(typeof(SkillManager))]
 public class Player : NetworkBehaviour
 {
     [SyncVar]

@@ -11,8 +11,7 @@ public class PlayerUIManager : MonoBehaviour
     List<Slider> HealthBarList = new List<Slider>();
 
     Camera mainCamera;
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mainCamera = Camera.main;
         Button btn = GetComponent<Button>();

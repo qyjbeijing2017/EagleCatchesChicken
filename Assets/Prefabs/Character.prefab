@@ -23,6 +23,7 @@ GameObject:
   - component: {fileID: 209111444622988169}
   - component: {fileID: 3107260102215789999}
   - component: {fileID: 4975191377603472741}
+  - component: {fileID: 3821924689307065175}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -182,7 +183,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 6076571768309708131}
-  clientAuthority: 0
+  clientAuthority: 1
   syncPosition: 1
   syncRotation: 1
   syncScale: 0
@@ -229,11 +230,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83392ae5c1b731446909f252fd494ae4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 1
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0
   target: {fileID: 2744447860547993140}
-  clientAuthority: 1
+  clientAuthority: 0
   syncVelocity: 1
   clearVelocity: 0
   velocitySensitivity: 0.1
@@ -342,6 +343,23 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+--- !u!114 &3821924689307065175
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296522295099171059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 1
+  animator: {fileID: 3107260102215789999}
 --- !u!1 &4182039139875007427
 GameObject:
   m_ObjectHideFlags: 0
