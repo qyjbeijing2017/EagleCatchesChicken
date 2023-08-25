@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
+using Unity.VisualScripting;
 
 public class SkillManager : NetworkBehaviour
 {
@@ -11,8 +12,24 @@ public class SkillManager : NetworkBehaviour
     [SerializeField]
     List<Skill> Skills = new List<Skill>();
 
-    Skill currentSkill = null;
-    int currentSkillIndex = 0;
+    Skill CurrentSkill = null;
+    int CurrentSkillIndex = -1;
+
+    public bool isSkillRunning
+    {
+        get
+        {
+            return CurrentSkill != null;
+        }
+    }
+
+    public int skillNo
+    {
+        get
+        {
+            return CurrentSkillIndex;
+        }
+    }
 
     PlayerInputAction InputActions;
 
@@ -35,7 +52,8 @@ public class SkillManager : NetworkBehaviour
         if (Skills.Count > 0)
         {
             Skills[0].exec();
-            currentSkill = Skills[0];
+            CurrentSkill = Skills[0];
+            CurrentSkillIndex = 0;
         }
     }
 
@@ -44,7 +62,8 @@ public class SkillManager : NetworkBehaviour
         if (Skills.Count > 1)
         {
             Skills[1].exec();
-            currentSkill = Skills[1];
+            CurrentSkill = Skills[1];
+            CurrentSkillIndex = 1;
         }
     }
 
@@ -53,16 +72,26 @@ public class SkillManager : NetworkBehaviour
         if (Skills.Count > 2)
         {
             Skills[2].exec();
-            currentSkill = Skills[2];
+            CurrentSkill = Skills[2];
+            CurrentSkillIndex = 2;
         }
     }
 
     void OnSkillEnd()
     {
-        if (currentSkill != null)
+        if (CurrentSkill != null)
         {
-            currentSkill.Stop();
-            currentSkill = null;
+            CurrentSkill.Stop();
+            CurrentSkill = null;
+            CurrentSkillIndex = -1;
+        }
+    }
+
+    void OnDamage(int damageIndex)
+    {
+        if (CurrentSkill != null)
+        {
+            CurrentSkill.OnDamage(damageIndex);
         }
     }
 

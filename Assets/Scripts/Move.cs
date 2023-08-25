@@ -30,6 +30,7 @@ public class Move : NetworkBehaviour
     PlayerInputAction InputActions;
     BuffManager PlayerBuffManager;
     JumpManager PlayerJumpManager;
+    SkillManager PlayerSkillManager;
 
     void Start()
     {
@@ -41,6 +42,7 @@ public class Move : NetworkBehaviour
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerBuffManager = GetComponent<BuffManager>();
             PlayerJumpManager = GetComponentInChildren<JumpManager>();
+            PlayerSkillManager = GetComponent<SkillManager>();
             PlayerJumpManager.onGrounded += () => {
                 JumpCount = 0;
             };
@@ -51,6 +53,7 @@ public class Move : NetworkBehaviour
     {
         if(PlayerBuffManager.isStagger) return;
         if (JumpCount >= JumpSpeeds.Count) return;
+        if(PlayerSkillManager.isSkillRunning) return;
         var jumpSpeed = JumpSpeeds[JumpCount];
         PlayerRigidbody.velocity = Vector3.up * jumpSpeed;
         JumpCount++;
@@ -64,6 +67,7 @@ public class Move : NetworkBehaviour
         if (isLocalPlayer)
         {
             if(PlayerBuffManager.isStagger) return;
+            if(PlayerSkillManager.isSkillRunning) return;
 
             MoveVelocity = Vector2.zero;
             

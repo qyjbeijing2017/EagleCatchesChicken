@@ -13,6 +13,8 @@ public class AnimatorManager : NetworkBehaviour
     Move PlayerMove;
     JumpManager PlayerJumpManager;
 
+    SkillManager PlayerSkillManager;
+
     void Start()
     {
         if(isLocalPlayer) {
@@ -20,6 +22,7 @@ public class AnimatorManager : NetworkBehaviour
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerMove = GetComponent<Move>();
             PlayerJumpManager = GetComponentInChildren<JumpManager>();
+            PlayerSkillManager = GetComponent<SkillManager>();
 
             if(PlayerJumpManager == null) {
                 Debug.LogError("PlayerJumpManager is null");
@@ -44,6 +47,9 @@ public class AnimatorManager : NetworkBehaviour
             animator.SetFloat("Up", PlayerRigidbody.velocity.y);
             animator.SetFloat("Height", PlayerJumpManager.height);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
+            animator.SetBool("IsSkillRunning", PlayerSkillManager.isSkillRunning);
+            animator.SetInteger("SkillNo", PlayerSkillManager.skillNo);
+
         }
     }
 
