@@ -53,7 +53,8 @@ MonoBehaviour:
   DamageEvents:
   - Time: 0
     Damage: {fileID: 6813987724019297847}
-  DamageList: []
+  DamageList:
+  - {fileID: 6813987724019297847}
 --- !u!1 &3433783916523636748
 GameObject:
   m_ObjectHideFlags: 0
