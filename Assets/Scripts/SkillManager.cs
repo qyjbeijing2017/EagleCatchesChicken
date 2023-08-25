@@ -11,6 +11,9 @@ public class SkillManager : NetworkBehaviour
     [SerializeField]
     List<Skill> Skills = new List<Skill>();
 
+    Skill currentSkill = null;
+    int currentSkillIndex = 0;
+
     PlayerInputAction InputActions;
 
     // Start is called before the first frame update
@@ -29,20 +32,38 @@ public class SkillManager : NetworkBehaviour
 
     void HandleSkill1(InputAction.CallbackContext context)
     {
-        if(Skills.Count > 0)
-            Skills[0].exec(PlayerDamageType);
+        if (Skills.Count > 0)
+        {
+            Skills[0].exec();
+            currentSkill = Skills[0];
+        }
     }
 
     void HandleSkill2(InputAction.CallbackContext context)
     {
         if (Skills.Count > 1)
-            Skills[1].exec(PlayerDamageType);
+        {
+            Skills[1].exec();
+            currentSkill = Skills[1];
+        }
     }
 
     void HandleSkill3(InputAction.CallbackContext context)
     {
         if (Skills.Count > 2)
-            Skills[2].exec(PlayerDamageType);
+        {
+            Skills[2].exec();
+            currentSkill = Skills[2];
+        }
+    }
+
+    void OnSkillEnd()
+    {
+        if (currentSkill != null)
+        {
+            currentSkill.Stop();
+            currentSkill = null;
+        }
     }
 
     // Update is called once per frame

@@ -41,27 +41,23 @@ public class Skill : NetworkBehaviour
         }
     }
 
-    virtual public void exec(DamageType damageType)
+    virtual public void exec()
     {
         if (isRunning) return;
         isRunning = true;
-        StartCoroutine(SkillCoroutine(damageType));
+        StartCoroutine(SkillCoroutine());
 
     }
 
-    virtual protected IEnumerator SkillCoroutine(DamageType damageType)
+    virtual protected IEnumerator SkillCoroutine()
     {
         foreach (DamageEvent damageEvent in DamageEvents)
         {
             yield return new WaitForSeconds(damageEvent.Time);
             Damage damage = damageEvent.Damage;
-            damage.Type = damageType;
             damage.Exec();
         }
         yield return null;
-        isRunning = false;
-        if(isCooldownAfterSkill)
-        CooldownTimer = Cooldown;
     }
 
     virtual public void Stop()
@@ -71,6 +67,13 @@ public class Skill : NetworkBehaviour
         isRunning = false;
         if(isCooldownAfterSkill)
         CooldownTimer = Cooldown;
+    }
+
+    virtual public void OnDamage(int damageIndex){
+        if(damageIndex < DamageList.Count){
+            var damage =  DamageList[damageIndex];
+            damage.Exec();
+        }
     }
 
     void Start()
