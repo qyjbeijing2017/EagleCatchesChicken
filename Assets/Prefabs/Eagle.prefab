@@ -29,8 +29,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.989, z: 0.522}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 6163536561069684171}
+  m_Children: []
   m_Father: {fileID: 5764284787746080262}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8567339099405002033
@@ -50,9 +49,7 @@ MonoBehaviour:
   syncInterval: 0
   Cooldown: 0
   isCooldownAfterSkill: 1
-  DamageEvents:
-  - Time: 0
-    Damage: {fileID: 6813987724019297847}
+  DamageEvents: []
   DamageList:
   - {fileID: 6813987724019297847}
 --- !u!1 &3433783916523636748
@@ -86,11 +83,11 @@ Transform:
   m_GameObject: {fileID: 3433783916523636748}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.093}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5774171729493354666}
+  m_Father: {fileID: 741621339041168991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2810315034836505958
 MeshFilter:
@@ -157,7 +154,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -202,9 +199,9 @@ MonoBehaviour:
   Type: 0
   Target:
     serializedVersion: 2
-    m_Bits: 896
+    m_Bits: 768
   ExecOnStart: 0
-  DamageAmountOnEnter: 0
+  DamageAmountOnEnter: 5
   BuffsOnEnter: []
   ImpulseOnEnter: {x: 0, y: 0, z: 0}
   IsLocalImpulseOnEnter: 0
@@ -1040,9 +1037,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 400120, guid: 8f0565f23a2b58541a475bd3c1393052,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6163536561069684171}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f0565f23a2b58541a475bd3c1393052, type: 3}
+--- !u!4 &741621339041168991 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 400120, guid: 8f0565f23a2b58541a475bd3c1393052,
+    type: 3}
+  m_PrefabInstance: {fileID: 741621339041031335}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &741621339041169249 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400326, guid: 8f0565f23a2b58541a475bd3c1393052,

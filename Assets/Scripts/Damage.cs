@@ -66,7 +66,6 @@ public abstract class Damage : NetworkBehaviour
     {
         if(!isServer) return;
         if((Target.value & (1 << other.gameObject.layer)) == 0) return;
-
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
