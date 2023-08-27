@@ -10,18 +10,22 @@ public class Source : NetworkBehaviour
 
     public Transform HealthBarAnchor;
 
-
     [HideInInspector]
     [SyncVar]
-    public int Health = 100;
+    int Health = 100;
 
     public event System.Action<int, int> OnHealthChanged;
     public event System.Action OnHealthZero;
 
+    public int health { get { return Health; } }
+    public int maxHealth { get { return MaxHealth; } }
+    public float healthPercent { get { return (float)Health / (float)MaxHealth; } }
+
     // Start is called before the first frame update
     void Start()
     {
-        if(isServer) {
+        if (isServer)
+        {
             Health = MaxHealth;
         }
     }
@@ -29,13 +33,16 @@ public class Source : NetworkBehaviour
 
     public void TakeDamage(int damage)
     {
-        if(isServer) {
+        if (isServer)
+        {
             Health -= damage;
-            if(Health <= 0) {
+            if (Health <= 0)
+            {
                 Health = 0;
                 Destroy(gameObject);
             }
-            if(Health > MaxHealth) {
+            if (Health > MaxHealth)
+            {
                 Health = MaxHealth;
             }
         }
@@ -44,6 +51,6 @@ public class Source : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
