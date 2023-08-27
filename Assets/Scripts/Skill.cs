@@ -31,8 +31,6 @@ public class Skill : NetworkBehaviour
     [SyncVar]
     private bool isRunning = false;
 
-    SkillManager PlayerSkillManager = null;
-
     public float coolDownLeft
     {
         get
@@ -78,7 +76,6 @@ public class Skill : NetworkBehaviour
 
     void Start()
     {
-        PlayerSkillManager = GetComponentInParent<SkillManager>();
         CooldownTimer = Cooldown;
         DamageEvents.Sort((a, b) => a.Time.CompareTo(b.Time));
     }

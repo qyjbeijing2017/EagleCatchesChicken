@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(Animator))]
 public abstract class Damage : NetworkBehaviour
 {
     [HideInInspector]
@@ -157,7 +156,8 @@ public abstract class Damage : NetworkBehaviour
     {
         var colliders = GetComponents<Collider>();
         var animator = GetComponent<Animator>();
-        animator.enabled = false;
+        if(animator != null)
+            animator.enabled = false;
         foreach(var collider in colliders)
         {
             if(collider.isTrigger)
