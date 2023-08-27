@@ -15,6 +15,7 @@ public class Buff : NetworkBehaviour
 
     [Header("Dot Settings")]
     [Tooltip("Dot <= 0 means add hp")]
+    public bool HasDot = false;
     public int Dot = 0;
     public float DotTick = 1;
 
@@ -29,20 +30,26 @@ public class Buff : NetworkBehaviour
     Player MyPlayer;
     Player BuffFrom;
 
-    public Player player{
-        get{
+    public Player player
+    {
+        get
+        {
             return MyPlayer;
         }
     }
 
-    public Player buffFrom{
-        get{
+    public Player buffFrom
+    {
+        get
+        {
             return BuffFrom;
         }
     }
 
-    public BuffManager buffManager{
-        get{
+    public BuffManager buffManager
+    {
+        get
+        {
             return PlayerBuffManager;
         }
     }
@@ -50,23 +57,27 @@ public class Buff : NetworkBehaviour
     [SyncVar]
     float TimeLeft;
 
-    public void From(Player player){
+    public void From(Player player)
+    {
         BuffFrom = player;
     }
+    
     void Start()
     {
         MyPlayer = GetComponentInParent<Player>();
+        Debug.Log(MyPlayer);
         PlayerBuffManager = MyPlayer.GetComponent<BuffManager>();
         PlayerBuffManager.Buffs.Add(this);
         if (isServer)
         {
             TimeLeft = Duration;
             PlayerSource = MyPlayer.GetComponent<Source>();
+            if (HasDot)
+            {
+                StartCoroutine(DotCoroutine());
+            }
         }
-        if (Dot > 0)
-        {
-            StartCoroutine(DotCoroutine());
-        }
+
     }
 
     void Update()

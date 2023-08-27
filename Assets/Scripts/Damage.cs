@@ -84,12 +84,12 @@ public abstract class Damage : NetworkBehaviour
         if(buffManager == null) return;
         foreach(var buff in BuffsOnEnter)
         {
-            Instantiate(buff, buffManager.transform);
+            buffManager.AddBuff(buff);
         }
 
         foreach(var buff in BuffsOnStay)
         {
-            var buffInstance = Instantiate(buff, buffManager.transform);
+            var buffInstance = buffManager.AddBuff(buff);
             BuffsNeedRemove.Add(buffInstance);
             BuffsOnStay.Remove(buff);
         }
@@ -121,7 +121,7 @@ public abstract class Damage : NetworkBehaviour
 
         foreach(var buff in BuffsOnExit)
         {
-            Instantiate(buff, buffManager.transform);
+            buffManager.AddBuff(buff);
         }
 
         foreach(var buff in BuffsNeedRemove)

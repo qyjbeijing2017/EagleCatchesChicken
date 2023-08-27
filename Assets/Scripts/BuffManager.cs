@@ -18,13 +18,14 @@ public class BuffManager : NetworkBehaviour
     bool IsStagger = false;
     public bool isStagger { get { return IsStagger; } }
 
-    public void AddBuff(Buff buff)
+    public Buff AddBuff(Buff buff)
     {
+        var buffInstance = Instantiate(buff, transform);
         if (isServer)
         {
-            var buffInstance = Instantiate(buff, transform);
             NetworkServer.Spawn(buffInstance.gameObject);
         }
+        return buffInstance;
     }
 
     // Start is called before the first frame update
