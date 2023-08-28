@@ -18,18 +18,21 @@ public class BuffManager : NetworkBehaviour
     bool IsStagger = false;
     public bool isStagger { get { return IsStagger; } }
 
+    Player MyPlayer;
+
     public void AddBuff(Buff buff)
     {
         if (isServer)
         {
-            var buffInstance = Instantiate(buff, transform);
-            NetworkServer.Spawn(buffInstance.gameObject);
+            var buffInstance = buff.GetInstance(transform.position, transform.rotation);
+            buffInstance.From(MyPlayer.PlayerID);
         }
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        MyPlayer = GetComponent<Player>();
 
     }
 

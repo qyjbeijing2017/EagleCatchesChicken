@@ -18,7 +18,7 @@ using Mirror.Experimental;
 public class Player : NetworkBehaviour
 {
     [SyncVar]
-    public uint PlayerID;
+    public int PlayerID;
     // Start is called before the first frame update
     void Start()
     {

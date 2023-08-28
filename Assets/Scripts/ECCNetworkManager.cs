@@ -21,8 +21,10 @@ public class ECCNetworkManager : NetworkManager
             NetworkServer.AddPlayerForConnection(conn, player);
             return;
         }
-        GameObject charactor = Instantiate(RoleList[id].gameObject);
-        NetworkServer.AddPlayerForConnection(conn, charactor);
-        PlayerList.Add(charactor.GetComponent<Player>());
+        GameObject character = Instantiate(RoleList[id].gameObject);
+        NetworkServer.AddPlayerForConnection(conn, character);
+        var Player = character.GetComponent<Player>();
+        PlayerList.Add(Player);
+        Player.PlayerID = id;
     }
 }

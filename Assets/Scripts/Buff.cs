@@ -5,7 +5,7 @@ using Mirror;
 using Unity.VisualScripting;
 
 [RequireComponent(typeof(NetworkIdentity))]
-public class Buff : NetworkBehaviour
+public class Buff : PoolAble<Buff>
 {
     Source PlayerSource;
     BuffManager PlayerBuffManager;
@@ -50,12 +50,14 @@ public class Buff : NetworkBehaviour
     [SyncVar]
     float TimeLeft;
 
-    public void From(Player player){
-        BuffFrom = player;
+    [ClientRpc]
+    public void From(int playerId){
+        var eccNetworkManager = ECCNetworkManager.singleton as ECCNetworkManager;
+        MyPlayer = eccNetworkManager.PlayerList[playerId];
     }
-    void Start()
+    void OnEnable()
     {
-        MyPlayer = GetComponentInParent<Player>();
+        Debug.Log("Buff OnEnable");
         PlayerBuffManager = MyPlayer.GetComponent<BuffManager>();
         PlayerBuffManager.Buffs.Add(this);
         if (isServer)
@@ -78,12 +80,11 @@ public class Buff : NetworkBehaviour
                 TimeLeft -= Time.deltaTime;
                 if (TimeLeft <= 0)
                 {
-                    Destroy(gameObject);
+                    RemoveBuff();
                 }
             }
         }
     }
-
 
     IEnumerator DotCoroutine()
     {
@@ -94,16 +95,13 @@ public class Buff : NetworkBehaviour
         }
     }
 
-    void OnDestroy()
-    {
-        PlayerBuffManager.Buffs.Remove(this);
-    }
-
     public void RemoveBuff()
     {
+        PlayerBuffManager.Buffs.Remove(this);
         if (isServer)
         {
-            Destroy(gameObject);
+            StopAllCoroutines();
+            RemoveInstance();
         }
     }
 }

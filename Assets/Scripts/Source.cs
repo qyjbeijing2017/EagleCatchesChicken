@@ -7,16 +7,14 @@ public class Source : NetworkBehaviour
 {
     [SerializeField]
     int MaxHealth = 100;
-
     public Transform HealthBarAnchor;
-
-
-    [HideInInspector]
-    [SyncVar]
-    public int Health = 100;
-
     public event System.Action<int, int> OnHealthChanged;
     public event System.Action OnHealthZero;
+
+
+    [Header("Debug")]
+    [SyncVar]
+    public int Health = 100;
 
     // Start is called before the first frame update
     void Start()
