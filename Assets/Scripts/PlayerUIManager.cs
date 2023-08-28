@@ -28,8 +28,7 @@ public class PlayerUIManager : MonoBehaviour
                 var newHealthBar = Instantiate(HealthBar, transform);
                 HealthBarList.Add(newHealthBar);
             }
-            HealthBarList[i].value = sources[i].Health;
-
+            HealthBarList[i].value = sources[i].healthPercent;
             var screenPos = mainCamera.WorldToScreenPoint(sources[i].HealthBarAnchor.position);
             HealthBarList[i].transform.position = screenPos;
             HealthBarList[i].gameObject.SetActive(true);

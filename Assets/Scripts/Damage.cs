@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-[RequireComponent(typeof(Animator))]
 public abstract class Damage : NetworkBehaviour
 {
     [HideInInspector]
@@ -66,7 +65,6 @@ public abstract class Damage : NetworkBehaviour
     {
         if(!isServer) return;
         if((Target.value & (1 << other.gameObject.layer)) == 0) return;
-
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
@@ -86,12 +84,12 @@ public abstract class Damage : NetworkBehaviour
         if(buffManager == null) return;
         foreach(var buff in BuffsOnEnter)
         {
-            Instantiate(buff, buffManager.transform);
+            buffManager.AddBuff(buff);
         }
 
         foreach(var buff in BuffsOnStay)
         {
-            var buffInstance = Instantiate(buff, buffManager.transform);
+            var buffInstance = buffManager.AddBuff(buff);
             BuffsNeedRemove.Add(buffInstance);
             BuffsOnStay.Remove(buff);
         }
@@ -123,7 +121,7 @@ public abstract class Damage : NetworkBehaviour
 
         foreach(var buff in BuffsOnExit)
         {
-            Instantiate(buff, buffManager.transform);
+            buffManager.AddBuff(buff);
         }
 
         foreach(var buff in BuffsNeedRemove)
@@ -158,7 +156,8 @@ public abstract class Damage : NetworkBehaviour
     {
         var colliders = GetComponents<Collider>();
         var animator = GetComponent<Animator>();
-        animator.enabled = false;
+        if(animator != null)
+            animator.enabled = false;
         foreach(var collider in colliders)
         {
             if(collider.isTrigger)
