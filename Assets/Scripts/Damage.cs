@@ -91,7 +91,6 @@ public abstract class Damage : NetworkBehaviour
         {
             var buffInstance = buffManager.AddBuff(buff);
             BuffsNeedRemove.Add(buffInstance);
-            BuffsOnStay.Remove(buff);
         }
     }
 

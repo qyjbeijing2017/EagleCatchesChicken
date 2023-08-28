@@ -26,20 +26,25 @@ public class Buff : PoolAble<Buff>
     [Header("Stagger Settings")]
     public bool IsStagger = false;
 
-    Player MyPlayer;
-    Player BuffFrom;
+    [Header("Debug")]
+    [SyncVar]
+    public int PlayerId;
+    // [SyncVar]
+    // public int BuffFrom;
+
 
     public Player player{
         get{
-            return MyPlayer;
+            if(PlayerId >= ECCNetworkManager.instance.PlayerList.Count) return null;
+            return ECCNetworkManager.instance.PlayerList[PlayerId];
         }
     }
 
-    public Player buffFrom{
-        get{
-            return BuffFrom;
-        }
-    }
+    // public Player buffFrom{
+    //     get{
+    //         return ECCNetworkManager.instance.PlayerList[BuffFrom];
+    //     }
+    // }
 
     public BuffManager buffManager{
         get{
@@ -50,25 +55,23 @@ public class Buff : PoolAble<Buff>
     [SyncVar]
     float TimeLeft;
 
-    [ClientRpc]
-    public void From(int playerId){
-        var eccNetworkManager = ECCNetworkManager.singleton as ECCNetworkManager;
-        MyPlayer = eccNetworkManager.PlayerList[playerId];
-    }
     void OnEnable()
     {
         Debug.Log("Buff OnEnable");
-        PlayerBuffManager = MyPlayer.GetComponent<BuffManager>();
+        if(player == null) return;
+        Debug.Log("Buff OnEnable 2");
+        PlayerBuffManager = player.GetComponent<BuffManager>();
         PlayerBuffManager.Buffs.Add(this);
         if (isServer)
         {
             TimeLeft = Duration;
-            PlayerSource = MyPlayer.GetComponent<Source>();
+            PlayerSource = player.GetComponent<Source>();
+            if (Dot > 0)
+            {
+                StartCoroutine(DotCoroutine());
+            }
         }
-        if (Dot > 0)
-        {
-            StartCoroutine(DotCoroutine());
-        }
+
     }
 
     void Update()
@@ -78,12 +81,15 @@ public class Buff : PoolAble<Buff>
             if (Duration > 0)
             {
                 TimeLeft -= Time.deltaTime;
-                if (TimeLeft <= 0)
-                {
-                    RemoveBuff();
-                }
+
             }
         }
+        if (TimeLeft <= 0)
+        {
+            RemoveBuff();
+        }
+        transform.position = player.transform.position;
+        transform.rotation = player.transform.rotation;
     }
 
     IEnumerator DotCoroutine()
@@ -98,8 +104,7 @@ public class Buff : PoolAble<Buff>
     public void RemoveBuff()
     {
         PlayerBuffManager.Buffs.Remove(this);
-        if (isServer)
-        {
+        if(isServer) {
             StopAllCoroutines();
             RemoveInstance();
         }

@@ -12,7 +12,7 @@ public class PrefabPool : MonoBehaviour
     public int currentCount;
     public Pool<GameObject> pool;
 
-    public void Init()
+    public void Start()
     {
         InitializePool();
         NetworkClient.RegisterPrefab(prefab, SpawnHandler, UnspawnHandler);
@@ -39,7 +39,7 @@ public class PrefabPool : MonoBehaviour
     {
         // use this object as parent so that objects dont crowd hierarchy
         GameObject next = Instantiate(prefab, transform);
-        next.name = $"{prefab.name}_pooled_{currentCount}";
+        next.name = prefab.name;
         next.SetActive(false);
         currentCount++;
         return next;

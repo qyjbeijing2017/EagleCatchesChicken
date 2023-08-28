@@ -2,21 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using System.Drawing.Text;
 
 public class PoolAble<T> : NetworkBehaviour
 {
-    PrefabPool Pool = null;
+    [HideInInspector]
+    public PrefabPool Pool = null;
 
-    public PrefabPool pool {
-        get {
-            if(Pool == null) {
+    public PrefabPool pool
+    {
+        get
+        {
+            if (Pool == null)
+            {
                 var poolObj = GameObject.Find($"{name}_pool");
-                if(poolObj == null) {
-                    poolObj = new GameObject($"{name}_pool");
-                    Pool = poolObj.AddComponent<PrefabPool>();
-                    Pool.prefab = gameObject;
-                    Pool.Init();
-                } else {
+                if (poolObj == null)
+                {
+                    Debug.LogError($"Pool {name}_pool not found");
+                }
+                else
+                {
                     Pool = poolObj.GetComponent<PrefabPool>();
                 }
             }
@@ -24,12 +29,14 @@ public class PoolAble<T> : NetworkBehaviour
         }
     }
 
-    public T GetInstance(Vector3 position, Quaternion rotation){
-       return pool.Get(position, rotation).GetComponent<T>();
+    public T GetInstance(Vector3 position, Quaternion rotation)
+    {
+        return pool.Get(position, rotation).GetComponent<T>();
     }
 
-    public void RemoveInstance(){
-        if(!isServer) return;
+    public void RemoveInstance()
+    {
+        if (!isServer) return;
         NetworkServer.UnSpawn(gameObject);
         pool.Return(gameObject);
     }

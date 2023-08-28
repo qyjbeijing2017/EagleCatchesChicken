@@ -14,7 +14,13 @@ public class Source : NetworkBehaviour
 
     [Header("Debug")]
     [SyncVar]
-    public int Health = 100;
+    int Health = 100;
+
+    public float healthPercent {
+        get {
+            return (float)Health / MaxHealth;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()

@@ -6,9 +6,15 @@ using Mirror;
 public class ECCNetworkManager : NetworkManager
 {
 
+    public static ECCNetworkManager instance {
+        get{
+            return (ECCNetworkManager)singleton;
+        }
+    }
+
     public List<Player> RoleList;
 
-    [HideInInspector]
+    [Header("Debug")]
     public List<Player> PlayerList = new List<Player>();
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)

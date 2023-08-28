@@ -20,13 +20,13 @@ public class BuffManager : NetworkBehaviour
 
     Player MyPlayer;
 
-    public void AddBuff(Buff buff)
+    [Server]
+    public Buff AddBuff(Buff buff)
     {
-        if (isServer)
-        {
-            var buffInstance = buff.GetInstance(transform.position, transform.rotation);
-            buffInstance.From(MyPlayer.PlayerID);
-        }
+        var buffInstance = buff.GetInstance(transform.position, transform.rotation);
+        NetworkServer.Spawn(buffInstance.gameObject);
+        buffInstance.PlayerId = MyPlayer.PlayerID;
+        return buffInstance;
     }
 
     // Start is called before the first frame update
