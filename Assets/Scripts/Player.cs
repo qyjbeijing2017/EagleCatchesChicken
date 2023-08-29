@@ -18,10 +18,14 @@ using Mirror.Experimental;
 public class Player : NetworkBehaviour
 {
     [SyncVar]
-    public int PlayerID;
+    public int PlayerId;
     // Start is called before the first frame update
     void Start()
     {
+        if(isClientOnly) {
+            ECCNetworkManager.instance.PlayerList.Add(this);
+            ECCNetworkManager.instance.PlayerList.Sort((a, b) => a.PlayerId.CompareTo(b.PlayerId));
+        }
     }
 
     // Update is called once per frame

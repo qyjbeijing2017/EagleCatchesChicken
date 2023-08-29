@@ -14,7 +14,7 @@ public class Hit : Damage
 
     private HashSet<Source> HasHit = new HashSet<Source>();
 
-    void OnTriggerEnter(Collider other)
+    override protected void OnTriggerEnter(Collider other)
     {
         var source = other.GetComponent<Source>();
         if (source)

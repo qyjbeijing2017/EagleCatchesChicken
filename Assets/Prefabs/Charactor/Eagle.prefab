@@ -52,8 +52,10 @@ MonoBehaviour:
   DamageEvents: []
   DamageList:
   - {fileID: 6813987724019297847}
+  MoveInRunning: 0
   CoolDownTimer: 0
-  isRunning: 0
+  IsRunning: 0
+  PlayerId: -1
 --- !u!1 &3433783916523636748
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,9 +129,9 @@ MonoBehaviour:
   Target:
     serializedVersion: 2
     m_Bits: 768
-  ExecOnStart: 0
   DamageAmountOnEnter: 5
-  BuffsOnEnter: []
+  BuffsOnEnter:
+  - {fileID: 5421685332143718729, guid: 637b35f7373214043b145e4397f6e648, type: 3}
   ImpulseOnEnter: {x: -120, y: 0, z: 0}
   IsLocalImpulseOnEnter: 1
   BuffsOnStay: []

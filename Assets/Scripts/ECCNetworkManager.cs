@@ -31,6 +31,6 @@ public class ECCNetworkManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, character);
         var Player = character.GetComponent<Player>();
         PlayerList.Add(Player);
-        Player.PlayerID = id;
+        Player.PlayerId = id;
     }
 }

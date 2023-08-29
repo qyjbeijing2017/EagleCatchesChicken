@@ -58,6 +58,13 @@ public abstract class Damage : NetworkBehaviour
         return impulse;
     }
 
+    [Server]
+    int DamageModifier(int damage)
+    {
+        if(MurdererBuffManager == null) return damage;
+        return damage + MurdererBuffManager.damageDealt;
+    }
+
     // Start is called before the first frame update
     virtual protected void OnTriggerEnter(Collider other)
     {
@@ -66,7 +73,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
-            source.TakeDamage(DamageAmountOnEnter);
+            source.TakeDamage(DamageModifier(DamageAmountOnEnter));
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
@@ -82,12 +89,12 @@ public abstract class Damage : NetworkBehaviour
         if(buffManager == null) return;
         foreach(var buff in BuffsOnEnter)
         {
-            buffManager.AddBuff(buff);
+            buffManager.AddBuff(buff, Murderer.PlayerId);
         }
 
         foreach(var buff in BuffsOnStay)
         {
-            var buffInstance = buffManager.AddBuff(buff);
+            var buffInstance = buffManager.AddBuff(buff, Murderer.PlayerId);
             BuffsNeedRemove.Add(buffInstance);
         }
     }
@@ -101,7 +108,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnExit > 0 && source != null)
         {
-            source.TakeDamage(DamageAmountOnExit);
+            source.TakeDamage(DamageModifier(DamageAmountOnExit));
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
@@ -118,7 +125,7 @@ public abstract class Damage : NetworkBehaviour
 
         foreach(var buff in BuffsOnExit)
         {
-            buffManager.AddBuff(buff);
+            buffManager.AddBuff(buff, Murderer.PlayerId);
         }
 
         foreach(var buff in BuffsNeedRemove)
@@ -130,11 +137,16 @@ public abstract class Damage : NetworkBehaviour
         }
     }
 
-    Skill skill = null;
+    Skill CurrentSkill = null;
+    Player Murderer = null;
+    BuffManager MurdererBuffManager = null;
 
     [Server]
     virtual public void Exec(Skill skill) {
-        this.skill = skill;
+        this.CurrentSkill = skill;
+        Murderer = skill.murderer;
+        if(Murderer)
+            MurdererBuffManager = Murderer.GetComponent<BuffManager>();
         foreach(var trigger in triggers)
         {
             trigger.enabled = true;
@@ -145,7 +157,9 @@ public abstract class Damage : NetworkBehaviour
 
     [Server]
     virtual public void Stop() {
-        this.skill = null;
+        this.CurrentSkill = null;
+        this.Murderer = null;
+        this.MurdererBuffManager = null;
         foreach(var trigger in triggers)
         {
             trigger.enabled = false;

@@ -22,11 +22,14 @@ public class Source : NetworkBehaviour
         }
     }
 
+    BuffManager PlayerBuffManager;
+
     // Start is called before the first frame update
     void Start()
     {
         if(isServer) {
             Health = MaxHealth;
+            PlayerBuffManager = GetComponent<BuffManager>();
         }
     }
 
@@ -34,7 +37,7 @@ public class Source : NetworkBehaviour
     public void TakeDamage(int damage)
     {
         if(isServer) {
-            Health -= damage;
+            Health -= damage + PlayerBuffManager.damageTaken;
             if(Health <= 0) {
                 Health = 0;
                 Destroy(gameObject);

@@ -5,7 +5,7 @@ using Mirror;
 using Unity.VisualScripting;
 
 [RequireComponent(typeof(NetworkIdentity))]
-public class Buff : PoolAble<Buff>
+public class Buff : NetworkBehaviour
 {
     Source PlayerSource;
     BuffManager PlayerBuffManager;
@@ -32,23 +32,29 @@ public class Buff : PoolAble<Buff>
 
     [Header("Debug")]
     [SyncVar]
-    public int PlayerId;
-    // [SyncVar]
-    // public int BuffFrom;
+    public int VictimId = -1;
+    [SyncVar]
+    public int MurdererId = -1;
+    [SyncVar]
+    [SerializeField]
+    float TimeLeft;
 
 
-    public Player player{
+    public Player victim{
         get{
-            if(PlayerId >= ECCNetworkManager.instance.PlayerList.Count) return null;
-            return ECCNetworkManager.instance.PlayerList[PlayerId];
+            if(VictimId < 0) return null;
+            if(VictimId >= ECCNetworkManager.instance.PlayerList.Count) return null;
+            return ECCNetworkManager.instance.PlayerList[VictimId];
         }
     }
 
-    // public Player buffFrom{
-    //     get{
-    //         return ECCNetworkManager.instance.PlayerList[BuffFrom];
-    //     }
-    // }
+    public Player murderer{
+        get{
+            if(MurdererId < 0) return null;
+            if(MurdererId >= ECCNetworkManager.instance.PlayerList.Count) return null;
+            return ECCNetworkManager.instance.PlayerList[MurdererId];
+        }
+    }
 
     public BuffManager buffManager{
         get{
@@ -56,20 +62,15 @@ public class Buff : PoolAble<Buff>
         }
     }
 
-    [SyncVar]
-    float TimeLeft;
-
-    void OnEnable()
+    void Start()
     {
-        Debug.Log("Buff OnEnable");
-        if(player == null) return;
-        Debug.Log("Buff OnEnable 2");
-        PlayerBuffManager = player.GetComponent<BuffManager>();
+        if(victim == null) return;
+        PlayerBuffManager = victim.GetComponent<BuffManager>();
         PlayerBuffManager.Buffs.Add(this);
         if (isServer)
         {
             TimeLeft = Duration;
-            PlayerSource = player.GetComponent<Source>();
+            PlayerSource = victim.GetComponent<Source>();
             if (Dot > 0)
             {
                 StartCoroutine(DotCoroutine());
@@ -85,15 +86,14 @@ public class Buff : PoolAble<Buff>
             if (Duration > 0)
             {
                 TimeLeft -= Time.deltaTime;
-
+                if (TimeLeft <= 0)
+                {
+                    RemoveBuff();
+                }
             }
         }
-        if (TimeLeft <= 0)
-        {
-            RemoveBuff();
-        }
-        transform.position = player.transform.position;
-        transform.rotation = player.transform.rotation;
+        transform.position = victim.transform.position;
+        transform.rotation = victim.transform.rotation;
     }
 
     IEnumerator DotCoroutine()
@@ -105,12 +105,17 @@ public class Buff : PoolAble<Buff>
         }
     }
 
+    [Server]
     public void RemoveBuff()
     {
         PlayerBuffManager.Buffs.Remove(this);
-        if(isServer) {
-            StopAllCoroutines();
-            RemoveInstance();
-        }
+        StopAllCoroutines();
+        RpcRemoveBuff();
+        NetworkServer.Destroy(gameObject);
+    }
+
+    public void RpcRemoveBuff()
+    {
+        PlayerBuffManager.Buffs.Remove(this);
     }
 }

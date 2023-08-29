@@ -16,6 +16,8 @@ public class SkillManager : NetworkBehaviour
 
     Player MyPlayer;
 
+    BuffManager PlayerBuffManager;
+
     public bool canMove{
         get{
             foreach(var skill in Skills) {
@@ -31,6 +33,7 @@ public class SkillManager : NetworkBehaviour
     void Start()
     {
         MyPlayer = GetComponent<Player>();
+        PlayerBuffManager = GetComponent<BuffManager>();
         if (isLocalPlayer)
         {
             InputActions = new PlayerInputAction();
@@ -71,9 +74,10 @@ public class SkillManager : NetworkBehaviour
     [Command]
     void SkillStart(int skillNo)
     {
+        if(PlayerBuffManager.isStagger) return;
         if(skillNo >= 0 && skillNo < Skills.Count)
         {
-            if(Skills[skillNo].exec(MyPlayer.PlayerID)){
+            if(Skills[skillNo].exec(MyPlayer.PlayerId)){
                 OnSkillStart?.Invoke(skillNo);
             }
         }

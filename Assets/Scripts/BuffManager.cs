@@ -18,14 +18,20 @@ public class BuffManager : NetworkBehaviour
     bool IsStagger = false;
     public bool isStagger { get { return IsStagger; } }
 
+    int DamageDealt = 0;
+    public int damageDealt { get { return DamageDealt; } }
+    int DamageTaken = 0;
+    public int damageTaken { get { return DamageTaken; } }
+
     Player MyPlayer;
 
     [Server]
-    public Buff AddBuff(Buff buff)
+    public Buff AddBuff(Buff buff, int murdererId)
     {
-        var buffInstance = buff.GetInstance(transform.position, transform.rotation);
+        var buffInstance = Instantiate(buff);
         NetworkServer.Spawn(buffInstance.gameObject);
-        buffInstance.PlayerId = MyPlayer.PlayerID;
+        buffInstance.VictimId = MyPlayer.PlayerId;
+        buffInstance.MurdererId = murdererId;
         return buffInstance;
     }
 
@@ -47,6 +53,8 @@ public class BuffManager : NetworkBehaviour
             SlowDownSpeed += buff.SlowDownSpeed;
             SlowDownPer += buff.SlowDownPer;
             IsStagger |= buff.IsStagger;
+            DamageDealt += buff.DamageDealt;
+            DamageTaken += buff.DamageTaken;
         }
     }
 }
