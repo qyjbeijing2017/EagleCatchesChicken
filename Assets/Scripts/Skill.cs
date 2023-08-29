@@ -45,9 +45,24 @@ public class Skill : NetworkBehaviour
     [SyncVar]
     [SerializeField]
     private bool IsRunning = false;
+    [SyncVar]
+    [SerializeField]
+    private int PlayerId = -1;
 
-    public bool isRunning {
-        get {
+    public Player murderer
+    {
+        get
+        {
+            if (PlayerId < 0) return null;
+            if (PlayerId >= ECCNetworkManager.instance.PlayerList.Count) return null;
+            return ECCNetworkManager.instance.PlayerList[PlayerId];
+        }
+    }
+
+    public bool isRunning
+    {
+        get
+        {
             return IsRunning;
         }
     }
@@ -61,10 +76,11 @@ public class Skill : NetworkBehaviour
     }
 
     [Server]
-    virtual public bool exec()
+    virtual public bool exec(int playerID)
     {
         if (IsRunning || CoolDownTimer > 0) return false;
         IsRunning = true;
+        PlayerId = playerID;
         StartCoroutine(SkillCoroutine());
         return true;
     }
@@ -76,7 +92,7 @@ public class Skill : NetworkBehaviour
         {
             yield return new WaitForSeconds(damageEvent.Time);
             Damage damage = damageEvent.Damage;
-            damage.Exec();
+            damage.Exec(this);
         }
         yield return null;
     }
@@ -84,18 +100,21 @@ public class Skill : NetworkBehaviour
     [Server]
     virtual public void Stop()
     {
-        if(!IsRunning) return;
+        if (!IsRunning) return;
         StopAllCoroutines();
         IsRunning = false;
-        if(isCoolDownAfterSkill)
-        CoolDownTimer = CoolDown;
+        PlayerId = -1;
+        if (isCoolDownAfterSkill)
+            CoolDownTimer = CoolDown;
     }
 
     [Server]
-    virtual public void OnDamage(int damageIndex){
-        if(damageIndex < DamageList.Count){
-            var damage =  DamageList[damageIndex];
-            damage.Exec();
+    virtual public void OnDamage(int damageIndex)
+    {
+        if (damageIndex < DamageList.Count)
+        {
+            var damage = DamageList[damageIndex];
+            damage.Exec(this);
         }
     }
 

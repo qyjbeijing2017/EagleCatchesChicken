@@ -26,10 +26,10 @@ public class Hit : Damage
         base.OnTriggerEnter(other);
     }
 
-    public override void Exec()
+    public override void Exec(Skill skill)
     {
         HasHit.Clear();
-        base.Exec();
+        base.Exec(skill);
         if (OnHitStart != null)
             OnHitStart();
         StartCoroutine(HitCoroutine());

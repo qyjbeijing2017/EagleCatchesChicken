@@ -9,8 +9,6 @@ public abstract class Damage : NetworkBehaviour
     public DamageType Type = DamageType.None;
     [SerializeField]
     private LayerMask Target = 0;
-    [SerializeField]
-    protected bool ExecOnStart = false;
 
     [Header("Damage Enter")]
     [SerializeField]
@@ -132,8 +130,11 @@ public abstract class Damage : NetworkBehaviour
         }
     }
 
+    Skill skill = null;
+
     [Server]
-    virtual public void Exec() {
+    virtual public void Exec(Skill skill) {
+        this.skill = skill;
         foreach(var trigger in triggers)
         {
             trigger.enabled = true;
@@ -144,6 +145,7 @@ public abstract class Damage : NetworkBehaviour
 
     [Server]
     virtual public void Stop() {
+        this.skill = null;
         foreach(var trigger in triggers)
         {
             trigger.enabled = false;
@@ -170,9 +172,5 @@ public abstract class Damage : NetworkBehaviour
 
     virtual protected void Start()
     {
-
-        if(ExecOnStart && isServer) {
-            Exec();
-        }
     }
 }

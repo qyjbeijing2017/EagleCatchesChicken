@@ -26,6 +26,10 @@ public class Buff : PoolAble<Buff>
     [Header("Stagger Settings")]
     public bool IsStagger = false;
 
+    [Header("Damage Modifier Settings")]
+    public int DamageDealt = 0;
+    public int DamageTaken = 0;
+
     [Header("Debug")]
     [SyncVar]
     public int PlayerId;
