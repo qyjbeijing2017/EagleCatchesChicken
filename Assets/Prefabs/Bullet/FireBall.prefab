@@ -305,7 +305,7 @@ MonoBehaviour:
   LifeTime: 0.5
   StoppableLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 768
 --- !u!1 &5602997355152413628
 GameObject:
   m_ObjectHideFlags: 0

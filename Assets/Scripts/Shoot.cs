@@ -18,7 +18,6 @@ public class Shoot : Damage
     [Server]
     public override void Exec(Skill skill)
     {
-        Debug.Log("OnShoot");
         var bullet = Instantiate(BulletPrefab, transform.position, transform.rotation);
         NetworkServer.Spawn(bullet.gameObject);
         bullet.transform.position = transform.position;

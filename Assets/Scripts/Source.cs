@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using Telepathy;
 
 public class Source : NetworkBehaviour
 {
@@ -40,7 +41,7 @@ public class Source : NetworkBehaviour
             Health -= damage + PlayerBuffManager.damageTaken;
             if(Health <= 0) {
                 Health = 0;
-                Destroy(gameObject);
+                NetworkServer.Destroy(gameObject);
             }
             if(Health > MaxHealth) {
                 Health = MaxHealth;
