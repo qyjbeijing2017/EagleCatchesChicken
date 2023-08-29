@@ -51,7 +51,7 @@ public abstract class Damage : NetworkBehaviour
                 var rotation = Quaternion.LookRotation(direction, Vector3.up);          
                 return rotation * impulse;
             case ImpulseMode.Local:
-                return me.TransformVector(impulse);
+                return me.rotation * impulse;
             case ImpulseMode.Global:
                 return impulse;
         }

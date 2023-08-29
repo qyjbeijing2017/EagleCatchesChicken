@@ -294,7 +294,7 @@ MonoBehaviour:
     m_Bits: 768
   DamageAmountOnEnter: 10
   BuffsOnEnter: []
-  ImpulseOnEnter: {x: 0, y: 0, z: 0}
+  ImpulseOnEnter: {x: 0, y: 0, z: 5}
   IsLocalImpulseOnEnter: 0
   BuffsOnStay: []
   DamageAmountOnExit: 0
