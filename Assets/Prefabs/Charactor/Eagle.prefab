@@ -56,6 +56,125 @@ MonoBehaviour:
   CoolDownTimer: 0
   IsRunning: 0
   PlayerId: -1
+--- !u!1 &1226055805449848706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 902292955386194115}
+  - component: {fileID: 3067278261663937641}
+  m_Layer: 7
+  m_Name: Shoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &902292955386194115
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226055805449848706}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.03, z: 0.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8958141467569393179}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3067278261663937641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226055805449848706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcce02ba4e763144ca4535f5cd3efaf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  Type: 0
+  Target:
+    serializedVersion: 2
+    m_Bits: 0
+  DamageAmountOnEnter: 0
+  BuffsOnEnter: []
+  ImpulseOnEnter: {x: 0, y: 0, z: 0}
+  IsLocalImpulseOnEnter: 0
+  BuffsOnStay: []
+  DamageAmountOnExit: 0
+  BuffsOnExit: []
+  ImpulseOnExit: {x: 0, y: 0, z: 0}
+  IsLocalImpulseOnExit: 0
+  BulletPrefab: {fileID: -2937116524720052422, guid: 0f75156d84388dc4885bcbfb8706e9bd,
+    type: 3}
+--- !u!1 &1504738264749767827
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8958141467569393179}
+  - component: {fileID: 5796041702233983920}
+  m_Layer: 7
+  m_Name: Fire
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8958141467569393179
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504738264749767827}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 902292955386194115}
+  m_Father: {fileID: 5764284787746080262}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5796041702233983920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1504738264749767827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9f93309386049f29468f7fe7d8b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  CoolDown: 5
+  isCoolDownAfterSkill: 1
+  DamageEvents: []
+  DamageList:
+  - {fileID: 3067278261663937641}
+  MoveInRunning: 0
+  CoolDownTimer: 0
+  IsRunning: 0
+  PlayerId: -1
 --- !u!1 &3433783916523636748
 GameObject:
   m_ObjectHideFlags: 0
@@ -989,13 +1108,18 @@ PrefabInstance:
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: Skills.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: Skills.Array.data[0]
       value: 
       objectReference: {fileID: 8567339099405002033}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[1]
+      value: 
+      objectReference: {fileID: 5796041702233983920}
     - target: {fileID: 307691792209447568, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Height
@@ -1161,6 +1285,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5774171729493354666}
+    - targetCorrespondingSourceObject: {fileID: 6076571768309708131, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8958141467569393179}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}

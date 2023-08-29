@@ -137,9 +137,9 @@ public abstract class Damage : NetworkBehaviour
         }
     }
 
-    Skill CurrentSkill = null;
-    Player Murderer = null;
-    BuffManager MurdererBuffManager = null;
+    protected Skill CurrentSkill = null;
+    protected Player Murderer = null;
+    protected BuffManager MurdererBuffManager = null;
 
     [Server]
     virtual public void Exec(Skill skill) {
@@ -182,9 +182,5 @@ public abstract class Damage : NetworkBehaviour
                 collider.enabled = false;
             }
         }
-    }
-
-    virtual protected void Start()
-    {
     }
 }
