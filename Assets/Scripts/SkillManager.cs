@@ -14,6 +14,17 @@ public class SkillManager : NetworkBehaviour
 
     PlayerInputAction InputActions;
 
+    public bool canMove{
+        get{
+            foreach(var skill in Skills) {
+                if(!skill.moveInRunning && skill.isRunning) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -59,8 +70,9 @@ public class SkillManager : NetworkBehaviour
     {
         if(skillNo >= 0 && skillNo < Skills.Count)
         {
-            OnSkillStart?.Invoke(skillNo);
-            Skills[skillNo].exec();
+            if(Skills[skillNo].exec()){
+                OnSkillStart?.Invoke(skillNo);
+            }
         }
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using Unity.VisualScripting;
 
 [Serializable]
 public struct DamageEvent
@@ -14,10 +15,10 @@ public struct DamageEvent
 public class Skill : NetworkBehaviour
 {
     [SerializeField]
-    [Tooltip("Cooldown <= 0 means no cooldown")]
-    private float Cooldown = 0f;
+    [Tooltip("CoolDown <= 0 means no cool down")]
+    private float CoolDown = 0f;
     [SerializeField]
-    private bool isCooldownAfterSkill = true;
+    private bool isCoolDownAfterSkill = true;
     // Start is called before the first frame update
 
     [SerializeField]
@@ -26,25 +27,46 @@ public class Skill : NetworkBehaviour
     [SerializeField]
     private List<Damage> DamageList = new List<Damage>();
 
+    [SerializeField]
+    private bool MoveInRunning = false;
+
+    public bool moveInRunning
+    {
+        get
+        {
+            return MoveInRunning;
+        }
+    }
+
+    [Header("Debug")]
     [SyncVar]
-    private float CooldownTimer = 0f;
+    [SerializeField]
+    private float CoolDownTimer = 0f;
     [SyncVar]
-    private bool isRunning = false;
+    [SerializeField]
+    private bool IsRunning = false;
+
+    public bool isRunning {
+        get {
+            return IsRunning;
+        }
+    }
 
     public float coolDownLeft
     {
         get
         {
-            return CooldownTimer;
+            return CoolDownTimer;
         }
     }
 
     [Server]
-    virtual public void exec()
+    virtual public bool exec()
     {
-        if (isRunning) return;
-        isRunning = true;
+        if (IsRunning || CoolDownTimer > 0) return false;
+        IsRunning = true;
         StartCoroutine(SkillCoroutine());
+        return true;
     }
 
     [Server]
@@ -62,11 +84,11 @@ public class Skill : NetworkBehaviour
     [Server]
     virtual public void Stop()
     {
-        if(!isRunning) return;
+        if(!IsRunning) return;
         StopAllCoroutines();
-        isRunning = false;
-        if(isCooldownAfterSkill)
-        CooldownTimer = Cooldown;
+        IsRunning = false;
+        if(isCoolDownAfterSkill)
+        CoolDownTimer = CoolDown;
     }
 
     [Server]
@@ -79,16 +101,16 @@ public class Skill : NetworkBehaviour
 
     void Start()
     {
-        CooldownTimer = Cooldown;
+        CoolDownTimer = 0;
         DamageEvents.Sort((a, b) => a.Time.CompareTo(b.Time));
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (CooldownTimer > 0)
+        if (isServer && CoolDownTimer > 0)
         {
-            CooldownTimer -= Time.deltaTime;
+            CoolDownTimer -= Time.deltaTime;
         }
     }
 }

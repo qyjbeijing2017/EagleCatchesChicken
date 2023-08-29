@@ -65,6 +65,7 @@ public class Move : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
+            if(!PlayerSkillManager.canMove) return;
             if(PlayerBuffManager.isStagger) return;
 
             MoveVelocity = Vector2.zero;

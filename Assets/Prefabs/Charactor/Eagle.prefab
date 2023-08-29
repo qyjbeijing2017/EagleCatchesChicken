@@ -47,11 +47,13 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  Cooldown: 0
-  isCooldownAfterSkill: 1
+  CoolDown: 2
+  isCoolDownAfterSkill: 1
   DamageEvents: []
   DamageList:
   - {fileID: 6813987724019297847}
+  CoolDownTimer: 0
+  isRunning: 0
 --- !u!1 &3433783916523636748
 GameObject:
   m_ObjectHideFlags: 0

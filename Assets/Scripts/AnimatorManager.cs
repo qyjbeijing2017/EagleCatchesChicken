@@ -29,7 +29,8 @@ public class AnimatorManager : NetworkBehaviour
         if(isServer) {
             PlayerSkillManager = GetComponent<SkillManager>();
             PlayerSkillManager.OnSkillStart += (int skillNo)=>{
-                // animator.SetTrigger($"Skill{skillNo}");
+                if(isServerOnly)
+                animator.SetTrigger($"Skill{skillNo}");
                 RpcSkillStart(skillNo);
             };
         }
