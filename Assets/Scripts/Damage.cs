@@ -132,6 +132,7 @@ public abstract class Damage : NetworkBehaviour
         }
     }
 
+    [Server]
     virtual public void Exec() {
         foreach(var trigger in triggers)
         {
@@ -139,9 +140,9 @@ public abstract class Damage : NetworkBehaviour
         }
         if(animator != null)
             animator.enabled = true;
-
     }
 
+    [Server]
     virtual public void Stop() {
         foreach(var trigger in triggers)
         {
@@ -170,7 +171,7 @@ public abstract class Damage : NetworkBehaviour
     virtual protected void Start()
     {
 
-        if(ExecOnStart){
+        if(ExecOnStart && isServer) {
             Exec();
         }
     }

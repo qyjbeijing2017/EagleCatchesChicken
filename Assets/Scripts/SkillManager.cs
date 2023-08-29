@@ -12,25 +12,6 @@ public class SkillManager : NetworkBehaviour
     [SerializeField]
     List<Skill> Skills = new List<Skill>();
 
-    Skill CurrentSkill = null;
-    int CurrentSkillIndex = -1;
-
-    public bool isSkillRunning
-    {
-        get
-        {
-            return CurrentSkill != null;
-        }
-    }
-
-    public int skillNo
-    {
-        get
-        {
-            return CurrentSkillIndex;
-        }
-    }
-
     PlayerInputAction InputActions;
 
     // Start is called before the first frame update
@@ -51,9 +32,7 @@ public class SkillManager : NetworkBehaviour
     {
         if (Skills.Count > 0)
         {
-            Skills[0].exec();
-            CurrentSkill = Skills[0];
-            CurrentSkillIndex = 0;
+            SkillStart(0);
         }
     }
 
@@ -61,9 +40,7 @@ public class SkillManager : NetworkBehaviour
     {
         if (Skills.Count > 1)
         {
-            Skills[1].exec();
-            CurrentSkill = Skills[1];
-            CurrentSkillIndex = 1;
+            SkillStart(1);
         }
     }
 
@@ -71,34 +48,43 @@ public class SkillManager : NetworkBehaviour
     {
         if (Skills.Count > 2)
         {
-            Skills[2].exec();
-            CurrentSkill = Skills[2];
-            CurrentSkillIndex = 2;
+            SkillStart(2);
         }
     }
 
-    void OnSkillEnd()
+    public event System.Action<int> OnSkillStart;
+
+    [Command]
+    void SkillStart(int skillNo)
     {
-        if (CurrentSkill != null)
+        if(skillNo >= 0 && skillNo < Skills.Count)
         {
-            CurrentSkill.Stop();
-            CurrentSkill = null;
-            CurrentSkillIndex = -1;
+            OnSkillStart?.Invoke(skillNo);
+            Skills[skillNo].exec();
         }
     }
 
-    void OnDamage(int damageIndex)
+    [Server]
+    void OnSkillEnd(int skillNo)
     {
-        if (CurrentSkill != null)
+        if(skillNo >= 0 && skillNo < Skills.Count)
         {
-            CurrentSkill.OnDamage(damageIndex);
+            Skills[skillNo].Stop();
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    // magic is name:damageNo, like Fire:0
+    [Server]
+    void OnDamage(string magic)
     {
-
+        var magicSplit = magic.Split(':');
+        if(magicSplit.Length != 2) {
+            Debug.LogError($"magicSplit.Length != 2, magic = {magic}");
+            return;
+        }
+        var name = magicSplit[0];
+        var damageNo = int.Parse(magicSplit[1]);
+        Skills.FindAll(skill => skill.name == name).ForEach(skill => skill.OnDamage(damageNo));
     }
 
     void OnDestroy()

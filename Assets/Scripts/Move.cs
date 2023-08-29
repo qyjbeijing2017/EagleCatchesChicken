@@ -53,7 +53,6 @@ public class Move : NetworkBehaviour
     {
         if(PlayerBuffManager.isStagger) return;
         if (JumpCount >= JumpSpeeds.Count) return;
-        if(PlayerSkillManager.isSkillRunning) return;
         var jumpSpeed = JumpSpeeds[JumpCount];
         PlayerRigidbody.velocity = Vector3.up * jumpSpeed;
         JumpCount++;
@@ -67,7 +66,6 @@ public class Move : NetworkBehaviour
         if (isLocalPlayer)
         {
             if(PlayerBuffManager.isStagger) return;
-            if(PlayerSkillManager.isSkillRunning) return;
 
             MoveVelocity = Vector2.zero;
             

@@ -39,14 +39,15 @@ public class Skill : NetworkBehaviour
         }
     }
 
+    [Server]
     virtual public void exec()
     {
         if (isRunning) return;
         isRunning = true;
         StartCoroutine(SkillCoroutine());
-
     }
 
+    [Server]
     virtual protected IEnumerator SkillCoroutine()
     {
         foreach (DamageEvent damageEvent in DamageEvents)
@@ -58,6 +59,7 @@ public class Skill : NetworkBehaviour
         yield return null;
     }
 
+    [Server]
     virtual public void Stop()
     {
         if(!isRunning) return;
@@ -67,6 +69,7 @@ public class Skill : NetworkBehaviour
         CooldownTimer = Cooldown;
     }
 
+    [Server]
     virtual public void OnDamage(int damageIndex){
         if(damageIndex < DamageList.Count){
             var damage =  DamageList[damageIndex];

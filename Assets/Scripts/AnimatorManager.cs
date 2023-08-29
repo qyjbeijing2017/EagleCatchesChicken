@@ -17,17 +17,28 @@ public class AnimatorManager : NetworkBehaviour
 
     void Start()
     {
-        if(isLocalPlayer) {
-            animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
+        if(isLocalPlayer || isServer) {
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerMove = GetComponent<Move>();
             PlayerJumpManager = GetComponentInChildren<JumpManager>();
-            PlayerSkillManager = GetComponent<SkillManager>();
-
             if(PlayerJumpManager == null) {
                 Debug.LogError("PlayerJumpManager is null");
             }
         }
+        if(isServer) {
+            PlayerSkillManager = GetComponent<SkillManager>();
+            PlayerSkillManager.OnSkillStart += (int skillNo)=>{
+                animator.SetTrigger($"Skill{skillNo}");
+                RpcSkillStart(skillNo);
+            };
+        }
+    }
+
+    [ClientRpc]
+    void RpcSkillStart(int skillNo)
+    {
+        animator.SetTrigger($"Skill{skillNo}");
     }
 
     void Update()
@@ -47,9 +58,6 @@ public class AnimatorManager : NetworkBehaviour
             animator.SetFloat("Up", PlayerRigidbody.velocity.y);
             animator.SetFloat("Height", PlayerJumpManager.height);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
-            animator.SetBool("IsSkillRunning", PlayerSkillManager.isSkillRunning);
-            animator.SetInteger("SkillNo", PlayerSkillManager.skillNo);
-
         }
     }
 
