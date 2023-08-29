@@ -21,7 +21,7 @@ public class Bullet : Damage
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
-        if ((StoppableLayer.value & (1 << other.gameObject.layer)) == 0)
+        if ((StoppableLayer & other.gameObject.layer) > 0)
         {
             NetworkServer.Destroy(gameObject);
         }
@@ -52,6 +52,7 @@ public class Bullet : Damage
             LifeTimeCounter -= Time.deltaTime;
             if (LifeTimeCounter <= 0)
             {
+                Debug.Log("FireBall Destroyed by time");
                 NetworkServer.Destroy(gameObject);
             }
         }

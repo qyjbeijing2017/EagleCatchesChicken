@@ -69,7 +69,7 @@ public abstract class Damage : NetworkBehaviour
     virtual protected void OnTriggerEnter(Collider other)
     {
         if(!isServer) return;
-        if((Target.value & (1 << other.gameObject.layer)) == 0) return;
+        if((Target & other.gameObject.layer) == 0) return;
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
@@ -102,7 +102,7 @@ public abstract class Damage : NetworkBehaviour
     virtual protected void OnTriggerExit(Collider other)
     {
         if(!isServer) return;
-        if((Target.value & (1 << other.gameObject.layer)) == 0) return;
+        if((Target & other.gameObject.layer) == 0) return;
 
 
         var source = other.GetComponent<Source>();
