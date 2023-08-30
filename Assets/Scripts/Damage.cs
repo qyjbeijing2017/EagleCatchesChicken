@@ -75,7 +75,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
-            source.TakeDamage(DamageModifier(DamageAmountOnEnter), Murderer);
+            source.TakeDamage(DamageModifier(DamageAmountOnEnter), Murderer, CurrentSkill, null);
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
@@ -110,7 +110,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnExit > 0 && source != null)
         {
-            source.TakeDamage(DamageModifier(DamageAmountOnExit), Murderer);
+            source.TakeDamage(DamageModifier(DamageAmountOnExit), Murderer, CurrentSkill, null);
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
