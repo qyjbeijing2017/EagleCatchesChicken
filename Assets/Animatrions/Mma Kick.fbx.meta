@@ -64,9 +64,9 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.99609375
+      - time: 1
         functionName: OnSkillEnd
-        data: 
+        data: Kick
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

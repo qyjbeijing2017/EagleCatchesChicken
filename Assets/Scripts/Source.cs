@@ -17,8 +17,10 @@ public class Source : NetworkBehaviour
     [SyncVar]
     int Health = 100;
 
-    public float healthPercent {
-        get {
+    public float healthPercent
+    {
+        get
+        {
             return (float)Health / MaxHealth;
         }
     }
@@ -28,22 +30,66 @@ public class Source : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if(isServer) {
+        if (isServer)
+        {
             Health = MaxHealth;
             PlayerBuffManager = GetComponent<BuffManager>();
         }
     }
 
-
-    public void TakeDamage(int damage)
+    [Server]
+    private void HandleExecute(ref int hpDamage, BuffManager buffManager, bool isDealt)
     {
-        if(isServer) {
-            Health -= damage + PlayerBuffManager.damageTaken;
-            if(Health <= 0) {
+        if (isDealt)
+        {
+            if (buffManager.executeDealtUnderHp > Health && Health / MaxHealth < buffManager.executeDealtUnderPercent)
+            {
+                if (buffManager.executeDealtOnce)
+                {
+                    hpDamage = Health;
+                }
+                else
+                {
+                    hpDamage += buffManager.executeDealtDamageModifier;
+                }
+            }
+        }
+        else
+        {
+            if (buffManager.executeTakenUnderHp > Health && Health / MaxHealth < buffManager.executeTakenUnderPercent)
+            {
+                if (buffManager.executeTakenOnce)
+                {
+                    hpDamage = Health;
+                }
+                else
+                {
+                    hpDamage += buffManager.executeTakenDamageModifier;
+                }
+            }
+        }
+    }
+
+
+    public void TakeDamage(int damage, Player murderer, Skill skill, Buff buff)
+    {
+        if (isServer)
+        {
+            var hpDamage = damage + PlayerBuffManager.damageTaken;
+            if (PlayerBuffManager.invincible && hpDamage > 0) return;
+            var murderBuffManager = murderer.GetComponent<BuffManager>();
+            HandleExecute(ref hpDamage, murderBuffManager, true);
+            HandleExecute(ref hpDamage, PlayerBuffManager, false);
+
+
+            Health -= hpDamage;
+            if (Health <= 0)
+            {
                 Health = 0;
                 NetworkServer.Destroy(gameObject);
             }
-            if(Health > MaxHealth) {
+            if (Health > MaxHealth)
+            {
                 Health = MaxHealth;
             }
         }
@@ -52,6 +98,6 @@ public class Source : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }

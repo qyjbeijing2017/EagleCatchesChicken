@@ -107,6 +107,7 @@ MonoBehaviour:
   Target:
     serializedVersion: 2
     m_Bits: 0
+  StopOnSkillStopped: 0
   DamageAmountOnEnter: 0
   BuffsOnEnter: []
   ImpulseOnEnter: {x: 0, y: 0, z: 0}
@@ -248,6 +249,7 @@ MonoBehaviour:
   Target:
     serializedVersion: 2
     m_Bits: 768
+  StopOnSkillStopped: 0
   DamageAmountOnEnter: 5
   BuffsOnEnter:
   - {fileID: 5421685332143718729, guid: 637b35f7373214043b145e4397f6e648, type: 3}
@@ -259,6 +261,117 @@ MonoBehaviour:
   ImpulseOnExit: {x: 0, y: 0, z: 0}
   IsLocalImpulseOnExit: 0
   Duration: 0.3
+--- !u!1 &8799984026840149464
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6518418209820597195}
+  - component: {fileID: 3757548561594558454}
+  - component: {fileID: 1642077682523385179}
+  m_Layer: 7
+  m_Name: Dash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6518418209820597195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8799984026840149464}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5764284787746080262}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3757548561594558454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8799984026840149464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff9f93309386049f29468f7fe7d8b7a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  CoolDown: 0
+  isCoolDownAfterSkill: 1
+  DamageEvents: []
+  DamageList:
+  - {fileID: 1642077682523385179}
+  MoveInRunning: 0
+  CoolDownTimer: 0
+  IsRunning: 0
+  PlayerId: -1
+--- !u!114 &1642077682523385179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8799984026840149464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74031d4b1cb028240aa536993ca8860c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  Type: 0
+  Target:
+    serializedVersion: 2
+    m_Bits: 0
+  StopOnSkillStopped: 0
+  DamageAmountOnEnter: 0
+  BuffsOnEnter: []
+  ImpulseOnEnter: {x: 0, y: 0, z: 0}
+  IsLocalImpulseOnEnter: 0
+  BuffsOnStay: []
+  DamageAmountOnExit: 0
+  BuffsOnExit: []
+  ImpulseOnExit: {x: 0, y: 0, z: 0}
+  IsLocalImpulseOnExit: 0
+  Distance:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.000024871784
+      value: -0.000021025073
+      inSlope: 22.02429
+      outSlope: 22.02429
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.034341756
+    - serializedVersion: 3
+      time: 0.650191
+      value: 4.9839797
+      inSlope: 1.0000359
+      outSlope: 1.0000359
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.040883105
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  MaxTime: 1
 --- !u!1001 &741621339041031335
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1108,7 +1221,7 @@ PrefabInstance:
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: Skills.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
@@ -1120,6 +1233,11 @@ PrefabInstance:
       propertyPath: Skills.Array.data[1]
       value: 
       objectReference: {fileID: 5796041702233983920}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[2]
+      value: 
+      objectReference: {fileID: 3757548561594558454}
     - target: {fileID: 307691792209447568, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Height
@@ -1289,6 +1407,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8958141467569393179}
+    - targetCorrespondingSourceObject: {fileID: 6076571768309708131, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6518418209820597195}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}

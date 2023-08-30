@@ -10,6 +10,9 @@ public class SkillManager : NetworkBehaviour
     public DamageType PlayerDamageType;
 
     [SerializeField]
+    Attack Attack;
+
+    [SerializeField]
     List<Skill> Skills = new List<Skill>();
 
     PlayerInputAction InputActions;
@@ -84,12 +87,9 @@ public class SkillManager : NetworkBehaviour
     }
 
     [Server]
-    void OnSkillEnd(int skillNo)
+    void OnSkillEnd(string skillName)
     {
-        if(skillNo >= 0 && skillNo < Skills.Count)
-        {
-            Skills[skillNo].Stop();
-        }
+        Skills.FindAll(skill => skill.name == skillName).ForEach(skill => skill.Stop());
     }
 
     // magic is name:damageNo, like Fire:0

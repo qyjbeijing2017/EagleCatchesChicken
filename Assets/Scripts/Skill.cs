@@ -47,7 +47,7 @@ public class Skill : NetworkBehaviour
     private bool IsRunning = false;
     [SyncVar]
     [SerializeField]
-    private int PlayerId = -1;
+    protected int PlayerId = -1;
 
     public Player murderer
     {
@@ -97,10 +97,13 @@ public class Skill : NetworkBehaviour
         yield return null;
     }
 
+    public event Action OnStopped;
+
     [Server]
     virtual public void Stop()
     {
         if (!IsRunning) return;
+        OnStopped?.Invoke();
         StopAllCoroutines();
         IsRunning = false;
         PlayerId = -1;
@@ -118,7 +121,7 @@ public class Skill : NetworkBehaviour
         }
     }
 
-    void Start()
+    virtual protected void Start()
     {
         CoolDownTimer = 0;
         DamageEvents.Sort((a, b) => a.Time.CompareTo(b.Time));

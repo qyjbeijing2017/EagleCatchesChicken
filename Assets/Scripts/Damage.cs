@@ -8,7 +8,9 @@ public abstract class Damage : NetworkBehaviour
     [HideInInspector]
     public DamageType Type = DamageType.None;
     [SerializeField]
-    private LayerMask Target = 0;
+    protected LayerMask Target = 0;
+    [SerializeField]
+    protected bool StopOnSkillStopped = false;
 
     [Header("Damage Enter")]
     [SerializeField]
@@ -73,7 +75,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnEnter > 0 && source != null)
         {
-            source.TakeDamage(DamageModifier(DamageAmountOnEnter));
+            source.TakeDamage(DamageModifier(DamageAmountOnEnter), Murderer);
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
@@ -108,7 +110,7 @@ public abstract class Damage : NetworkBehaviour
         var source = other.GetComponent<Source>();
         if(DamageAmountOnExit > 0 && source != null)
         {
-            source.TakeDamage(DamageModifier(DamageAmountOnExit));
+            source.TakeDamage(DamageModifier(DamageAmountOnExit), Murderer);
         }
 
         var rigidbody = other.GetComponent<Rigidbody>();
