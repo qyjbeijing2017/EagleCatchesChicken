@@ -18,21 +18,32 @@ public class AnimatorManager : NetworkBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
-        if(isLocalPlayer || isServer) {
+        if (isLocalPlayer || isServer)
+        {
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerMove = GetComponent<Move>();
             PlayerJumpManager = GetComponentInChildren<JumpManager>();
-            if(PlayerJumpManager == null) {
+            if (PlayerJumpManager == null)
+            {
                 Debug.LogError("PlayerJumpManager is null");
             }
         }
-        if(isServer) {
+        if (isServer)
+        {
             PlayerSkillManager = GetComponent<SkillManager>();
-            PlayerSkillManager.OnSkillStart += (int skillNo)=>{
-                if(isServerOnly)
-                animator.SetTrigger($"Skill{skillNo}");
+            PlayerSkillManager.OnSkillStart += (int skillNo) =>
+            {
+                if (isServerOnly)
+                    animator.SetTrigger($"Skill{skillNo}");
                 RpcSkillStart(skillNo);
             };
+            if (PlayerSkillManager.attack != null)
+                PlayerSkillManager.attack.onAttack += () =>
+                {
+                    if (isServerOnly)
+                        animator.SetTrigger("Attack");
+                    RpcAttack();
+                };
         }
     }
 
@@ -40,6 +51,12 @@ public class AnimatorManager : NetworkBehaviour
     void RpcSkillStart(int skillNo)
     {
         animator.SetTrigger($"Skill{skillNo}");
+    }
+
+    [ClientRpc]
+    void RpcAttack()
+    {
+        animator.SetTrigger("Attack");
     }
 
     void Update()
@@ -59,6 +76,8 @@ public class AnimatorManager : NetworkBehaviour
             animator.SetFloat("Up", PlayerRigidbody.velocity.y);
             animator.SetFloat("Height", PlayerJumpManager.height);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
+            if(PlayerSkillManager.attack != null)
+                animator.SetBool("ReadyAttack", PlayerSkillManager.attack.IsReady);
         }
     }
 

@@ -30,7 +30,7 @@ public class JumpManager : MonoBehaviour
     {
         RaycastHit hit;
         var ray = new Ray(transform.position, Vector3.down);
-        if(Physics.Raycast(ray, out hit, 100f)) {
+        if(Physics.Raycast(ray, out hit, 100f, LayerMask.GetMask("Ground"))) {
             Height = hit.distance;
         }
     }

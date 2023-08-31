@@ -87,15 +87,15 @@ ModelImporter:
       curves: []
       events:
       - time: 0.21938777
-        functionName: NewEvent
-        data: 
+        functionName: OnDamage
+        data: Attack:0
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
-        functionName: NewEvent
-        data: 
+        functionName: OnSkillEnd
+        data: Attack
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0

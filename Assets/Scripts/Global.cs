@@ -12,9 +12,11 @@ public enum DamageType
 
 public enum ImpulseMode
 {
-    LookAtTarget = 0,
-    Local = 1,
+    DamageToTarget = 0,
+    DamageLocal = 1,
     Global = 2,
+    PlayerToTarget = 3,
+    PlayerLocal = 4,
 }
 
 public class GlobalName

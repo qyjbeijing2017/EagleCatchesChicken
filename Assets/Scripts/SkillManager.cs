@@ -21,12 +21,28 @@ public class SkillManager : NetworkBehaviour
 
     BuffManager PlayerBuffManager;
 
-    public bool canMove{
-        get{
-            foreach(var skill in Skills) {
-                if(!skill.moveInRunning && skill.isRunning) {
+    public Attack attack
+    {
+        get
+        {
+            return Attack;
+        }
+    }
+
+    public bool canMove
+    {
+        get
+        {
+            foreach (var skill in Skills)
+            {
+                if (!skill.moveInRunning && skill.isRunning)
+                {
                     return false;
                 }
+            }
+            if(Attack.isRunning && !Attack.moveInRunning)
+            {
+                return false;
             }
             return true;
         }
@@ -77,10 +93,11 @@ public class SkillManager : NetworkBehaviour
     [Command]
     void SkillStart(int skillNo)
     {
-        if(PlayerBuffManager.isStagger) return;
-        if(skillNo >= 0 && skillNo < Skills.Count)
+        if (PlayerBuffManager.isStagger) return;
+        if (skillNo >= 0 && skillNo < Skills.Count)
         {
-            if(Skills[skillNo].exec(MyPlayer.PlayerId)){
+            if (Skills[skillNo].exec(MyPlayer.PlayerId))
+            {
                 OnSkillStart?.Invoke(skillNo);
             }
         }
@@ -89,6 +106,11 @@ public class SkillManager : NetworkBehaviour
     [Server]
     void OnSkillEnd(string skillName)
     {
+        if(skillName == "Attack")
+        {
+            Attack.Stop();
+            return;
+        }
         Skills.FindAll(skill => skill.name == skillName).ForEach(skill => skill.Stop());
     }
 
@@ -97,12 +119,18 @@ public class SkillManager : NetworkBehaviour
     void OnDamage(string magic)
     {
         var magicSplit = magic.Split(':');
-        if(magicSplit.Length != 2) {
+        if (magicSplit.Length != 2)
+        {
             Debug.LogError($"magicSplit.Length != 2, magic = {magic}");
             return;
         }
         var name = magicSplit[0];
         var damageNo = int.Parse(magicSplit[1]);
+        if (name == "Attack")
+        {
+            Attack.OnDamage(damageNo);
+            return;
+        }
         Skills.FindAll(skill => skill.name == name).ForEach(skill => skill.OnDamage(damageNo));
     }
 

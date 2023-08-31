@@ -20,7 +20,7 @@ public abstract class Damage : NetworkBehaviour
     [SerializeField]
     private Vector3 ImpulseOnEnter = Vector3.zero;
     [SerializeField]
-    private ImpulseMode IsLocalImpulseOnEnter = ImpulseMode.LookAtTarget;
+    private ImpulseMode IsLocalImpulseOnEnter = ImpulseMode.DamageToTarget;
 
     [Header("Buff Stay")]
     [SerializeField]
@@ -35,7 +35,7 @@ public abstract class Damage : NetworkBehaviour
     [SerializeField]
     private Vector3 ImpulseOnExit = Vector3.zero;
     [SerializeField]
-    private ImpulseMode IsLocalImpulseOnExit = ImpulseMode.LookAtTarget;
+    private ImpulseMode IsLocalImpulseOnExit = ImpulseMode.DamageToTarget;
 
     List<Buff> BuffsNeedRemove = new List<Buff>();
 
@@ -43,19 +43,26 @@ public abstract class Damage : NetworkBehaviour
 
     Animator animator = null;
 
-    static public Vector3 ImpulseModeToGlobal(ImpulseMode mode, Vector3 impulse, Transform me, Transform target)
+    static public Vector3 ImpulseModeToGlobal(ImpulseMode mode, Vector3 impulse, Transform damage, Transform target, Transform player)
     {
         switch(mode)
         {
-            case ImpulseMode.LookAtTarget:
-                var direction = target.position - me.position;
+            case ImpulseMode.DamageToTarget:
+                var direction = target.position - damage.position;
                 direction.Normalize();
                 var rotation = Quaternion.LookRotation(direction, Vector3.up);          
                 return rotation * impulse;
-            case ImpulseMode.Local:
-                return me.rotation * impulse;
+            case ImpulseMode.DamageLocal:
+                return damage.rotation * impulse;
             case ImpulseMode.Global:
                 return impulse;
+            case ImpulseMode.PlayerToTarget:
+                var direction2 = target.position - player.position;
+                direction2.Normalize();
+                var rotation2 = Quaternion.LookRotation(direction2, Vector3.up);          
+                return rotation2 * impulse;
+            case ImpulseMode.PlayerLocal:
+                return player.rotation * impulse;
         }
         return impulse;
     }
@@ -82,7 +89,7 @@ public abstract class Damage : NetworkBehaviour
         if(ImpulseOnEnter != Vector3.zero)
         {
             if(source != null){
-                var impulse = ImpulseModeToGlobal(IsLocalImpulseOnEnter, ImpulseOnEnter, transform, other.transform);
+                var impulse = ImpulseModeToGlobal(IsLocalImpulseOnEnter, ImpulseOnEnter, transform, other.transform, Murderer.transform);
                 rigidbody.AddForce(impulse, ForceMode.Impulse);
             }
         }
@@ -117,7 +124,7 @@ public abstract class Damage : NetworkBehaviour
         if(ImpulseOnExit != Vector3.zero && rigidbody != null)
         {
             if(source != null){
-                var impulse = ImpulseModeToGlobal(IsLocalImpulseOnExit, ImpulseOnExit, transform, other.transform);
+                var impulse = ImpulseModeToGlobal(IsLocalImpulseOnExit, ImpulseOnExit, transform, other.transform, Murderer.transform);
                 rigidbody.AddForce(impulse, ForceMode.Impulse);
             }
         }

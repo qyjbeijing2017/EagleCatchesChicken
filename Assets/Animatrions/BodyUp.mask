@@ -7,14 +7,14 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BodyUp
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000000000000000000
   m_Elements:
   - m_Path: 
     m_Weight: 1
   - m_Path: Character1_Reference
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_LeftUpLeg
     m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_LeftUpLeg/Character1_LeftLeg
@@ -32,9 +32,9 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/Character1_RightUpLeg/Character1_RightLeg/Character1_RightFoot/Character1_RightToeBase
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Spine2
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Spine2/Character1_LeftShoulder
@@ -246,7 +246,7 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/Character1_Spine2/Character1_RightShoulder/Character1_RightArm/Character1_RightForeArm/J_R_Sode_D00/J_R_Sode_D01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/J_Mune_root_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/J_Mune_root_00/J_L_Mune_00
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/J_Mune_root_00/J_L_Mune_00/J_L_Mune_01
@@ -262,15 +262,15 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/Character1_Spine1/J_Mune_root_00/J_R_Mune_00/J_R_Mune_01/J_R_Mune_02
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/J_L_SusoSide_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/J_L_SusoSide_00/J_L_SusoSide_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/J_R_SusoSide_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/Character1_Spine/J_R_SusoSide_00/J_R_SusoSide_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_L_Skirt_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/J_L_Skirt_00/J_L_Skirt_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_L_Skirt_00/J_L_Skirt_01/J_L_Skirt_02
@@ -280,7 +280,7 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/J_L_Skirt_00/J_L_SusoFront_00/J_L_SusoFront_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_L_SkirtBack_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/J_L_SkirtBack_00/J_L_SkirtBack_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_L_SkirtBack_00/J_L_SkirtBack_01/J_L_SkirtBack_02
@@ -290,7 +290,7 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/J_L_SkirtBack_00/J_L_SusoBack_00/J_L_SusoBack_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_R_Skirt_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/J_R_Skirt_00/J_R_Skirt_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_R_Skirt_00/J_R_Skirt_01/J_R_Skirt_02
@@ -300,7 +300,7 @@ AvatarMask:
   - m_Path: Character1_Reference/Character1_Hips/J_R_Skirt_00/J_R_SusoFront_00/J_R_SusoFront_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_R_SkirtBack_00
-    m_Weight: 1
+    m_Weight: 0
   - m_Path: Character1_Reference/Character1_Hips/J_R_SkirtBack_00/J_R_SkirtBack_01
     m_Weight: 1
   - m_Path: Character1_Reference/Character1_Hips/J_R_SkirtBack_00/J_R_SkirtBack_01/J_R_SkirtBack_02

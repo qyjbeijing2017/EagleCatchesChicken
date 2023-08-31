@@ -16,7 +16,7 @@ public class Buff : NetworkBehaviour
     [Tooltip("Dot <= 0 means add hp")]
     public int Dot = 0;
     public Vector3 Impulse = Vector3.zero;
-    private ImpulseMode ImpulseMode = ImpulseMode.LookAtTarget;
+    private ImpulseMode ImpulseMode = ImpulseMode.DamageToTarget;
     public float DotTick = 1;
 
     [Header("Slow Down Settings")]
@@ -120,7 +120,7 @@ public class Buff : NetworkBehaviour
             PlayerSource.TakeDamage(Dot, murderer, null, this);
             if(Impulse != Vector3.zero)
             {
-                var impulse = Damage.ImpulseModeToGlobal(ImpulseMode, Impulse, transform, victim.transform);
+                var impulse = Damage.ImpulseModeToGlobal(ImpulseMode, Impulse, transform, victim.transform, murderer.transform);
                 var rigidbody = victim.GetComponent<Rigidbody>();
                 if(rigidbody != null)
                 {
