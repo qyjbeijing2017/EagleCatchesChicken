@@ -12,41 +12,33 @@ public class Move : NetworkBehaviour
     [SerializeField]
     [Tooltip("Base turn speed in degrees per second")]
     List<float> JumpSpeeds = new List<float> { 5 };
-
     int JumpCount = 0;
-    public int jumpCount{
-        get {
-            return JumpCount;
-        }
-    }
-    Vector2 MoveVelocity;
-    public Vector2 moveVelocity {
-        get {
-            return MoveVelocity;
-        }
-    }
+    // Start is called before the first frame update
+
 
     Rigidbody PlayerRigidbody;
     PlayerInputAction InputActions;
     BuffManager PlayerBuffManager;
-    JumpManager PlayerJumpManager;
-    SkillManager PlayerSkillManager;
-
     void Start()
     {
         if(isLocalPlayer) {
             InputActions = new PlayerInputAction();
-            InputActions.Move.Enable();
-            InputActions.Move.Jump.performed += OnJump;
+            InputActions.Player.Enable();
+            InputActions.Player.Jump.performed += OnJump;
 
             PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerBuffManager = GetComponent<BuffManager>();
-            PlayerJumpManager = GetComponentInChildren<JumpManager>();
-            PlayerSkillManager = GetComponent<SkillManager>();
-            PlayerJumpManager.onGrounded += () => {
-                JumpCount = 0;
-            };
         }
+    }
+
+    
+
+    void OnCollisionEnter(Collision collision)
+    {
+       if(isLocalPlayer) {
+        if (collision.gameObject.tag == "Ground")
+            JumpCount = 0;
+       }
     }
 
     void OnJump(InputAction.CallbackContext context)
@@ -65,29 +57,24 @@ public class Move : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            if(!PlayerSkillManager.canMove) return;
             if(PlayerBuffManager.isStagger) return;
-
-            MoveVelocity = Vector2.zero;
             
-            var inputAxis = InputActions.Move.Move.ReadValue<Vector2>();
+            var inputAxis = InputActions.Player.Move.ReadValue<Vector2>();
             if (inputAxis.magnitude > 0f)
             {
-                var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * (1 - PlayerBuffManager.slowDownPer);
-                MoveVelocity = inputAxis * moveSpeed;
-
-                var deltaTransform = new Vector3(MoveVelocity.x, 0, MoveVelocity.y) * Time.deltaTime;
-                var newPosition = transform.position + deltaTransform;
+                var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * Time.deltaTime * (1 - PlayerBuffManager.slowDownPer);
+                var moveVector = inputAxis * moveSpeed;
+                var newPosition = transform.position + new Vector3(moveVector.x, 0, moveVector.y);
                 transform.position = newPosition;
             }
-            var inputForward = InputActions.Move.Look.ReadValue<Vector2>();
+            var inputForward = InputActions.Player.Look.ReadValue<Vector2>();
             if (inputForward.magnitude > 0f)
             {
                 transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
             }
             else
             {
-                var inputPointPosition = InputActions.Move.PointPosition.ReadValue<Vector2>();
+                var inputPointPosition = InputActions.Player.PointPosition.ReadValue<Vector2>();
                 var ray = Camera.main.ScreenPointToRay(inputPointPosition);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit)) {
@@ -103,7 +90,8 @@ public class Move : NetworkBehaviour
     {
         if (isLocalPlayer && InputActions != null)
         {
-            InputActions.Move.Disable();
+            Debug.Log(InputActions);
+            InputActions.Player.Disable();
             InputActions.Dispose();
         }
     }

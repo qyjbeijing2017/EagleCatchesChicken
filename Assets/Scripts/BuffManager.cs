@@ -18,48 +18,18 @@ public class BuffManager : NetworkBehaviour
     bool IsStagger = false;
     public bool isStagger { get { return IsStagger; } }
 
-    int DamageDealt = 0;
-    public int damageDealt { get { return DamageDealt; } }
-    int DamageTaken = 0;
-    public int damageTaken { get { return DamageTaken; } }
-    int ExecuteDealtUnderHp = 0;
-    public int executeDealtUnderHp { get { return ExecuteDealtUnderHp; } }
-    float ExecuteDealtUnderPercent = 0;
-    public float executeDealtUnderPercent { get { return ExecuteDealtUnderPercent; } }
-    int ExecuteDealtDamageModifier = 0;
-    public int executeDealtDamageModifier { get { return ExecuteDealtDamageModifier; } }
-    bool ExecuteDealtOnce = false;
-    public bool executeDealtOnce { get { return ExecuteDealtOnce; } }
-    int ExecuteTakenUnderHp = 0;
-    public int executeTakenUnderHp { get { return ExecuteTakenUnderHp; } }
-    float ExecuteTakenUnderPercent = 0;
-    public float executeTakenUnderPercent { get { return ExecuteTakenUnderPercent; } }
-    int ExecuteTakenDamageModifier = 0;
-    public int executeTakenDamageModifier { get { return ExecuteTakenDamageModifier; } }
-    bool ExecuteTakenOnce = false;
-    public bool executeTakenOnce { get { return ExecuteTakenOnce; } }
-    bool Invincible = false;
-    public bool invincible { get { return Invincible; } }
-
-
-
-
-    Player MyPlayer;
-
-    [Server]
-    public Buff AddBuff(Buff buff, int murdererId)
+    public void AddBuff(Buff buff)
     {
-        var buffInstance = Instantiate(buff);
-        NetworkServer.Spawn(buffInstance.gameObject);
-        buffInstance.VictimId = MyPlayer.PlayerId;
-        buffInstance.MurdererId = murdererId;
-        return buffInstance;
+        if (isServer)
+        {
+            var buffInstance = Instantiate(buff, transform);
+            NetworkServer.Spawn(buffInstance.gameObject);
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        MyPlayer = GetComponent<Player>();
 
     }
 
@@ -74,18 +44,6 @@ public class BuffManager : NetworkBehaviour
             SlowDownSpeed += buff.SlowDownSpeed;
             SlowDownPer += buff.SlowDownPer;
             IsStagger |= buff.IsStagger;
-            DamageDealt += buff.DamageDealt;
-            DamageTaken += buff.DamageTaken;
-            ExecuteDealtUnderHp = Mathf.Max(ExecuteDealtUnderHp, buff.ExecuteDealtUnderHp);
-            ExecuteDealtUnderPercent = Mathf.Max(ExecuteDealtUnderPercent, buff.ExecuteDealtUnderPercent);
-            ExecuteDealtDamageModifier = Mathf.Max(ExecuteDealtDamageModifier, buff.ExecuteDealtDamageModifier);
-            ExecuteDealtOnce |= buff.ExecuteDealtOnce;
-            ExecuteTakenUnderHp = Mathf.Max(ExecuteTakenUnderHp, buff.ExecuteTakenUnderHp);
-            ExecuteTakenUnderPercent = Mathf.Max(ExecuteTakenUnderPercent, buff.ExecuteTakenUnderPercent);
-            ExecuteTakenDamageModifier = Mathf.Max(ExecuteTakenDamageModifier, buff.ExecuteTakenDamageModifier);
-            ExecuteTakenOnce |= buff.ExecuteTakenOnce;
-            Invincible |= buff.Invincible;
-
         }
     }
 }
