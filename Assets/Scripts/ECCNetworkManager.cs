@@ -6,9 +6,15 @@ using Mirror;
 public class ECCNetworkManager : NetworkManager
 {
 
+    public static ECCNetworkManager instance {
+        get{
+            return (ECCNetworkManager)singleton;
+        }
+    }
+
     public List<Player> RoleList;
 
-    [HideInInspector]
+    [Header("Debug")]
     public List<Player> PlayerList = new List<Player>();
 
     public override void OnServerAddPlayer(NetworkConnectionToClient conn)
@@ -21,8 +27,10 @@ public class ECCNetworkManager : NetworkManager
             NetworkServer.AddPlayerForConnection(conn, player);
             return;
         }
-        GameObject charactor = Instantiate(RoleList[id].gameObject);
-        NetworkServer.AddPlayerForConnection(conn, charactor);
-        PlayerList.Add(charactor.GetComponent<Player>());
+        GameObject character = Instantiate(RoleList[id].gameObject);
+        NetworkServer.AddPlayerForConnection(conn, character);
+        var Player = character.GetComponent<Player>();
+        PlayerList.Add(Player);
+        Player.PlayerId = id;
     }
 }

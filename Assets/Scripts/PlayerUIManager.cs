@@ -11,10 +11,10 @@ public class PlayerUIManager : MonoBehaviour
     List<Slider> HealthBarList = new List<Slider>();
 
     Camera mainCamera;
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         mainCamera = Camera.main;
+        Button btn = GetComponent<Button>();
     }
 
     // Update is called once per frame
@@ -28,8 +28,7 @@ public class PlayerUIManager : MonoBehaviour
                 var newHealthBar = Instantiate(HealthBar, transform);
                 HealthBarList.Add(newHealthBar);
             }
-            HealthBarList[i].value = sources[i].Health;
-
+            HealthBarList[i].value = sources[i].healthPercent;
             var screenPos = mainCamera.WorldToScreenPoint(sources[i].HealthBarAnchor.position);
             HealthBarList[i].transform.position = screenPos;
             HealthBarList[i].gameObject.SetActive(true);
