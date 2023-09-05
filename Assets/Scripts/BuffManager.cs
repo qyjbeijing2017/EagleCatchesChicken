@@ -5,7 +5,7 @@ using Mirror;
 
 public class BuffManager : NetworkBehaviour
 {
-    [HideInInspector]
+    [Header("Debug")]
     public List<Buff> Buffs = new List<Buff>();
 
     // Slow Down Settings

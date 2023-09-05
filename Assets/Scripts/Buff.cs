@@ -14,8 +14,10 @@ public class Buff : NetworkBehaviour
 
     [Header("Dot Settings")]
     [Tooltip("Dot <= 0 means add hp")]
-    public int Dot = 0;
-    public Vector3 Impulse = Vector3.zero;
+    private int Dot = 0;
+    [SerializeField]
+    private Vector3 Impulse = Vector3.zero;
+    [SerializeField]
     private ImpulseMode ImpulseMode = ImpulseMode.DamageToTarget;
     public float DotTick = 1;
 

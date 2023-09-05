@@ -14,6 +14,7 @@ public class Source : NetworkBehaviour
 
 
     [Header("Debug")]
+    [SerializeField]
     [SyncVar]
     int Health = 100;
 
@@ -42,7 +43,7 @@ public class Source : NetworkBehaviour
     {
         if (isDealt)
         {
-            if (buffManager.executeDealtUnderHp > Health && Health / MaxHealth < buffManager.executeDealtUnderPercent)
+            if (buffManager.executeDealtUnderHp > Health || Health / MaxHealth < buffManager.executeDealtUnderPercent)
             {
                 if (buffManager.executeDealtOnce)
                 {
@@ -56,7 +57,7 @@ public class Source : NetworkBehaviour
         }
         else
         {
-            if (buffManager.executeTakenUnderHp > Health && Health / MaxHealth < buffManager.executeTakenUnderPercent)
+            if (buffManager.executeTakenUnderHp > Health || Health / MaxHealth < buffManager.executeTakenUnderPercent)
             {
                 if (buffManager.executeTakenOnce)
                 {

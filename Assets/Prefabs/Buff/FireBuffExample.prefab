@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8545265521536696691}
   - component: {fileID: 5421685332143718729}
   m_Layer: 0
-  m_Name: Fire
+  m_Name: FireBuffExample
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,12 +67,22 @@ MonoBehaviour:
   syncInterval: 0
   Duration: 5
   Dot: 5
+  Impulse: {x: 0, y: 0, z: 0}
   DotTick: 1
   SlowDownSpeed: 0
   SlowDownPer: 0
   IsStagger: 0
   DamageDealt: 0
   DamageTaken: 0
+  ExecuteDealtUnderHp: 0
+  ExecuteDealtUnderPercent: 0
+  ExecuteDealtDamageModifier: 0
+  ExecuteDealtOnce: 0
+  ExecuteTakenUnderHp: 0
+  ExecuteTakenUnderPercent: 0
+  ExecuteTakenDamageModifier: 0
+  ExecuteTakenOnce: 0
+  Invincible: 0
   VictimId: -1
   MurdererId: -1
   TimeLeft: 0

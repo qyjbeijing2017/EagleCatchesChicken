@@ -76,7 +76,7 @@ public class Skill : NetworkBehaviour
     }
 
     [Server]
-    virtual public bool exec(int playerID)
+    virtual public bool Exec(int playerID)
     {
         if (IsRunning || CoolDownTimer > 0) return false;
         IsRunning = true;

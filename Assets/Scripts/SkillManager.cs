@@ -7,13 +7,28 @@ using Unity.VisualScripting;
 
 public class SkillManager : NetworkBehaviour
 {
-    public DamageType PlayerDamageType;
+  
 
     [SerializeField]
     Attack Attack;
 
     [SerializeField]
     List<Skill> Skills = new List<Skill>();
+    [SerializeField]
+    List<Skill> FireSkills = new List<Skill>();
+    [SerializeField]
+    List<Skill> IceSkills = new List<Skill>();
+    [SerializeField]
+    List<Skill> EarthSkills = new List<Skill>();
+    [SerializeField]
+    List<Skill> WindSkills = new List<Skill>();
+    [SerializeField]
+    List<Skill> HolySkills = new List<Skill>();
+    [SerializeField]
+    List<Skill> DarkSkills = new List<Skill>();
+
+    [Header("Debug")]
+    public DamageType PlayerDamageType;
 
     PlayerInputAction InputActions;
 
@@ -94,12 +109,71 @@ public class SkillManager : NetworkBehaviour
     void SkillStart(int skillNo)
     {
         if (PlayerBuffManager.isStagger) return;
-        if (skillNo >= 0 && skillNo < Skills.Count)
+
+        switch (PlayerDamageType)
         {
-            if (Skills[skillNo].exec(MyPlayer.PlayerId))
-            {
-                OnSkillStart?.Invoke(skillNo);
-            }
+            case DamageType.Fire:
+                if (skillNo >= 0 && skillNo < FireSkills.Count)
+                {
+                    if(FireSkills[skillNo].Exec(MyPlayer.PlayerId)) {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            case DamageType.Ice:
+                if (skillNo >= 0 && skillNo < IceSkills.Count)
+                {
+                    if (IceSkills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            case DamageType.Earth:
+                if (skillNo >= 0 && skillNo < EarthSkills.Count)
+                {
+                    if (EarthSkills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            case DamageType.Wind:
+                if (skillNo >= 0 && skillNo < WindSkills.Count)
+                {
+                    if (WindSkills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            case DamageType.Holy:
+                if (skillNo >= 0 && skillNo < HolySkills.Count)
+                {
+                    if (HolySkills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            case DamageType.Dark:
+                if (skillNo >= 0 && skillNo < DarkSkills.Count)
+                {
+                    if (DarkSkills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
+            default:
+                if (skillNo >= 0 && skillNo < Skills.Count)
+                {
+                    if (Skills[skillNo].Exec(MyPlayer.PlayerId))
+                    {
+                        OnSkillStart?.Invoke(skillNo);
+                    }
+                }
+                break;
         }
     }
 

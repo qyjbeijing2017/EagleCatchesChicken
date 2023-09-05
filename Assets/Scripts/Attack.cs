@@ -40,7 +40,7 @@ public class Attack : Skill
     {
         if (!isServer) return;
         if ((Target.value & (1 << collider.gameObject.layer)) == 0) return;
-        if(exec(PlayerId)){
+        if(Exec(PlayerId)){
             onAttack?.Invoke();
         }
     }
