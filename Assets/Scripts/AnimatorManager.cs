@@ -31,11 +31,11 @@ public class AnimatorManager : NetworkBehaviour
         if (isServer)
         {
             PlayerSkillManager = GetComponent<SkillManager>();
-            PlayerSkillManager.OnSkillStart += (int skillNo) =>
+            PlayerSkillManager.OnSkillStart += (SkillIdentity skillIdentity) =>
             {
                 if (isServerOnly)
-                    animator.SetTrigger($"Skill{skillNo}");
-                RpcSkillStart(skillNo);
+                    animator.SetTrigger(skillIdentity.id);
+                RpcSkillStart(skillIdentity.id);
             };
             if (PlayerSkillManager.attack != null)
                 PlayerSkillManager.attack.onAttack += () =>
@@ -48,9 +48,9 @@ public class AnimatorManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSkillStart(int skillNo)
+    void RpcSkillStart(string skillId)
     {
-        animator.SetTrigger($"Skill{skillNo}");
+        animator.SetTrigger(skillId);
     }
 
     [ClientRpc]
