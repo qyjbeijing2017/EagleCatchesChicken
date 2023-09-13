@@ -650,8 +650,6 @@ MonoBehaviour:
   transport: {fileID: 1196743938}
   networkAddress: localhost
   maxConnections: 100
-  disconnectInactiveConnections: 0
-  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 3094933599436471310, guid: 20088fe4456af3c43b6b8a1a19e270b4,
     type: 3}
@@ -666,7 +664,6 @@ MonoBehaviour:
   - {fileID: 8462291535026315337, guid: 496ce3c4165556c458cdec1123a96bad, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
-    bufferLimit: 32
     catchupNegativeThreshold: -1
     catchupPositiveThreshold: 1
     catchupSpeed: 0.019999999552965164
@@ -675,7 +672,6 @@ MonoBehaviour:
     dynamicAdjustment: 1
     dynamicAdjustmentTolerance: 1
     deliveryTimeEmaDuration: 2
-  connectionQualityInterval: 3
   timeInterpolationGui: 0
   RoleList:
   - {fileID: 45809622209626736, guid: 17dec3000abb12d45b4d5170e276486b, type: 3}
@@ -906,37 +902,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1955163467
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1955163468}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1955163468
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1955163467}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.889832, y: 7.6594095, z: -4.2024274}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1983713835
 GameObject:
   m_ObjectHideFlags: 0
@@ -1144,5 +1109,4 @@ SceneRoots:
   - {fileID: 1998370517}
   - {fileID: 1196743940}
   - {fileID: 1591508334}
-  - {fileID: 1955163468}
   - {fileID: 1430107857}

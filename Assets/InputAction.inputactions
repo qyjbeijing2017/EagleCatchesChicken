@@ -193,7 +193,7 @@
             "id": "15515805-ec17-4ce5-a81e-a0744f44762e",
             "actions": [
                 {
-                    "name": "Skill1",
+                    "name": "Power",
                     "type": "Button",
                     "id": "50593476-1320-4404-8655-f53eabba002a",
                     "expectedControlType": "Button",
@@ -228,7 +228,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Skill1",
+                    "action": "Power",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

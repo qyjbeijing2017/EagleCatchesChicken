@@ -215,7 +215,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             ""id"": ""15515805-ec17-4ce5-a81e-a0744f44762e"",
             ""actions"": [
                 {
-                    ""name"": ""Skill1"",
+                    ""name"": ""Power"",
                     ""type"": ""Button"",
                     ""id"": ""50593476-1320-4404-8655-f53eabba002a"",
                     ""expectedControlType"": ""Button"",
@@ -250,7 +250,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Skill1"",
+                    ""action"": ""Power"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -289,7 +289,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Move_Look = m_Move.FindAction("Look", throwIfNotFound: true);
         // Skill
         m_Skill = asset.FindActionMap("Skill", throwIfNotFound: true);
-        m_Skill_Skill1 = m_Skill.FindAction("Skill1", throwIfNotFound: true);
+        m_Skill_Power = m_Skill.FindAction("Power", throwIfNotFound: true);
         m_Skill_Skill2 = m_Skill.FindAction("Skill2", throwIfNotFound: true);
         m_Skill_Skill3 = m_Skill.FindAction("Skill3", throwIfNotFound: true);
     }
@@ -423,14 +423,14 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     // Skill
     private readonly InputActionMap m_Skill;
     private List<ISkillActions> m_SkillActionsCallbackInterfaces = new List<ISkillActions>();
-    private readonly InputAction m_Skill_Skill1;
+    private readonly InputAction m_Skill_Power;
     private readonly InputAction m_Skill_Skill2;
     private readonly InputAction m_Skill_Skill3;
     public struct SkillActions
     {
         private @PlayerInputAction m_Wrapper;
         public SkillActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Skill1 => m_Wrapper.m_Skill_Skill1;
+        public InputAction @Power => m_Wrapper.m_Skill_Power;
         public InputAction @Skill2 => m_Wrapper.m_Skill_Skill2;
         public InputAction @Skill3 => m_Wrapper.m_Skill_Skill3;
         public InputActionMap Get() { return m_Wrapper.m_Skill; }
@@ -442,9 +442,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_SkillActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_SkillActionsCallbackInterfaces.Add(instance);
-            @Skill1.started += instance.OnSkill1;
-            @Skill1.performed += instance.OnSkill1;
-            @Skill1.canceled += instance.OnSkill1;
+            @Power.started += instance.OnPower;
+            @Power.performed += instance.OnPower;
+            @Power.canceled += instance.OnPower;
             @Skill2.started += instance.OnSkill2;
             @Skill2.performed += instance.OnSkill2;
             @Skill2.canceled += instance.OnSkill2;
@@ -455,9 +455,9 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(ISkillActions instance)
         {
-            @Skill1.started -= instance.OnSkill1;
-            @Skill1.performed -= instance.OnSkill1;
-            @Skill1.canceled -= instance.OnSkill1;
+            @Power.started -= instance.OnPower;
+            @Power.performed -= instance.OnPower;
+            @Power.canceled -= instance.OnPower;
             @Skill2.started -= instance.OnSkill2;
             @Skill2.performed -= instance.OnSkill2;
             @Skill2.canceled -= instance.OnSkill2;
@@ -490,7 +490,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     }
     public interface ISkillActions
     {
-        void OnSkill1(InputAction.CallbackContext context);
+        void OnPower(InputAction.CallbackContext context);
         void OnSkill2(InputAction.CallbackContext context);
         void OnSkill3(InputAction.CallbackContext context);
     }
