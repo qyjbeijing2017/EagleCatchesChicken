@@ -11,7 +11,6 @@ public class JumpManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnGrounded");
         onGrounded?.Invoke();
     }
 
