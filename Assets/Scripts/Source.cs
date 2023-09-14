@@ -74,25 +74,36 @@ public class Source : NetworkBehaviour
 
     public void TakeDamage(int damage, Player murderer, Skill skill, Buff buff)
     {
+
         if (isServer)
         {
+            Debug.Log("--------------------Damage---------------");
+            Debug.Log($"murderer:{murderer.PlayerId}");
+            Debug.Log($"victom:{GetComponent<Player>().PlayerId}");
+
             var hpDamage = damage + PlayerBuffManager.damageTaken;
             if (PlayerBuffManager.invincible && hpDamage > 0) return;
             var murderBuffManager = murderer.GetComponent<BuffManager>();
             HandleExecute(ref hpDamage, murderBuffManager, true);
             HandleExecute(ref hpDamage, PlayerBuffManager, false);
 
-
+            Debug.Log($"hpDamage:{hpDamage}");
             Health -= hpDamage;
+
             if (Health <= 0)
             {
                 Health = 0;
                 NetworkServer.Destroy(gameObject);
+                Debug.Log($"Dead!");
             }
             if (Health > MaxHealth)
             {
+
                 Health = MaxHealth;
             }
+            Debug.Log($"hpLeft:{Health}");
+            Debug.Log($"------------------------------------------------");
+
         }
     }
 

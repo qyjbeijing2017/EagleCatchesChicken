@@ -14,6 +14,7 @@ public class Buff : NetworkBehaviour
 
     [Header("Dot Settings")]
     [Tooltip("Dot <= 0 means add hp")]
+    [SerializeField]
     private int Dot = 0;
     [SerializeField]
     private Vector3 Impulse = Vector3.zero;

@@ -75,14 +75,15 @@ public class SkillManager : NetworkBehaviour
     {
         MyPlayer = GetComponent<Player>();
         PlayerBuffManager = GetComponent<BuffManager>();
+        InputActions = new PlayerInputAction();
         if (isLocalPlayer)
         {
-            InputActions = new PlayerInputAction();
             InputActions.Skill.Enable();
             var actions = InputActions.Skill.Get().actions;
             for (int i = 0; i < actions.Count; i++)
             {
-                actions[i].performed += (context) => SkillStart(i);
+                var index = i;
+                actions[i].performed += (context) => SkillStart(index);
             }
         }
     }

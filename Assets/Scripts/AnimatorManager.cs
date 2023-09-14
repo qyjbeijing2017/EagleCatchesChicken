@@ -31,8 +31,6 @@ public class AnimatorManager : NetworkBehaviour
             }
             PlayerJumpManager.onGrounded += () =>
             {
-                // if (isServerOnly)
-                //     animator.SetTrigger("Grounded");
                 animator.SetTrigger("Grounded");
             };
         }
