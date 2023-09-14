@@ -5,16 +5,16 @@ using Mirror;
 using Mirror.Experimental;
 using System.IO.Enumeration;
 
+[RequireComponent(typeof(NetworkIdentity))]
+[RequireComponent(typeof(NetworkTransform))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(NetworkRigidbody))]
 [RequireComponent(typeof(Move))]
 [RequireComponent(typeof(Source))]
 [RequireComponent(typeof(BuffManager))]
 [RequireComponent(typeof(SkillManager))]
 [RequireComponent(typeof(AnimatorManager))]
-[RequireComponent(typeof(NetworkIdentity))]
-[RequireComponent(typeof(NetworkTransform))]
 [RequireComponent(typeof(CapsuleCollider))]
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(NetworkRigidbody))]
 [RequireComponent(typeof(SkillManager))]
 public class Player : NetworkBehaviour
 {
