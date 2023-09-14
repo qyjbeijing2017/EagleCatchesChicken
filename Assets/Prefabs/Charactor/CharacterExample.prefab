@@ -351,15 +351,69 @@ MonoBehaviour:
   syncInterval: 0
   Attack: {fileID: 4859402461500329204}
   Skills:
-  - {fileID: 8989359711043858585}
-  - {fileID: 4105176812757231705}
-  - {fileID: 1218521667985974526}
-  FireSkills: []
-  IceSkills: []
-  EarthSkills: []
-  WindSkills: []
-  HolySkills: []
-  DarkSkills: []
+  - name: "Dark\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "Dark\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Dark\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "Earth\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "Earth\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Earth\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "Fire\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "Fire\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Fire\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "Holy\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "Holy\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Holy\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "Ice\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "Ice\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Ice\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "None\tSkill1"
+    id: Skill1
+    skill: {fileID: 0}
+  - name: "None\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "None\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
+  - name: "Wind\tSkill1"
+    id: Skill1
+    skill: {fileID: 8989359711043858585}
+  - name: "Wind\tSkill2"
+    id: Skill2
+    skill: {fileID: 0}
+  - name: "Wind\tSkill3"
+    id: Skill3
+    skill: {fileID: 0}
   PlayerDamageType: 0
 --- !u!95 &1693765437482072138
 Animator:

@@ -82,7 +82,6 @@ public class Player : NetworkBehaviour
             jumpColider.radius = 0.3f;
         }
 
-
         var skillManager = player.GetComponent<SkillManager>();        
         var skillsNode =player.transform.Find("Skills");
         if(skillsNode != null)
