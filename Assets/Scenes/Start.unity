@@ -702,6 +702,8 @@ MonoBehaviour:
   - {fileID: 8462291535026315337, guid: 496ce3c4165556c458cdec1123a96bad, type: 3}
   - {fileID: 4723269866267928164, guid: 5bdea0d732d425e478b6104e3802c4e3, type: 3}
   - {fileID: 2958868760711015817, guid: 24131dec2317cb946ac3fd364855611a, type: 3}
+  - {fileID: 3721001641913483125, guid: 4bd276cb4b2126e4a962e70cb2298520, type: 3}
+  - {fileID: 3721001641913483125, guid: 7265d666cabc82d42a3754f4782add60, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -794,6 +796,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: "003\uFF08xxd\uFF09"
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 025a1b983db2fdc4dab63866c3ccd5e6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
