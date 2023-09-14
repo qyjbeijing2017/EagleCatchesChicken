@@ -1047,7 +1047,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 5526014306646870315}
-  clientAuthority: 0
+  clientAuthority: 1
   syncVelocity: 1
   clearVelocity: 0
   velocitySensitivity: 0.1
@@ -1589,7 +1589,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1617,10 +1617,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 768
   StopOnSkillStopped: 0
-  DamageAmountOnEnter: 0
+  DamageAmountOnEnter: 5
   BuffsOnEnter: []
   BuffsOnEnterForMyself: []
-  ImpulseOnEnter: {x: 0, y: 5, z: 0}
+  ImpulseOnEnter: {x: 0, y: 0, z: 5}
   IsLocalImpulseOnEnter: 3
   BuffsOnStay: []
   BuffsOnStayForMyself: []
@@ -2136,7 +2136,7 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3

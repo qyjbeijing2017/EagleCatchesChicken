@@ -49,6 +49,9 @@ public class Player : NetworkBehaviour
         var animator = player.GetComponent<Animator>();
         networkAnimator.animator = animator;
 
+        var networkRigidbody = player.GetComponent<NetworkRigidbody>();
+        networkRigidbody.clientAuthority = true;
+        
         var rigdibody = player.GetComponent<Rigidbody>();
         rigdibody.freezeRotation = true;
 
