@@ -51,7 +51,7 @@ public class Player : NetworkBehaviour
 
         var networkRigidbody = player.GetComponent<NetworkRigidbody>();
         networkRigidbody.clientAuthority = true;
-        
+
         var rigdibody = player.GetComponent<Rigidbody>();
         rigdibody.freezeRotation = true;
 
@@ -61,11 +61,11 @@ public class Player : NetworkBehaviour
             var healthBarAnchor = player.transform.Find("HealthBarAnchor");
             if (healthBarAnchor == null)
             {
-                var healthBarAnchorObject = new GameObject("HealthBarAnchor");
-                healthBarAnchorObject.transform.SetParent(player.transform);
-                healthBarAnchorObject.transform.localPosition = new Vector3(0f, 2f, 0f);
-                healthBarAnchorObject.transform.localRotation = Quaternion.identity;
-                healthBarAnchorObject.transform.localScale = Vector3.one;
+                healthBarAnchor = new GameObject("HealthBarAnchor").transform;
+                healthBarAnchor.transform.SetParent(player.transform);
+                healthBarAnchor.transform.localPosition = new Vector3(0f, 2f, 0f);
+                healthBarAnchor.transform.localRotation = Quaternion.identity;
+                healthBarAnchor.transform.localScale = Vector3.one;
             }
             source.HealthBarAnchor = healthBarAnchor;
         }
