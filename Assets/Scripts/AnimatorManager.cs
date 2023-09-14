@@ -18,6 +18,8 @@ public class AnimatorManager : NetworkBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        PlayerSkillManager = GetComponent<SkillManager>();
+
         if (isLocalPlayer || isServer)
         {
             PlayerRigidbody = GetComponent<Rigidbody>();
@@ -29,14 +31,14 @@ public class AnimatorManager : NetworkBehaviour
             }
             PlayerJumpManager.onGrounded += () =>
             {
-                if (isServerOnly)
-                    animator.SetTrigger("Grounded");
-                RpcTrigger("Grounded");
+                // if (isServerOnly)
+                //     animator.SetTrigger("Grounded");
+                animator.SetTrigger("Grounded");
             };
         }
+
         if (isServer)
         {
-            PlayerSkillManager = GetComponent<SkillManager>();
             PlayerSkillManager.OnSkillStart += (SkillIdentity skillIdentity) =>
             {
                 if (isServerOnly)
