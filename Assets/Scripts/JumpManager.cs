@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class JumpManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("OnGrounded");
         onGrounded?.Invoke();
     }
 
@@ -19,10 +21,15 @@ public class JumpManager : MonoBehaviour
 
     void Start()
     {
+        GetComponent<Collider>().isTrigger = true;
     }
 
     // Update is called once per frame
     void Update()
     {
+    }
+
+    void Reset() {
+        GetComponent<Collider>().isTrigger = true;
     }
 }
