@@ -4,31 +4,30 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
 using Unity.VisualScripting;
+using System.ComponentModel;
+
+[System.Serializable]
+public struct SkillIdentity
+{
+    [HideInInspector]
+    public string name;
+    public string id;
+    public Skill skill;
+}
 
 public class SkillManager : NetworkBehaviour
 {
-  
+
 
     [SerializeField]
-    Attack Attack;
+    public Attack Attack;
 
     [SerializeField]
-    List<Skill> Skills = new List<Skill>();
-    [SerializeField]
-    List<Skill> FireSkills = new List<Skill>();
-    [SerializeField]
-    List<Skill> IceSkills = new List<Skill>();
-    [SerializeField]
-    List<Skill> EarthSkills = new List<Skill>();
-    [SerializeField]
-    List<Skill> WindSkills = new List<Skill>();
-    [SerializeField]
-    List<Skill> HolySkills = new List<Skill>();
-    [SerializeField]
-    List<Skill> DarkSkills = new List<Skill>();
+    public List<SkillIdentity> Skills = new List<SkillIdentity>();
 
     [Header("Debug")]
-    public DamageType PlayerDamageType;
+    [ReadOnly(true)]
+    public DamageType PlayerDamageType = DamageType.None;
 
     PlayerInputAction InputActions;
 
@@ -48,14 +47,22 @@ public class SkillManager : NetworkBehaviour
     {
         get
         {
-            foreach (var skill in Skills)
+            foreach (var skillIdentity in Skills)
             {
-                if (!skill.moveInRunning && skill.isRunning)
+                if (
+                    skillIdentity.skill != null &&
+                    skillIdentity.skill.isRunning &&
+                    !skillIdentity.skill.moveInRunning
+                )
                 {
                     return false;
                 }
             }
-            if(Attack.isRunning && !Attack.moveInRunning)
+            if (
+                Attack != null &&
+                Attack.isRunning &&
+                !Attack.moveInRunning
+                )
             {
                 return false;
             }
@@ -68,124 +75,51 @@ public class SkillManager : NetworkBehaviour
     {
         MyPlayer = GetComponent<Player>();
         PlayerBuffManager = GetComponent<BuffManager>();
+        InputActions = new PlayerInputAction();
         if (isLocalPlayer)
         {
-            InputActions = new PlayerInputAction();
             InputActions.Skill.Enable();
-
-            InputActions.Skill.Skill1.performed += HandleSkill1;
-            InputActions.Skill.Skill2.performed += HandleSkill2;
-            InputActions.Skill.Skill3.performed += HandleSkill3;
+            var actions = InputActions.Skill.Get().actions;
+            for (int i = 0; i < actions.Count; i++)
+            {
+                var index = i;
+                actions[i].performed += (context) => SkillStart(index);
+            }
         }
     }
 
-    void HandleSkill1(InputAction.CallbackContext context)
-    {
-        if (Skills.Count > 0)
-        {
-            SkillStart(0);
-        }
-    }
-
-    void HandleSkill2(InputAction.CallbackContext context)
-    {
-        if (Skills.Count > 1)
-        {
-            SkillStart(1);
-        }
-    }
-
-    void HandleSkill3(InputAction.CallbackContext context)
-    {
-        if (Skills.Count > 2)
-        {
-            SkillStart(2);
-        }
-    }
-
-    public event System.Action<int> OnSkillStart;
+    public event System.Action<SkillIdentity> OnSkillStart;
 
     [Command]
     void SkillStart(int skillNo)
     {
         if (PlayerBuffManager.isStagger) return;
 
-        switch (PlayerDamageType)
+        var inputCount = InputActions.Skill.Get().actions.Count;
+
+        var skillIdentity = Skills[inputCount * (int)PlayerDamageType + skillNo];
+        if (!skillIdentity.skill) return;
+
+        if (skillIdentity.skill.Exec(MyPlayer.PlayerId))
         {
-            case DamageType.Fire:
-                if (skillNo >= 0 && skillNo < FireSkills.Count)
-                {
-                    if(FireSkills[skillNo].Exec(MyPlayer.PlayerId)) {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            case DamageType.Ice:
-                if (skillNo >= 0 && skillNo < IceSkills.Count)
-                {
-                    if (IceSkills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            case DamageType.Earth:
-                if (skillNo >= 0 && skillNo < EarthSkills.Count)
-                {
-                    if (EarthSkills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            case DamageType.Wind:
-                if (skillNo >= 0 && skillNo < WindSkills.Count)
-                {
-                    if (WindSkills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            case DamageType.Holy:
-                if (skillNo >= 0 && skillNo < HolySkills.Count)
-                {
-                    if (HolySkills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            case DamageType.Dark:
-                if (skillNo >= 0 && skillNo < DarkSkills.Count)
-                {
-                    if (DarkSkills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
-            default:
-                if (skillNo >= 0 && skillNo < Skills.Count)
-                {
-                    if (Skills[skillNo].Exec(MyPlayer.PlayerId))
-                    {
-                        OnSkillStart?.Invoke(skillNo);
-                    }
-                }
-                break;
+            OnSkillStart?.Invoke(skillIdentity);
         }
     }
 
     [Server]
-    void OnSkillEnd(string skillName)
+    void OnSkillEnd(string skillId)
     {
-        if(skillName == "Attack")
+        if (skillId == "Attack")
         {
             Attack.Stop();
             return;
         }
-        Skills.FindAll(skill => skill.name == skillName).ForEach(skill => skill.Stop());
+        var skillIdentities = Skills.FindAll(skillIdentity => skillIdentity.id == skillId);
+        foreach (var skill in skillIdentities)
+        {
+            if (skill.skill)
+                skill.skill.Stop();
+        }
     }
 
     // magic is name:damageNo, like Fire:0
@@ -205,7 +139,13 @@ public class SkillManager : NetworkBehaviour
             Attack.OnDamage(damageNo);
             return;
         }
-        Skills.FindAll(skill => skill.name == name).ForEach(skill => skill.OnDamage(damageNo));
+
+        var skillIdentities = Skills.FindAll(skillIdentity => skillIdentity.id == name);
+        foreach (var skill in skillIdentities)
+        {
+            if (skill.skill)
+                skill.skill.OnDamage(damageNo);
+        }
     }
 
     void OnDestroy()

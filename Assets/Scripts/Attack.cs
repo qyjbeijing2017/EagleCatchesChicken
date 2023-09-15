@@ -57,6 +57,8 @@ public class Attack : Skill
     override protected void Start()
     {
         base.Start();
+        AttackCollider.GetComponent<Collider>().isTrigger = true;
+        ReadyCollider.GetComponent<Collider>().isTrigger = true;
         if (isServer)
         {
             PlayerId = GetComponentInParent<Player>().PlayerId;

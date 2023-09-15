@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using System;
 using Unity.VisualScripting;
+using System.ComponentModel;
 
 [Serializable]
 public struct DamageEvent
@@ -14,6 +15,13 @@ public struct DamageEvent
 
 public class Skill : NetworkBehaviour
 {
+    public string name
+    {
+        get
+        {
+            return gameObject.name;
+        }
+    }
     [SerializeField]
     [Tooltip("CoolDown <= 0 means no cool down")]
     private float CoolDown = 0f;
@@ -44,9 +52,11 @@ public class Skill : NetworkBehaviour
     private float CoolDownTimer = 0f;
     [SyncVar]
     [SerializeField]
+    [ReadOnly(true)]
     private bool IsRunning = false;
     [SyncVar]
     [SerializeField]
+    [ReadOnly(true)]
     protected int PlayerId = -1;
 
     public Player murderer

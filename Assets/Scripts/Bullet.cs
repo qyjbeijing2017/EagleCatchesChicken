@@ -18,6 +18,22 @@ public class Bullet : Damage
 
     float LifeTimeCounter = 0;
 
+    public float speed
+    {
+        get
+        {
+            return Speed;
+        }
+    }
+
+    public float lifeTime
+    {
+        get
+        {
+            return LifeTime;
+        }
+    }
+
     protected override void OnTriggerEnter(Collider other)
     {
         base.OnTriggerEnter(other);
