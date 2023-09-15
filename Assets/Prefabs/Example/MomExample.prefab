@@ -1099,7 +1099,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   target: {fileID: 45960909317595455}
-  clientAuthority: 1
+  clientAuthority: 0
   syncVelocity: 1
   clearVelocity: 0
   velocitySensitivity: 0.1
