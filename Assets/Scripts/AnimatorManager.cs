@@ -18,6 +18,8 @@ public class AnimatorManager : NetworkBehaviour
     void Start()
     {
         animator = GetComponent<Animator>();
+        PlayerSkillManager = GetComponent<SkillManager>();
+
         if (isLocalPlayer || isServer)
         {
             PlayerRigidbody = GetComponent<Rigidbody>();
@@ -27,15 +29,19 @@ public class AnimatorManager : NetworkBehaviour
             {
                 Debug.LogError("PlayerJumpManager is null");
             }
+            PlayerJumpManager.onGrounded += () =>
+            {
+                animator.SetTrigger("Grounded");
+            };
         }
+
         if (isServer)
         {
-            PlayerSkillManager = GetComponent<SkillManager>();
-            PlayerSkillManager.OnSkillStart += (int skillNo) =>
+            PlayerSkillManager.OnSkillStart += (SkillIdentity skillIdentity) =>
             {
                 if (isServerOnly)
-                    animator.SetTrigger($"Skill{skillNo}");
-                RpcSkillStart(skillNo);
+                    animator.SetTrigger(skillIdentity.id);
+                RpcTrigger(skillIdentity.id);
             };
             if (PlayerSkillManager.attack != null)
                 PlayerSkillManager.attack.onAttack += () =>
@@ -48,9 +54,9 @@ public class AnimatorManager : NetworkBehaviour
     }
 
     [ClientRpc]
-    void RpcSkillStart(int skillNo)
+    void RpcTrigger(string name)
     {
-        animator.SetTrigger($"Skill{skillNo}");
+        animator.SetTrigger(name);
     }
 
     [ClientRpc]
@@ -74,7 +80,6 @@ public class AnimatorManager : NetworkBehaviour
             animator.SetFloat("Forward", forwardVelocity);
             animator.SetFloat("Right", rightVelocity);
             animator.SetFloat("Up", PlayerRigidbody.velocity.y);
-            animator.SetFloat("Height", PlayerJumpManager.height);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
             if(PlayerSkillManager.attack != null)
                 animator.SetBool("ReadyAttack", PlayerSkillManager.attack.IsReady);

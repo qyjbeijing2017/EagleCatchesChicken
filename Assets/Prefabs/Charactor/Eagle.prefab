@@ -1578,12 +1578,12 @@ PrefabInstance:
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: PlayerDamageType
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: Skills.Array.size
-      value: 3
+      value: 21
       objectReference: {fileID: 0}
     - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
@@ -1600,6 +1600,156 @@ PrefabInstance:
       propertyPath: Skills.Array.data[2]
       value: 
       objectReference: {fileID: 3757548561594558454}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[0].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[3].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[6].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[9].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[12].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[15].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[16].id
+      value: Skill1
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[17].id
+      value: Skill2
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[18].id
+      value: Skill3
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[0].name
+      value: "Dark\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[1].name
+      value: "Dark\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[2].name
+      value: "Dark\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[3].name
+      value: "Earth\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[4].name
+      value: "Earth\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[5].name
+      value: "Earth\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[6].name
+      value: "Fire\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[7].name
+      value: "Fire\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[8].name
+      value: "Fire\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[9].name
+      value: "Holy\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[10].name
+      value: "Holy\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[11].name
+      value: "Holy\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[12].name
+      value: "Ice\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[13].name
+      value: "Ice\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[14].name
+      value: "Ice\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[15].name
+      value: "None\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[16].name
+      value: "Wind\tSkill1"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[17].name
+      value: "Wind\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[18].name
+      value: "Wind\tSkill3"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[19].name
+      value: "None\tSkill2"
+      objectReference: {fileID: 0}
+    - target: {fileID: 209111444622988169, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: Skills.Array.data[20].name
+      value: "None\tSkill3"
+      objectReference: {fileID: 0}
     - target: {fileID: 307691792209447568, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}
       propertyPath: m_Height
@@ -1624,6 +1774,11 @@ PrefabInstance:
         type: 3}
       propertyPath: syncDirection
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1202731160554643896, guid: f1e440cc3f333d44590fc1b3499b0789,
+        type: 3}
+      propertyPath: clientAuthority
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1296522295099171059, guid: f1e440cc3f333d44590fc1b3499b0789,
         type: 3}

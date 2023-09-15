@@ -59,14 +59,14 @@ ModelImporter:
       events:
       - time: 0.49411765
         functionName: OnDamage
-        data: Fire:0
+        data: Skill2:0
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 1
         functionName: OnSkillEnd
-        data: Fire
+        data: Skill2
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
