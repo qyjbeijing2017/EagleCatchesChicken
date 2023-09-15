@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 6abc3150b1e474dcd8b324d08f82166c,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -705,6 +706,9 @@ MonoBehaviour:
   - {fileID: 3721001641913483125, guid: 4bd276cb4b2126e4a962e70cb2298520, type: 3}
   - {fileID: 3721001641913483125, guid: 7265d666cabc82d42a3754f4782add60, type: 3}
   - {fileID: 2497889566569620253, guid: 25ced9c604e4b414e8276c519cde04ec, type: 3}
+  - {fileID: 4465637717383640468, guid: a21a4c2756c5a48e19b55a90500b35b6, type: 3}
+  - {fileID: 6505544890443796687, guid: 87856039d6d8543d3ae6df4b6424b7ae, type: 3}
+  - {fileID: 2844722400131050886, guid: d7d73f31e1948411d8ca3112877f0c0c, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -717,8 +721,9 @@ MonoBehaviour:
     deliveryTimeEmaDuration: 2
   timeInterpolationGui: 0
   RoleList:
-  - {fileID: 461774644903506977, guid: 5bdea0d732d425e478b6104e3802c4e3, type: 3}
+  - {fileID: 6427635034006013540, guid: 87856039d6d8543d3ae6df4b6424b7ae, type: 3}
   - {fileID: 2679227311208433227, guid: 24131dec2317cb946ac3fd364855611a, type: 3}
+  - {fileID: 461774644903506977, guid: 5bdea0d732d425e478b6104e3802c4e3, type: 3}
   - {fileID: 9132482974404106386, guid: 25ced9c604e4b414e8276c519cde04ec, type: 3}
   PlayerList: []
 --- !u!4 &1196743940

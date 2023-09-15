@@ -57,7 +57,14 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.49411765
+      - time: 0.1971326
+        functionName: OnDamage
+        data: Skill2:1
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.5263757
         functionName: OnDamage
         data: Skill2:0
         objectReferenceParameter: {instanceID: 0}
@@ -67,6 +74,13 @@ ModelImporter:
       - time: 1
         functionName: OnSkillEnd
         data: Skill2
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.29877996
+        functionName: OnDamage
+        data: Skill2:2
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
