@@ -9,9 +9,8 @@ using System;
 public class AnimatorManager : NetworkBehaviour
 {
     Animator animator;
-    Rigidbody PlayerRigidbody;
+    // Rigidbody PlayerRigidbody;
     Move PlayerMove;
-    JumpManager PlayerJumpManager;
 
     SkillManager PlayerSkillManager;
 
@@ -20,19 +19,11 @@ public class AnimatorManager : NetworkBehaviour
         animator = GetComponent<Animator>();
         PlayerSkillManager = GetComponent<SkillManager>();
 
+
         if (isLocalPlayer || isServer)
         {
-            PlayerRigidbody = GetComponent<Rigidbody>();
+            // PlayerRigidbody = GetComponent<Rigidbody>();
             PlayerMove = GetComponent<Move>();
-            PlayerJumpManager = GetComponentInChildren<JumpManager>();
-            if (PlayerJumpManager == null)
-            {
-                Debug.LogError("PlayerJumpManager is null");
-            }
-            PlayerJumpManager.onGrounded += () =>
-            {
-                animator.SetTrigger("Grounded");
-            };
         }
 
         if (isServer)
@@ -65,22 +56,21 @@ public class AnimatorManager : NetworkBehaviour
         animator.SetTrigger("Attack");
     }
 
+
+
     void Update()
     {
         if (isLocalPlayer)
         {
-            var velocity = PlayerMove.moveVelocity;
-
-            var forwardDir = new Vector2(transform.forward.x, transform.forward.z);
-            var rightDir = new Vector2(transform.right.x, transform.right.z);
-
-            var forwardVelocity = Vector2.Dot(velocity, forwardDir);
-            var rightVelocity = Vector2.Dot(velocity, rightDir);
+            var forwardVelocity = Vector3.Dot(PlayerMove.moveVelocity, transform.forward) / PlayerMove.baseMoveSpeed;
+            var rightVelocity = Vector3.Dot(PlayerMove.moveVelocity, transform.right) / PlayerMove.baseMoveSpeed;
+            var upVelocity = PlayerMove.moveVelocity.y;
 
             animator.SetFloat("Forward", forwardVelocity);
             animator.SetFloat("Right", rightVelocity);
-            animator.SetFloat("Up", PlayerRigidbody.velocity.y);
+            // animator.SetFloat("Up", upVelocity);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
+            animator.SetBool("Grounded", PlayerMove.isGrounded);
             if(PlayerSkillManager.attack != null)
                 animator.SetBool("ReadyAttack", PlayerSkillManager.attack.IsReady);
         }

@@ -7,14 +7,12 @@ using System.IO.Enumeration;
 
 [RequireComponent(typeof(NetworkIdentity))]
 [RequireComponent(typeof(NetworkTransform))]
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(NetworkRigidbody))]
+[RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Move))]
 [RequireComponent(typeof(Source))]
 [RequireComponent(typeof(BuffManager))]
 [RequireComponent(typeof(SkillManager))]
 [RequireComponent(typeof(AnimatorManager))]
-[RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(SkillManager))]
 public class Player : NetworkBehaviour
 {
@@ -49,11 +47,6 @@ public class Player : NetworkBehaviour
         var animator = player.GetComponent<Animator>();
         networkAnimator.animator = animator;
 
-        var networkRigidbody = player.GetComponent<NetworkRigidbody>();
-
-        var rigdibody = player.GetComponent<Rigidbody>();
-        rigdibody.freezeRotation = true;
-
         var source = player.GetComponent<Source>();
         if (source.HealthBarAnchor == null)
         {
@@ -67,21 +60,6 @@ public class Player : NetworkBehaviour
                 healthBarAnchor.transform.localScale = Vector3.one;
             }
             source.HealthBarAnchor = healthBarAnchor;
-        }
-
-        var jumpManager = player.GetComponentInChildren<JumpManager>();
-        if (jumpManager == null)
-        {
-            var jumpManagerObject = new GameObject("JumpManager");
-            jumpManagerObject.transform.SetParent(player.transform);
-            jumpManagerObject.transform.localPosition = Vector3.zero;
-            jumpManagerObject.transform.localRotation = Quaternion.identity;
-            jumpManagerObject.transform.localScale = Vector3.one;
-            jumpManager = jumpManagerObject.AddComponent<JumpManager>();
-
-            var jumpColider = jumpManagerObject.GetComponent<SphereCollider>();
-            jumpColider.center = new Vector3(0f, 0.0f, 0f);
-            jumpColider.radius = 0.3f;
         }
 
         var skillManager = player.GetComponent<SkillManager>();        

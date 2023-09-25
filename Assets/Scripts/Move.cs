@@ -3,100 +3,157 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
+using System.Security.Cryptography;
 
 public class Move : NetworkBehaviour
 {
     [SerializeField]
     [Tooltip("Base move speed in meters per second")]
-    float BaseMoveSpeed = 10f;
+    float BaseMoveSpeed = 5f;
+    public float baseMoveSpeed
+    {
+        get
+        {
+            return BaseMoveSpeed;
+        }
+    }
     [SerializeField]
     [Tooltip("Base turn speed in degrees per second")]
     List<float> JumpSpeeds = new List<float> { 5 };
 
     int JumpCount = 0;
-    public int jumpCount{
-        get {
+    public int jumpCount
+    {
+        get
+        {
             return JumpCount;
         }
     }
-    Vector2 MoveVelocity;
-    public Vector2 moveVelocity {
-        get {
+
+    // Rigidbody PlayerRigidbody;
+    PlayerInputAction InputActions;
+    BuffManager PlayerBuffManager;
+    // JumpManager PlayerJumpManager;
+    SkillManager PlayerSkillManager;
+
+    CharacterController PlayerCharacterController;
+
+    [SerializeField]
+    float Gravity = 9.8f;
+    [SerializeField]
+    float HeightStillGround = 0.3f;
+
+    [Header("Debug")]
+    [SerializeField]
+    Vector3 MoveVelocity;
+    public Vector3 moveVelocity
+    {
+        get
+        {
             return MoveVelocity;
         }
     }
 
-    Rigidbody PlayerRigidbody;
-    PlayerInputAction InputActions;
-    BuffManager PlayerBuffManager;
-    JumpManager PlayerJumpManager;
-    SkillManager PlayerSkillManager;
+    [SerializeField]
+    bool IsGrounded;
+    public bool isGrounded
+    {
+        get
+        {
+            return IsGrounded;
+        }
+    }
 
     void Start()
     {
-        if(isLocalPlayer) {
+        if (isLocalPlayer)
+        {
             InputActions = new PlayerInputAction();
             InputActions.Move.Enable();
             InputActions.Move.Jump.performed += OnJump;
-
-            PlayerRigidbody = GetComponent<Rigidbody>();
+            PlayerCharacterController = GetComponent<CharacterController>();
             PlayerBuffManager = GetComponent<BuffManager>();
-            PlayerJumpManager = GetComponentInChildren<JumpManager>();
             PlayerSkillManager = GetComponent<SkillManager>();
-            PlayerJumpManager.onGrounded += () => {
-                JumpCount = 0;
-            };
         }
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if(PlayerBuffManager.isStagger) return;
+        if (PlayerBuffManager.isStagger) return;
         if (JumpCount >= JumpSpeeds.Count) return;
         var jumpSpeed = JumpSpeeds[JumpCount];
-        PlayerRigidbody.velocity = Vector3.up * jumpSpeed;
+        MoveVelocity.y = jumpSpeed;
         JumpCount++;
     }
 
+
+    void InputMove()
+    {
+        var inputAxis = InputActions.Move.Move.ReadValue<Vector2>();
+        if (inputAxis.magnitude > 0f)
+        {
+            var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * (1 - PlayerBuffManager.slowDownPer);
+            var inputVelocity = inputAxis * moveSpeed;
+            MoveVelocity.x = inputVelocity.x;
+            MoveVelocity.z = inputVelocity.y;
+        }
+    }
+
+    void InputForward()
+    {
+        var inputForward = InputActions.Move.Look.ReadValue<Vector2>();
+        if (inputForward.magnitude > 0f)
+        {
+            transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
+        }
+        else
+        {
+            var inputPointPosition = InputActions.Move.PointPosition.ReadValue<Vector2>();
+            var ray = Camera.main.ScreenPointToRay(inputPointPosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                var inputWorldPosition = hit.point;
+                transform.forward = new Vector3(inputWorldPosition.x - transform.position.x, 0, inputWorldPosition.z - transform.position.z);
+            }
+        }
+    }
+
+    void UseGravity()
+    {
+        if (PlayerCharacterController == null) return;
+        MoveVelocity.y -= Gravity * Time.deltaTime;
+        RaycastHit hit;
+        var layerMask = 1 << LayerMask.NameToLayer("Ground");
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, HeightStillGround, layerMask))
+        {
+            if (MoveVelocity.y < 0)
+                MoveVelocity.y = 0;
+            JumpCount = 0;
+            IsGrounded = true;
+        }
+        else
+        {
+            IsGrounded = false;
+        }
+
+    }
 
     // Update is called once per frame
 
     void Update()
     {
-        if (isLocalPlayer)
+        if (!isLocalPlayer) return;
+        MoveVelocity.x = 0;
+        MoveVelocity.z = 0;
+        if (PlayerSkillManager.canMove &&
+            !PlayerBuffManager.isStagger)
         {
-            if(!PlayerSkillManager.canMove) return;
-            if(PlayerBuffManager.isStagger) return;
-
-            MoveVelocity = Vector2.zero;
-            
-            var inputAxis = InputActions.Move.Move.ReadValue<Vector2>();
-            if (inputAxis.magnitude > 0f)
-            {
-                var moveSpeed = (BaseMoveSpeed - PlayerBuffManager.slowDownSpeed) * (1 - PlayerBuffManager.slowDownPer);
-                MoveVelocity = inputAxis * moveSpeed;
-
-                var deltaTransform = new Vector3(MoveVelocity.x, 0, MoveVelocity.y) * Time.deltaTime;
-                var newPosition = transform.position + deltaTransform;
-                transform.position = newPosition;
-            }
-            var inputForward = InputActions.Move.Look.ReadValue<Vector2>();
-            if (inputForward.magnitude > 0f)
-            {
-                transform.forward = new Vector3(inputForward.x, 0, inputForward.y);
-            }
-            else
-            {
-                var inputPointPosition = InputActions.Move.PointPosition.ReadValue<Vector2>();
-                var ray = Camera.main.ScreenPointToRay(inputPointPosition);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit)) {
-                    var inputWorldPosition = hit.point;
-                    transform.forward = new Vector3(inputWorldPosition.x - transform.position.x, 0, inputWorldPosition.z - transform.position.z);
-                }
-
-            }
+            InputMove();
+            InputForward();
         }
+        UseGravity();
+        PlayerCharacterController.Move(MoveVelocity * Time.deltaTime);
     }
 
     void OnDestroy()

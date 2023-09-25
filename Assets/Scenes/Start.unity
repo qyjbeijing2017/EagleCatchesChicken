@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -694,17 +694,13 @@ MonoBehaviour:
   autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 744404028788429718, guid: 8d026c700b703c64cb6f98767c9a0874, type: 3}
-  - {fileID: 744404028788429718, guid: ad94333cb9133f847891a474a4482ff5, type: 3}
-  - {fileID: 744404028788429718, guid: 38942e58c841d794cb372b3e68acd069, type: 3}
   - {fileID: 5080776790659204452, guid: 0f75156d84388dc4885bcbfb8706e9bd, type: 3}
   - {fileID: 5839296229334271337, guid: 637b35f7373214043b145e4397f6e648, type: 3}
   - {fileID: 8462291535026315337, guid: 496ce3c4165556c458cdec1123a96bad, type: 3}
-  - {fileID: 4723269866267928164, guid: 5bdea0d732d425e478b6104e3802c4e3, type: 3}
-  - {fileID: 2958868760711015817, guid: 24131dec2317cb946ac3fd364855611a, type: 3}
   - {fileID: 3721001641913483125, guid: 4bd276cb4b2126e4a962e70cb2298520, type: 3}
   - {fileID: 3721001641913483125, guid: 7265d666cabc82d42a3754f4782add60, type: 3}
-  - {fileID: 2497889566569620253, guid: 25ced9c604e4b414e8276c519cde04ec, type: 3}
+  - {fileID: 1028899279676510421, guid: 1b24c5eeff5541248bfea410083dbd59, type: 3}
+  - {fileID: 1028899279676510421, guid: 9b6bc57f0767fb64bad6012ba651eb6f, type: 3}
   snapshotSettings:
     bufferTimeMultiplier: 2
     catchupNegativeThreshold: -1
@@ -717,9 +713,8 @@ MonoBehaviour:
     deliveryTimeEmaDuration: 2
   timeInterpolationGui: 0
   RoleList:
-  - {fileID: 461774644903506977, guid: 5bdea0d732d425e478b6104e3802c4e3, type: 3}
-  - {fileID: 2679227311208433227, guid: 24131dec2317cb946ac3fd364855611a, type: 3}
-  - {fileID: 9132482974404106386, guid: 25ced9c604e4b414e8276c519cde04ec, type: 3}
+  - {fileID: 3477094123925586212, guid: 1b24c5eeff5541248bfea410083dbd59, type: 3}
+  - {fileID: 3477094123925586212, guid: 9b6bc57f0767fb64bad6012ba651eb6f, type: 3}
   PlayerList: []
 --- !u!4 &1196743940
 Transform:
@@ -803,6 +798,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 025a1b983db2fdc4dab63866c3ccd5e6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
