@@ -81,3 +81,9 @@ Assets/ScriptTemplates.meta
 Assets/ScriptTemplates/
 Assets/Samples/
 Assets/Samples.meta
+
+# HotFix
+Assets/Scripts/ECC_HotFix~/obj/
+Assets/StreamingAssets/
+!Assets/Scripts/ECC_HotFix~/ECC_HotFix.csproj
+!Assets/Scripts/ECC_HotFix~/ECC_HotFix.sln
