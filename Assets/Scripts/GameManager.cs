@@ -10,7 +10,15 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    ILRuntime.Runtime.Enviorment.AppDomain appDomain;
+    ILRuntime.Runtime.Enviorment.AppDomain EccAppDomain;
+
+    ILRuntime.Runtime.Enviorment.AppDomain appDomain
+    {
+        get
+        {
+            return EccAppDomain;
+        }
+    }
 
     public IEnumerator LoadHotFix(string key)
     {
@@ -22,7 +30,6 @@ public class GameManager : MonoSingleton<GameManager>
             yield break;
         }
         var dll = handle.Result.bytes;
-        Debug.Log(dll.Length);
 
 #if DEBUG
         handle = Addressables.LoadAssetAsync<TextAsset>(key + ".pdb.bytes");
@@ -33,26 +40,28 @@ public class GameManager : MonoSingleton<GameManager>
             yield break;
         }
         var pdb = handle.Result.bytes;
-        Debug.Log(pdb.Length);
-        appDomain.LoadAssembly(new MemoryStream(dll), new MemoryStream(pdb), new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
+        EccAppDomain.LoadAssembly(new MemoryStream(dll), new MemoryStream(pdb), new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
 #else
         appDomain.LoadAssembly(new MemoryStream(dll));
 #endif
     }
 
-    IEnumerator Test() {
+    IEnumerator Test()
+    {
         yield return StartCoroutine(LoadHotFix("Assets/HotFix/MainMenu"));
-        appDomain.Invoke("MainMenu.MainMenu", "Main", null, null);
+        EccAppDomain.Invoke("MainMenu.MainMenu", "Main", null, null);
+        yield return StartCoroutine(LoadHotFix("Assets/HotFix/Test"));
+        EccAppDomain.Invoke("Test.Test", "Main", null, null);
+        EccAppDomain.Invoke("MainMenu.MainMenu", "Main", null, null);
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        appDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+        EccAppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
 #if DEBUG
-        appDomain.DebugService.StartDebugService();
-        appDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
-        Debug.Log("Start");
+        EccAppDomain.DebugService.StartDebugService();
+        EccAppDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
 #endif
         StartCoroutine(Test());
     }
