@@ -22,6 +22,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield break;
         }
         var dll = handle.Result.bytes;
+        Debug.Log(dll.Length);
 
 #if DEBUG
         handle = Addressables.LoadAssetAsync<TextAsset>(key + ".pdb.bytes");
@@ -32,7 +33,7 @@ public class GameManager : MonoSingleton<GameManager>
             yield break;
         }
         var pdb = handle.Result.bytes;
-        Debug.Log("LoadHotFix");
+        Debug.Log(pdb.Length);
         appDomain.LoadAssembly(new MemoryStream(dll), new MemoryStream(pdb), new ILRuntime.Mono.Cecil.Pdb.PdbReaderProvider());
 #else
         appDomain.LoadAssembly(new MemoryStream(dll));
@@ -40,8 +41,8 @@ public class GameManager : MonoSingleton<GameManager>
     }
 
     IEnumerator Test() {
-        yield return StartCoroutine(LoadHotFix("Assets/Hotfix/MainMenu"));
-        appDomain.Invoke("MainMenu.MainMenu", "Start", null, null);
+        yield return StartCoroutine(LoadHotFix("Assets/HotFix/MainMenu"));
+        appDomain.Invoke("MainMenu.MainMenu", "Main", null, null);
     }
 
     // Start is called before the first frame update

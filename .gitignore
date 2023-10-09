@@ -85,6 +85,6 @@ Assets/Samples.meta
 # HotFix
 Assets/Scripts/ECC_HotFix~/obj/
 Assets/StreamingAssets/
-!Assets/Scripts/ECC_HotFix~/ECC_HotFix.csproj
-!Assets/Scripts/ECC_HotFix~/ECC_HotFix.sln
-[Oo]bj/
+!Assets/Scripts/ECC_HotFix~/**/*.csproj
+!Assets/Scripts/ECC_HotFix~/**/*.sln
+Assets/Scripts/ECC_HotFix~/**/[Oo]bj/

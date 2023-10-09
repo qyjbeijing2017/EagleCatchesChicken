@@ -16,7 +16,17 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: b8cfadebae27f8c47b9f9178d7f93122
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 573ff0eff46d385449e2dfe352e76ad7
+    m_Address: Assets/HotFix/MainMenu.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e1f7937efa8f56f4f9321b0045ce5f8a
+    m_Address: Assets/HotFix/MainMenu.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
