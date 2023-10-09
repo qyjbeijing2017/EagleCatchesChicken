@@ -1,0 +1,16 @@
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\StreamingAssets\MainMenu.deps.json
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\StreamingAssets\MainMenu.hf
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\StreamingAssets\MainMenu.pdb
+D:\UnityProject\EagleCatchesChicken\Assets\StreamingAssets\MainMenu.deps.json
+D:\UnityProject\EagleCatchesChicken\Assets\StreamingAssets\MainMenu.pdb
+D:\UnityProject\EagleCatchesChicken\Assets\StreamingAssets\MainMenu.HotFix
+D:\UnityProject\EagleCatchesChicken\Assets\HotFix\MainMenu.deps.json
+D:\UnityProject\EagleCatchesChicken\Assets\HotFix\MainMenu.dll.bytes
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.csproj.AssemblyReference.cache
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.GeneratedMSBuildEditorConfig.editorconfig
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.AssemblyInfoInputs.cache
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.AssemblyInfo.cs
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.csproj.CoreCompileInputs.cache
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\MainMenu.dll.bytes
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\refint\MainMenu.dll.bytes
+D:\UnityProject\EagleCatchesChicken\Assets\Scripts\ECC_HotFix~\MainMenu\obj\Debug\ref\MainMenu.dll.bytes

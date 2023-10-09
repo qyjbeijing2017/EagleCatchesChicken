@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "MainMenu/1.0.0": {
+        "runtime": {
+          "MainMenu.dll.bytes": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "MainMenu/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
