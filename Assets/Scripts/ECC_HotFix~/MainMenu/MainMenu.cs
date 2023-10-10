@@ -4,7 +4,7 @@ namespace MainMenu;
 
 public class MainMenu
 {    
-    public static void Main()
+    public static void Start()
     {
     }
 }

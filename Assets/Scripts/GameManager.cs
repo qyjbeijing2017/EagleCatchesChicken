@@ -7,6 +7,9 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public struct HotFixAssembly
 {
@@ -43,7 +46,7 @@ public class GameManager : MonoSingleton<GameManager>
             pdb = null
         };
         HotFixAssemblys[key] = hotFixAssembly;
-        
+
 
 #if DEBUG
         handle = Addressables.LoadAssetAsync<TextAsset>(key + ".pdb.bytes");
@@ -66,20 +69,40 @@ public class GameManager : MonoSingleton<GameManager>
         {
             var hotFixAssembly = HotFixAssemblys[key];
             Debug.Log("DestroyHotFix:" + key);
-            if(hotFixAssembly.dll != null)
+            if (hotFixAssembly.dll != null)
                 hotFixAssembly.dll.Dispose();
-            if(hotFixAssembly.pdb != null)
+            if (hotFixAssembly.pdb != null)
                 hotFixAssembly.pdb.Dispose();
             HotFixAssemblys.Remove(key);
         }
     }
 
-    IEnumerator Test()
+    IEnumerator InitGame()
     {
+        SceneManager.LoadScene(1);
+        yield return null;
+        var loading = FindAnyObjectByType<Loading>();
+        loading.max = 1;
+        
+        loading.Tick("Update Script", 0);
         yield return StartCoroutine(LoadHotFix("Assets/HotFix/MainMenu"));
-        EccAppDomain.Invoke("MainMenu.MainMenu", "Main", null, null);
-        yield return StartCoroutine(LoadHotFix("Assets/HotFix/Test"));
-        EccAppDomain.Invoke("Test.Test", "Main", null, null);
+        loading.Tick("Start Game", 1);
+    }
+
+    IEnumerator DebugStart()
+    {
+        EccAppDomain.DebugService.StartDebugService();
+        EccAppDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+
+        var keyboard = Keyboard.current;
+        while(true){
+            yield return null;
+            if(keyboard.enterKey.wasPressedThisFrame) {
+                break;
+            }
+        }
+
+        StartCoroutine(InitGame());
     }
 
     // Start is called before the first frame update
@@ -87,10 +110,10 @@ public class GameManager : MonoSingleton<GameManager>
     {
         EccAppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
 #if DEBUG
-        EccAppDomain.DebugService.StartDebugService();
-        EccAppDomain.UnityMainThreadID = System.Threading.Thread.CurrentThread.ManagedThreadId;
+        StartCoroutine(DebugStart());
+#else
+        StartCoroutine(InitGame());
 #endif
-        StartCoroutine(Test());
     }
 
     // Update is called once per frame
