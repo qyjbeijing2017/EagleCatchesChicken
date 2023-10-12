@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
-using Unity.VisualScripting;
 
 [CustomEditor(typeof(SkillManager))]
 public class SkillManagerEditor : Editor
