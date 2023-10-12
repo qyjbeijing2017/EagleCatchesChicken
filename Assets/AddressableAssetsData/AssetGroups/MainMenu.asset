@@ -37,6 +37,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e74034fe5ad49e34e847dd098402304e
+    m_Address: Assets/GlobalConfig.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 176842ed1802f2c459e3962429e4f012
+    m_Address: Assets/Scenes/MainMenu.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:

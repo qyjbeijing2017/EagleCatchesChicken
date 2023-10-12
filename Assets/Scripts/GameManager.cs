@@ -84,9 +84,9 @@ public class GameManager : MonoSingleton<GameManager>
         var loading = FindAnyObjectByType<Loading>();
         loading.max = 1;
         
-        loading.Tick("Update Script", 0);
+        loading.Tick("Update MainMenu", 0);
         yield return StartCoroutine(LoadHotFix("Assets/HotFix/MainMenu"));
-        loading.Tick("Start Game", 1);
+        appDomain.Invoke("MainMenu.MainMenu", "Init", null, null);
     }
 
     IEnumerator DebugStart()
@@ -109,6 +109,10 @@ public class GameManager : MonoSingleton<GameManager>
     void Start()
     {
         EccAppDomain = new ILRuntime.Runtime.Enviorment.AppDomain();
+
+        // Register CrossBindingAdaptor
+        EccAppDomain.RegisterCrossBindingAdaptor(new ECCCoroutineAdapter());
+
 #if DEBUG
         StartCoroutine(DebugStart());
 #else
