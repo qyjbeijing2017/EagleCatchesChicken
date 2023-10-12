@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 60ab749f2dccc754daaef4d11baa79cb
-  m_SerializeEntries:
-  - m_GUID: 8e4bedef2aa789449bb62436bc03ac6c
-    m_Address: Assets/HotFix/TestHybird.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
