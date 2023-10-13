@@ -4,6 +4,8 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using UnityEngine.AddressableAssets;
+using UnityEditor;
+using UnityEditor.SceneManagement;
 
 public class TestHybird
 {
@@ -30,7 +32,7 @@ public class TestHybird
     public void BuildHotFix()
     {
         // Arrange
-        var targetUnderTest = UnityEditor.EditorUserBuildSettings.activeBuildTarget;
+        var targetUnderTest = EditorUserBuildSettings.activeBuildTarget;
         var targetPath = $"{Application.dataPath}/HotFix/{targetUnderTest}";
         var hotfixNameUnderTest = new List<string> {
             "ECCTestHybird",
@@ -48,5 +50,4 @@ public class TestHybird
         }
         
     }
-
 }

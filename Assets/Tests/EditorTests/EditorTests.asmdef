@@ -7,7 +7,8 @@
         "ECCEditor",
         "Unity.ResourceManager",
         "Unity.Addressables",
-        "Unity.Addressables.Editor"
+        "Unity.Addressables.Editor",
+        "ECCBase"
     ],
     "includePlatforms": [
         "Editor"
