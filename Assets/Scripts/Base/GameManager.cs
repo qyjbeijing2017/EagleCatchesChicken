@@ -68,26 +68,12 @@ public class GameManager : MonoSingleton<GameManager>
 
         IEnumerator LoadSceneHandler(string name)
         {
-#if DEBUG
-                Debug.Log($"LoadScene{name}");
-                Debug.Log("Load Loading Scene");
-#endif
                 yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
                 var loading = FindObjectOfType<LoadingBase>();
-#if DEBUG
-                Debug.Log("Load finished");
-                Debug.Log("Loading Scripts...");
-#endif
                 loading.maxValue = 100;
                 loading.Tick("Loading Scripts...", 0);
                 var mainMenu = Addressables.LoadSceneAsync($"Assets/Scenes/{name}.unity");
-#if DEBUG
-                Debug.Log("Load finished");
-                Debug.Log("Loading Scene...");
-#endif
                 loading.Tick("Loading Scenes...", 1);
-
-
         }
 
         public Coroutine LoadScene(string name)
@@ -99,23 +85,12 @@ public class GameManager : MonoSingleton<GameManager>
 
         IEnumerator InitManager()
         {
-#if DEBUG
-                Debug.Log($"Init GameManager");
-                Debug.Log($"Load Loading Scripts");
-#endif
                 yield return StartCoroutine(LoadScript("Loading"));
                 var loadingType = GetAssembly("Loading").GetType("Loading");
                 var loadingMaxValue = loadingType.GetProperty("maxValue");
+                
                 var loadingTick = loadingType.GetMethod("Tick");
-#if DEBUG
-                Debug.Log($"Loading Finished");
-                Debug.Log($"Load Loading Scene");
-#endif
                 yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
-#if DEBUG
-                Debug.Log($"Loading Finished");
-                Debug.Log($"Load MainMenu");
-#endif
                 var mainMenu = Addressables.LoadSceneAsync("Assets/Scenes/Ma.unity");
         }
 
