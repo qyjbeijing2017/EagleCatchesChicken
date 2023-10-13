@@ -43,6 +43,11 @@ public class GameManager : MonoSingleton<GameManager>
                 return null;
         }
 
+        public bool ContainsAssembly(string name)
+        {
+                return hotUpdateAsses.ContainsKey(name);
+        }
+
         public void ReleaseAssembly(string name)
         {
                 if (hotUpdateAsses.ContainsKey(name))
@@ -68,16 +73,27 @@ public class GameManager : MonoSingleton<GameManager>
 
         IEnumerator LoadSceneHandler(string name)
         {
-                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
+                yield return StartCoroutine(LoadLoadingScene());
                 var loading = FindObjectOfType<LoadingBase>();
                 loading.maxValue = 100;
-                loading.Tick("Loading Scripts...", 0);
-                var mainMenu = Addressables.LoadSceneAsync($"Assets/Scenes/{name}.unity");
-                loading.Tick("Loading Scenes...", 1);
+                // TODO: Loading Scene
+        }
+
+        IEnumerator LoadLoadingScene()
+        {
+                if (!ContainsAssembly("Loading"))
+                {
+                        yield return StartCoroutine(LoadScript("Loading"));
+                }
+                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
         }
 
         public Coroutine LoadScene(string name)
         {
+                if (name == "Loading")
+                {
+                        return StartCoroutine(LoadLoadingScene());
+                }
                 return StartCoroutine(LoadSceneHandler(name));
         }
 
@@ -86,12 +102,7 @@ public class GameManager : MonoSingleton<GameManager>
         IEnumerator InitManager()
         {
                 yield return StartCoroutine(LoadScript("Loading"));
-                var loadingType = GetAssembly("Loading").GetType("Loading");
-                var loadingMaxValue = loadingType.GetProperty("maxValue");
-                
-                var loadingTick = loadingType.GetMethod("Tick");
                 yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
-                var mainMenu = Addressables.LoadSceneAsync("Assets/Scenes/Ma.unity");
         }
 
 
