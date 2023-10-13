@@ -77,6 +77,17 @@ public class GameManager : MonoSingleton<GameManager>
                 var loading = FindObjectOfType<LoadingBase>();
                 loading.maxValue = 100;
                 // TODO: Loading Scene
+                loading.Tick("Loading scripts...", 0);
+                yield return LoadScript(name);
+                var loadingAss = GetAssembly(name);
+                var loadingType = loadingAss.GetType(name);
+                var extraLoadingValueProperty = loadingType.GetProperty("ExtraLoadingValue");
+                var extraLoadingMethod = loadingType.GetProperty("ExtraLoading");
+                float extraLoadingValue = (float)extraLoadingValueProperty.GetValue(null);
+
+                
+
+
         }
 
         IEnumerator LoadLoadingScene()

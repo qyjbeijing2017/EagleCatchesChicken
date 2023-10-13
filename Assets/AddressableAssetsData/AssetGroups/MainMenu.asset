@@ -22,6 +22,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f61e7d294a352024095ff650dc916398
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ac677e4a8dae1154b9ca2473aa7feb88
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:

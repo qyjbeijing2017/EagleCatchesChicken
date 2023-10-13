@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class TestHybird : MonoBehaviour
 {
+    readonly public static float ExtraLoadingValue = 50f;
+    public static IEnumerator ExtraLoading()
+    {
+        Debug.Log("TestHybird ExtraLoading");
+        yield return null;
+    }
+
     public static void Run()
     {
         Debug.Log("TestHybird Run");
