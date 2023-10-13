@@ -12,13 +12,13 @@ public class TestHotfix
     public IEnumerator LoadHotFix()
     {
         // Arrange
-        var modelNameUnderTest = "ECCTestHybird";
+        var modelNameUnderTest = "TestHybird";
         var gameManagerUnderTest = GameManager.instance;
 
         // Act
         yield return gameManagerUnderTest.StartCoroutine(gameManagerUnderTest.LoadScript(modelNameUnderTest));
         var assUnderTest = gameManagerUnderTest.GetAssembly(modelNameUnderTest);
-        var typeUnderTest = assUnderTest.GetType("TestHybird");
+        var typeUnderTest = assUnderTest.GetType(modelNameUnderTest);
         var methodUnderTest = typeUnderTest.GetMethod("Run");
         methodUnderTest.Invoke(null, null);
         gameManagerUnderTest.ReleaseAssembly(modelNameUnderTest);

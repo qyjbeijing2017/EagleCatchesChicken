@@ -35,19 +35,21 @@ public class TestHybird
         var targetUnderTest = EditorUserBuildSettings.activeBuildTarget;
         var targetPath = $"{Application.dataPath}/HotFix/{targetUnderTest}";
         var hotfixNameUnderTest = new List<string> {
-            "ECCTestHybird",
+            "TestHybird",
+            "Loading",
         };
 
         // Act
         ECCEditor.BuildHotFix();
-        
+
         // Assert
         Assert.IsTrue(System.IO.Directory.Exists(targetPath));
         foreach (var name in hotfixNameUnderTest)
         {
-            Assert.IsTrue(System.IO.File.Exists($"{targetPath}/{name}.dll.bytes"));
-            Assert.IsTrue(System.IO.File.Exists($"{targetPath}/{name}.pdb.bytes") == Debug.isDebugBuild);
+            Assert.IsTrue(System.IO.File.Exists($"{targetPath}/ECC{name}.dll.bytes"));
+            if (Debug.isDebugBuild)
+                Assert.IsTrue(System.IO.File.Exists($"{targetPath}/ECC{name}.pdb.bytes"));
         }
-        
+
     }
 }

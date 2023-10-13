@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Reflection;
 using UnityEditor;
+using UnityEngine.ResourceManagement.ResourceProviders;
+using Unity.Loading;
+using System;
 
 public class GameManager : MonoSingleton<GameManager>
 {
@@ -31,7 +34,6 @@ public class GameManager : MonoSingleton<GameManager>
                 }
         }
 
-
         public Assembly GetAssembly(string name)
         {
                 if (hotUpdateAsses.ContainsKey(name))
@@ -56,16 +58,71 @@ public class GameManager : MonoSingleton<GameManager>
 
         public IEnumerator LoadScript(string name)
         {
-                var handle = Addressables.LoadAssetAsync<TextAsset>($"Assets/HotFix/{platformName}/{name}.dll.bytes");
+                var handle = Addressables.LoadAssetAsync<TextAsset>($"Assets/HotFix/{platformName}/ECC{name}.dll.bytes");
                 yield return handle;
                 var assbleData = handle.Result.bytes;
                 var ass = Assembly.Load(assbleData);
                 hotUpdateAsses[name] = ass;
         }
         // Start is called before the first frame update
+
+        IEnumerator LoadSceneHandler(string name)
+        {
+#if DEBUG
+                Debug.Log($"LoadScene{name}");
+                Debug.Log("Load Loading Scene");
+#endif
+                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
+                var loading = FindObjectOfType<LoadingBase>();
+#if DEBUG
+                Debug.Log("Load finished");
+                Debug.Log("Loading Scripts...");
+#endif
+                loading.maxValue = 100;
+                loading.Tick("Loading Scripts...", 0);
+                var mainMenu = Addressables.LoadSceneAsync($"Assets/Scenes/{name}.unity");
+#if DEBUG
+                Debug.Log("Load finished");
+                Debug.Log("Loading Scene...");
+#endif
+                loading.Tick("Loading Scenes...", 1);
+
+
+        }
+
+        public Coroutine LoadScene(string name)
+        {
+                return StartCoroutine(LoadSceneHandler(name));
+        }
+
+        bool _isReady = false;
+
+        IEnumerator InitManager()
+        {
+#if DEBUG
+                Debug.Log($"Init GameManager");
+                Debug.Log($"Load Loading Scripts");
+#endif
+                yield return StartCoroutine(LoadScript("Loading"));
+                var loadingType = GetAssembly("Loading").GetType("Loading");
+                var loadingMaxValue = loadingType.GetProperty("maxValue");
+                var loadingTick = loadingType.GetMethod("Tick");
+#if DEBUG
+                Debug.Log($"Loading Finished");
+                Debug.Log($"Load Loading Scene");
+#endif
+                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
+#if DEBUG
+                Debug.Log($"Loading Finished");
+                Debug.Log($"Load MainMenu");
+#endif
+                var mainMenu = Addressables.LoadSceneAsync("Assets/Scenes/Ma.unity");
+        }
+
+
         void Start()
         {
-
+                StartCoroutine(InitManager());
         }
 
         // Update is called once per frame

@@ -10,20 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Test
+  m_Name: Loading
   m_EditorClassIdentifier: 
-  m_GroupName: Test
+  m_GroupName: Loading
   m_Data:
     m_SerializedData: []
-  m_GUID: 93814c7e718370044afd7507a3aedef0
+  m_GUID: b5341e8b11bc95242896cf2a1b026b59
   m_SerializeEntries:
-  - m_GUID: 66db9e3cf34bed24da731ce8659f0f1f
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.pdb.bytes
+  - m_GUID: b1afbb462883d6a41a1d92a02a988bc1
+    m_Address: Assets/Scenes/Loading.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83fc2e7f1fe4fd04bb68237f342dcb5b
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.dll.bytes
+  - m_GUID: 422a56e4fd144cb4fbe42bf2438fe096
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCLoading.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: edf10c30cfb83f54298f40ce447d665e
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCLoading.dll.bytes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -31,5 +36,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 0f8c615784698bf4486fcdd9b5e5f192, type: 2}
-    - {fileID: 11400000, guid: 50cad46166af57e44aa95683a91f1c15, type: 2}
+    - {fileID: 11400000, guid: 0f1a9690637e79e4493cb4e9a68bc8b3, type: 2}
+    - {fileID: 11400000, guid: 2aa95cbeb6859b3498a66491e4299112, type: 2}

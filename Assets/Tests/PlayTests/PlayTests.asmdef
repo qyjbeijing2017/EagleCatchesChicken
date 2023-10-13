@@ -1,10 +1,11 @@
 {
-    "name": "PlayerTests",
+    "name": "PlayTests",
     "rootNamespace": "",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ECCBase"
+        "EccBase",
+        "ECCLoading"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

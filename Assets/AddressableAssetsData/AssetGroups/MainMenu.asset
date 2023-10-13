@@ -10,20 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: Test
+  m_Name: MainMenu
   m_EditorClassIdentifier: 
-  m_GroupName: Test
+  m_GroupName: MainMenu
   m_Data:
     m_SerializedData: []
-  m_GUID: 93814c7e718370044afd7507a3aedef0
+  m_GUID: 7b37581b0e950154d99e4ce4465ce398
   m_SerializeEntries:
-  - m_GUID: 66db9e3cf34bed24da731ce8659f0f1f
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 83fc2e7f1fe4fd04bb68237f342dcb5b
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.dll.bytes
+  - m_GUID: 8c28fec44677ded4ca0bc20acca60420
+    m_Address: Assets/Scenes/MainMenu.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -31,5 +26,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 0f8c615784698bf4486fcdd9b5e5f192, type: 2}
-    - {fileID: 11400000, guid: 50cad46166af57e44aa95683a91f1c15, type: 2}
+    - {fileID: 11400000, guid: 8848fb5f5da9be6439e23a00d85933d5, type: 2}
+    - {fileID: 11400000, guid: 4d301ab20c987d846bbf9fa416146c05, type: 2}

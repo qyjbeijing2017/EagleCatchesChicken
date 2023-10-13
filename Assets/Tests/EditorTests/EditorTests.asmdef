@@ -4,11 +4,11 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ECCEditor",
         "Unity.ResourceManager",
         "Unity.Addressables",
         "Unity.Addressables.Editor",
-        "ECCBase"
+        "EccBase",
+        "EccEditor"
     ],
     "includePlatforms": [
         "Editor"
