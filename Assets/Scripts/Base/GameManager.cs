@@ -127,23 +127,4 @@ public class GameManager : MonoSingleton<GameManager>
                 return StartCoroutine(LoadSceneHandler(name));
         }
 
-        bool _isReady = false;
-
-        IEnumerator InitManager()
-        {
-                yield return StartCoroutine(LoadScript("Loading"));
-                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
-        }
-
-
-        void Start()
-        {
-                StartCoroutine(InitManager());
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
 }
