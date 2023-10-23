@@ -1,7 +1,9 @@
 {
     "name": "ECCTestHybird",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:1e36711b5e549e640ac929c0b4e5247e"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

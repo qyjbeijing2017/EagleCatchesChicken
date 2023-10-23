@@ -26,6 +26,6 @@ public class TestHotfix
         // Assert
         LogAssert.Expect(LogType.Log, "TestHybird Run");
         Assert.AreEqual(gameManagerUnderTest.GetAssembly(modelNameUnderTest), null);
- 
+
     }
 }

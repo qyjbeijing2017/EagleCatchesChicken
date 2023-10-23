@@ -12,7 +12,7 @@ public class TestLoading
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
     // `yield return null;` to skip a frame.
     [UnityTest]
-    public IEnumerator Tick()
+    public IEnumerator LoadingScene()
     {
         yield return GameManager.instance.LoadScene("Loading");
 
@@ -44,5 +44,20 @@ public class TestLoading
         // Assert2
         Assert.AreEqual(textComponentUnderTest.text, textUnderTest2);
         Assert.AreEqual(sliderComponentUnderTest.value, valueUnderTest2 + valueUnderTest);
+    }
+
+    [UnityTest]
+    public IEnumerator LoadingTestScene()
+    {
+        // Arrange
+        var sceneNameUnderTest = "TestHybird";
+
+        // Act
+        yield return GameManager.instance.LoadScene(sceneNameUnderTest);
+
+        // Assert
+        Assert.AreEqual(sceneNameUnderTest, SceneManager.GetActiveScene().name);
+        LogAssert.Expect(LogType.Log, "TestHybird ExtraLoading");
+        LogAssert.Expect(LogType.Log, "TestHybird Start");
     }
 }

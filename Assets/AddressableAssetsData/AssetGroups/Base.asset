@@ -16,7 +16,12 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 60ab749f2dccc754daaef4d11baa79cb
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: d7a54ab876c69194aa825fec8213b6b8
+    m_Address: Assets/Scenes/TestHybird.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:

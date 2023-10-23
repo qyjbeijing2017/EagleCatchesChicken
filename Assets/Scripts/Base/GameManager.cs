@@ -81,13 +81,32 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return LoadScript(name);
                 var loadingAss = GetAssembly(name);
                 var loadingType = loadingAss.GetType(name);
+
+                // Loading something from Hotfix
                 var extraLoadingValueProperty = loadingType.GetProperty("ExtraLoadingValue");
-                var extraLoadingMethod = loadingType.GetProperty("ExtraLoading");
-                float extraLoadingValue = (float)extraLoadingValueProperty.GetValue(null);
+                var extraLoadingMethod = loadingType.GetMethod("ExtraLoading");
+                if (extraLoadingValueProperty != null)
+                {
+                        float extraLoadingValue = (float)extraLoadingValueProperty.GetValue(null);
+                        loading.maxValue += extraLoadingValue;
+                }
+                if (extraLoadingMethod != null)
+                {
+                        yield return StartCoroutine((IEnumerator)extraLoadingMethod.Invoke(null, new object[] { loading }));
+                }
 
-                
+                // Loading scene
+                var operation = Addressables.LoadSceneAsync($"Assets/Scenes/{name}.unity");
 
-
+                var lastPercent = 0f;
+                while (!operation.IsDone)
+                {
+                        var percent = operation.PercentComplete;
+                        var add = percent - lastPercent;
+                        lastPercent = percent;
+                        loading.Tick($"Loading Scene...", add * 100);
+                        yield return null;
+                }
         }
 
         IEnumerator LoadLoadingScene()
