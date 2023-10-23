@@ -9,9 +9,9 @@ public class TestHybird : MonoBehaviour
     {
         Debug.Log("TestHybird ExtraLoading");
         var tickTime = 0;
-        while (tickTime < 10)
+        while (tickTime < 5)
         {
-            loading.Tick("ExtraLoading...", ExtraLoadingValue / 10);
+            loading.Tick("ExtraLoading...", ExtraLoadingValue / 5);
             tickTime++;
             yield return new WaitForSeconds(1);
         }

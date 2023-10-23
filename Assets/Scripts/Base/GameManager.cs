@@ -83,7 +83,7 @@ public class GameManager : MonoSingleton<GameManager>
                 var loadingType = loadingAss.GetType(name);
 
                 // Loading something from Hotfix
-                var extraLoadingValueProperty = loadingType.GetProperty("ExtraLoadingValue");
+                var extraLoadingValueProperty = loadingType.GetField("ExtraLoadingValue");
                 var extraLoadingMethod = loadingType.GetMethod("ExtraLoading");
                 if (extraLoadingValueProperty != null)
                 {
