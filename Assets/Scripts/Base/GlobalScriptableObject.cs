@@ -6,6 +6,6 @@ using UnityEngine;
 public class GlobalScriptableObject : ScriptableObject
 {
     [Header("Network")]
-    public string EntryPoint;
-    public int Port;
+    public string EntryPoint = "http://test";
+    public int Port = 8080;
 }
