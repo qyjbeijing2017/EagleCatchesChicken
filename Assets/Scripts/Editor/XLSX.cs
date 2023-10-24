@@ -293,6 +293,32 @@ public struct XLSXRow
             }
         }
     }
+
+    public void serializeFormScriptableObject(Type type, object obj, bool cover = true)
+    {
+        var fields = type.GetFields();
+        foreach (var field in fields)
+        {
+            var cell = this[field.Name];
+            if (cell.IsEmpty() || cover)
+            {
+                cell.setValue(field, obj);
+            }
+        }
+    }
+
+    public void serializeToScriptableObject(Type type, object obj, bool cover = true)
+    {
+        var fields = type.GetFields();
+        foreach (var field in fields)
+        {
+            var cell = this[field.Name];
+            if (!cell.IsEmpty() || cover)
+            {
+                cell.exportToObject(field, obj);
+            }
+        }
+    }
 }
 
 public struct XLSXTitles
@@ -405,6 +431,35 @@ public struct XLSXSheet
     public void serializeToScriptableObject<T>(T obj, bool cover = true) where T : ScriptableObject
     {
         var fields = typeof(T).GetFields();
+        foreach (var field in fields)
+        {
+            var row = this[field.Name];
+            var cell = row["value"];
+            if (!cell.IsEmpty() || cover)
+            {
+                cell.exportToObject(field, obj);
+            }
+        }
+    }
+
+
+    public void serializeFormScriptableObject(Type type, object obj, bool cover = true)
+    {
+        var fields = type.GetFields();
+        foreach (var field in fields)
+        {
+            var row = this[field.Name];
+            var cell = row["value"];
+            if (cell.IsEmpty() || cover)
+            {
+                cell.setValue(field, obj);
+            }
+        }
+    }
+
+    public void serializeToScriptableObject(Type type, object obj, bool cover = true)
+    {
+        var fields = type.GetFields();
         foreach (var field in fields)
         {
             var row = this[field.Name];

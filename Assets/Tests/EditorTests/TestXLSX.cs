@@ -4,10 +4,10 @@ using System.IO;
 
 public class TestScriptableObject : ScriptableObject
 {
-    public int intValue;
-    public string stringValue;
-    public float floatValue;
-    public bool boolValue;
+    public int intValue = 888;
+    public string stringValue = "default value";
+    public float floatValue = 1.5f;
+    public bool boolValue = true;
 }
 
 public class TestScriptableObject2 : ScriptableObject
@@ -299,6 +299,34 @@ public class TestXLSX
         Assert.AreEqual(scriptableObjectUnderTest.boolValue, scriptableObjectCheck.boolValue);
     }
 
+
+    [Test]
+    public void UnknownObject()
+    {
+        // Arrange
+        var xlsxUnderTest = new XLSX(s_TestFilePath);
+        var sheetUnderTest = xlsxUnderTest[s_sheetName];
+        var typeUnderTest = typeof(TestScriptableObject);
+
+        // Act
+        var instance = typeUnderTest.Assembly.CreateInstance(typeUnderTest.FullName);
+        sheetUnderTest.serializeFormScriptableObject(typeUnderTest, instance, false);
+
+
+        // Assert
+        var scriptableObjectCheck = new TestScriptableObject(){
+            stringValue = "other Value",
+            intValue = 111,
+            floatValue = 1.0f,
+            boolValue = false
+        };
+        sheetUnderTest.serializeToScriptableObject(scriptableObjectCheck);
+
+        Assert.AreEqual("default value", scriptableObjectCheck.stringValue);
+        Assert.AreEqual(888, scriptableObjectCheck.intValue);
+        Assert.AreEqual(1.5f, scriptableObjectCheck.floatValue);
+        Assert.AreEqual(true, scriptableObjectCheck.boolValue);
+    }
 
     [TearDown]
     public void TearDown()
