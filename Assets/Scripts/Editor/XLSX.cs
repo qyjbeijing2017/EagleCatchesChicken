@@ -3,6 +3,8 @@ using NPOI.XSSF.UserModel;
 using System.IO;
 using System;
 using UnityEngine;
+using PlasticGui.WorkspaceWindow;
+using System.Collections.Generic;
 
 
 public struct XLSXCell
@@ -231,6 +233,16 @@ public struct XLSXRow
     XLSXTitles titles;
     IRow m_Row;
 
+    public string name
+    {
+        get
+        {
+            var cell = m_Row.GetCell(0);
+            if (cell == null) return string.Empty;
+            return cell.StringCellValue;
+        }
+    }
+
     public IRow row
     {
         get
@@ -346,7 +358,7 @@ public struct XLSXTitles
             for (int i = 1; i < m_Row.LastCellNum; i++)
             {
                 cell = m_Row.GetCell(i);
-                if(cell == null) continue;
+                if (cell == null) continue;
                 if (cell.StringCellValue == index)
                 {
                     return i;
@@ -377,6 +389,21 @@ public struct XLSXSheet
         get
         {
             return m_Sheet.SheetName;
+        }
+    }
+
+    public List<XLSXRow> raws
+    {
+        get
+        {
+            var list = new List<XLSXRow>();
+            for (int i = 1; i <= m_Sheet.LastRowNum; i++)
+            {
+                var row = m_Sheet.GetRow(i);
+                if (row == null) continue;
+                list.Add(new XLSXRow(row, titles));
+            }
+            return list;
         }
     }
 
@@ -482,6 +509,19 @@ public class XLSX
         get
         {
             return m_Workbook;
+        }
+    }
+
+    public List<XLSXSheet> sheets
+    {
+        get
+        {
+            var list = new List<XLSXSheet>();
+            for (int i = 0; i < m_Workbook.NumberOfSheets; i++)
+            {
+                list.Add(new XLSXSheet(m_Workbook.GetSheetAt(i)));
+            }
+            return list;
         }
     }
 

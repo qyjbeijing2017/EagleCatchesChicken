@@ -13,8 +13,8 @@ public class ExcelToScriptable : Editor
     static List<Type> s_SheetTypes = new List<Type>(){
         typeof(GlobalScriptableObject),
     };
-    static List<Type> s_RawTypes = new List<Type>(){
-
+    static List<Type> s_RawTypes = new List<Type>()
+    {
     };
 
     static void CreateGlobalTable()
@@ -35,6 +35,11 @@ public class ExcelToScriptable : Editor
             Directory.CreateDirectory(s_Workspace);
         }
 
+        if (!Directory.Exists(s_Designer))
+        {
+            Directory.CreateDirectory(s_Designer);
+        }
+
 
         // GlobalScriptableObject
         var xlsx = new XLSX($"{s_Designer}/Global.xlsx");
@@ -44,7 +49,7 @@ public class ExcelToScriptable : Editor
             var name = sheetType.Name.Replace("ScriptableObject", "");
             xlsx[name].serializeFormScriptableObject(sheetType, Activator.CreateInstance(sheetType), false);
         }
-        
+
         xlsx.Save();
 
         // RawObject
@@ -68,6 +73,7 @@ public class ExcelToScriptable : Editor
 
         if (!Directory.Exists(s_Designer))
         {
+            Debug.LogWarning("Designer is not exist");
             return;
         }
 
@@ -80,11 +86,58 @@ public class ExcelToScriptable : Editor
 
         foreach (var file in files)
         {
-            var xlsx = new XLSX(file);
-            var sheet = xlsx["global"];
-            var obj = new GlobalScriptableObject();
-            sheet.serializeFormScriptableObject(obj, false);
-            xlsx.Save();
+            var info = new FileInfo(file);
+            var name = info.Name.Replace(".xlsx", "");
+            if (name == "Global")
+            {
+                var xlsx = new XLSX(file);
+                var sheets = xlsx.sheets;
+                foreach (var sheet in sheets)
+                {
+                    var path = $"{s_Runtime}/{sheet.name}.asset";
+                    var type = Type.GetType($"{sheet.name}ScriptableObject");
+                    var asset = AssetDatabase.LoadAssetAtPath(path, type);
+                    if (asset == null)
+                    {
+                        asset = (ScriptableObject)type.Assembly.CreateInstance(type.FullName);
+                        sheet.serializeFormScriptableObject(type, asset, true);
+                        AssetDatabase.CreateAsset(asset, path);
+                    }
+                    else
+                    {
+                        sheet.serializeFormScriptableObject(type, asset, true);
+                    }
+                    AssetDatabase.SaveAssets();
+                }
+
+            }
+            else
+            {
+                var xlsx = new XLSX(file);
+                var type = Type.GetType($"{name}ScriptableObject");
+                var sheet = xlsx["default"];
+                var raws = sheet.raws;
+
+                foreach(var raw in raws)
+                {
+                    if(String.IsNullOrEmpty(raw.name))
+                    {
+                        continue;
+                    }
+                    var path = $"{s_Runtime}/{name}_{raw.name}.asset";
+                    var asset = AssetDatabase.LoadAssetAtPath(path, type);
+                    if (asset == null)
+                    {
+                        asset = ScriptableObject.CreateInstance(type);
+                        AssetDatabase.CreateAsset(asset, path);
+                    }
+                    else
+                    {
+                        sheet.serializeFormScriptableObject(type, asset, true);
+                    }
+                    AssetDatabase.SaveAssets();
+                }
+            }
         }
     }
 
