@@ -49,7 +49,6 @@ public class LoadingBase : MonoBehaviour
 
     public void Tick(string text = "", float progressAdd = 1)
     {
-        Debug.Log($"LoadingBase Tick: {text} {progressAdd} {_text.text} {_slider.value}/{_slider.maxValue}");
         _text.text = text;
         _slider.value += progressAdd;
     }
