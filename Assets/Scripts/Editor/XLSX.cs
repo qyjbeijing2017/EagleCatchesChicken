@@ -575,17 +575,22 @@ public class XLSX
     {
         FileInfo file = new FileInfo(m_Path);
         string savePath = $"{file.Directory}/~catch_{file.Name}";
-        using (var stream = File.Open(savePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+        try
         {
-            m_Workbook.Write(stream);
-        }
-        if (File.Exists(m_Path))
-            File.Delete(m_Path);
-        try{
+            using (var stream = File.Open(savePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
+            {
+                m_Workbook.Write(stream);
+            }
+            if (File.Exists(m_Path))
+                File.Delete(m_Path);
             File.Move(savePath, m_Path);
-        } catch (Exception e) {
-            File.Delete(m_Path);
-            Debug.LogError(e);
+        }
+        catch (Exception e)
+        {
+
+            if (File.Exists(savePath))
+                File.Delete(savePath);
+            throw e;
         }
     }
 
