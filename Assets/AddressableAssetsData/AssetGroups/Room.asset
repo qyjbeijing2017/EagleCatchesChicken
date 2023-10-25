@@ -10,25 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
-  m_Name: MainMenu
+  m_Name: Room
   m_EditorClassIdentifier: 
-  m_GroupName: MainMenu
+  m_GroupName: Room
   m_Data:
     m_SerializedData: []
-  m_GUID: 7b37581b0e950154d99e4ce4465ce398
+  m_GUID: 9c8c6f815a431674c8c93c968d52ee27
   m_SerializeEntries:
-  - m_GUID: ac677e4a8dae1154b9ca2473aa7feb88
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.pdb.bytes
+  - m_GUID: 457b1c38a33e5db4b9b391b37feccdc5
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCRoom.pdb.bytes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f61e7d294a352024095ff650dc916398
-    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8c28fec44677ded4ca0bc20acca60420
-    m_Address: Assets/Scenes/MainMenu.unity
+  - m_GUID: 41c885fe3d0673a4fa0c7c336fabcc4e
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCRoom.dll.bytes
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
@@ -36,5 +31,5 @@ MonoBehaviour:
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
     m_Schemas:
-    - {fileID: 11400000, guid: 8848fb5f5da9be6439e23a00d85933d5, type: 2}
-    - {fileID: 11400000, guid: 4d301ab20c987d846bbf9fa416146c05, type: 2}
+    - {fileID: 11400000, guid: 9a22a8d36811d6943b9a89c296a77480, type: 2}
+    - {fileID: 11400000, guid: 3630744c7c84bf045ad303ec0f2c1388, type: 2}
