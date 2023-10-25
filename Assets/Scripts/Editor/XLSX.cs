@@ -3,8 +3,9 @@ using NPOI.XSSF.UserModel;
 using System.IO;
 using System;
 using UnityEngine;
-using PlasticGui.WorkspaceWindow;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using NPOI.SS.Formula.Functions;
 
 
 public struct XLSXCell
@@ -251,6 +252,7 @@ public struct XLSXRow
         }
     }
 
+
     public XLSXRow(IRow row, XLSXTitles titles)
     {
         m_Row = row;
@@ -405,6 +407,34 @@ public struct XLSXSheet
             }
             return list;
         }
+    }
+
+    static List<Char> words = new List<Char>()
+    {
+        'A','B','C','D','E','F','G','H','I','J','K','L','M',
+        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
+    };
+    public static int WordsToNumber(string words)
+    {
+        int number = 0;
+        for (int i = 0; i < words.Length; i++)
+        {
+            number += (int)Mathf.Pow(26, i) * (words[words.Length - 1 - i] - 'A' + 1);
+        }
+        return number;
+    }
+
+    public XLSXCell GetCell(string index)
+    {
+        var colunmPattern = @"^[A-Z]+";
+        var rowPattern = @"\d+$";
+        var colunmIndex = XLSXSheet.WordsToNumber(Regex.Match(index, colunmPattern).Value) - 1;
+        var rowIndex = int.Parse(Regex.Match(index, rowPattern).Value) - 1;
+        var row = m_Sheet.GetRow(rowIndex);
+        if (row == null) row = m_Sheet.CreateRow(rowIndex);
+        var cell = row.GetCell(colunmIndex);
+        if (cell == null) cell = row.CreateCell(colunmIndex);
+        return new XLSXCell(cell);
     }
 
     public XLSXTitles titles;
