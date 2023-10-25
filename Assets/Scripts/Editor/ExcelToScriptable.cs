@@ -67,6 +67,7 @@ public class ExcelToScriptable : Editor
     [MenuItem("ECC/Configuration/Generate Scriptable")]
     public static void GenerateScriptable()
     {
+        
         if (!Directory.Exists(s_Workspace))
         {
             Directory.CreateDirectory(s_Workspace);
@@ -122,9 +123,12 @@ public class ExcelToScriptable : Editor
     }
 
 
-    [MenuItem("ECC/Configuration/Ovewrite Excels")]
-    public static void OvewriteExcels()
+    [MenuItem("ECC/Configuration/Overwrite Excels")]
+    public static void OverwriteExcels()
     {
+        if(!EditorUtility.DisplayDialog("Overwrite Excels", "This function will overwrite Designer.xlsx", "Yes", "No")){
+            return;
+        }
         if (!Directory.Exists(s_Workspace))
         {
             Directory.CreateDirectory(s_Workspace);
