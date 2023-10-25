@@ -581,7 +581,12 @@ public class XLSX
         }
         if (File.Exists(m_Path))
             File.Delete(m_Path);
-        File.Move(savePath, m_Path);
+        try{
+            File.Move(savePath, m_Path);
+        } catch (Exception e) {
+            File.Delete(m_Path);
+            Debug.LogError(e);
+        }
     }
 
     public XLSXSheet this[string index]

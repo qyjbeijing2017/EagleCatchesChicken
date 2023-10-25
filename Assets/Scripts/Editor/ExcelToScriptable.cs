@@ -33,6 +33,7 @@ public class ExcelToScriptable : Editor
     [MenuItem("ECC/Configuration/Init Excels")]
     public static void InitExcels()
     {
+        var timeStart = DateTime.Now;
         if (!Directory.Exists(s_Workspace))
         {
             Directory.CreateDirectory(s_Workspace);
@@ -59,14 +60,14 @@ public class ExcelToScriptable : Editor
         }
 
         xlsx.Save();
-
-        Debug.Log("Init Excels Success");
+        Debug.Log($"Init Excels Success, time: {(DateTime.Now - timeStart).TotalSeconds}s");
     }
 
 
     [MenuItem("ECC/Configuration/Generate Scriptable")]
     public static void GenerateScriptable()
     {
+        var timeStart = DateTime.Now;
         
         if (!Directory.Exists(s_Workspace))
         {
@@ -118,14 +119,14 @@ public class ExcelToScriptable : Editor
         }
 
         AssetDatabase.SaveAssets();
-
-        Debug.Log("Generate Scriptable Success");
+        Debug.Log("Generate Scriptable Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
 
 
     [MenuItem("ECC/Configuration/Overwrite Excels")]
     public static void OverwriteExcels()
     {
+        var timeStart = DateTime.Now;
         if(!EditorUtility.DisplayDialog("Overwrite Excels", "This function will overwrite Designer.xlsx", "Yes", "No")){
             return;
         }
@@ -177,7 +178,6 @@ public class ExcelToScriptable : Editor
 
 
         xlsx.Save();
-
-        Debug.Log("Ovewrite Excels Success");
+        Debug.Log("Ovewrite Excels Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
 }
