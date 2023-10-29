@@ -12,7 +12,7 @@ public class GameManager : MonoSingleton<GameManager>
 {
         private Dictionary<string, Assembly> hotUpdateAsses = new Dictionary<string, Assembly>();
 
-        public string platformName
+        static public string platformName
         {
                 get
                 {
@@ -63,11 +63,13 @@ public class GameManager : MonoSingleton<GameManager>
 
         public IEnumerator LoadScript(string name)
         {
+                Debug.Log($"Load source Assets/HotFix/{platformName}/ECC{name}.dll.bytes");
                 var handle = Addressables.LoadAssetAsync<TextAsset>($"Assets/HotFix/{platformName}/ECC{name}.dll.bytes");
                 yield return handle;
                 var assbleData = handle.Result.bytes;
                 var ass = Assembly.Load(assbleData);
                 hotUpdateAsses[name] = ass;
+
         }
         // Start is called before the first frame update
 

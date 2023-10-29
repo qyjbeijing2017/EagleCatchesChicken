@@ -17,13 +17,83 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 60ab749f2dccc754daaef4d11baa79cb
   m_SerializeEntries:
-  - m_GUID: d7a54ab876c69194aa825fec8213b6b8
-    m_Address: Assets/Scenes/TestHybird.unity
+  - m_GUID: b1afbb462883d6a41a1d92a02a988bc1
+    m_Address: Assets/Scenes/Loading.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c7cc051023c7e7841bd43a5a7ed63ee4
     m_Address: Assets/Configuration/Global.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5f7c23c3a8be14623afed283dfd8efb4
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCLoading.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1deaf10fcc0bf4b0bbf52ce634f29484
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCMainMenu.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c802380fe516e441ba1bd74746001e48
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCRoom.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8b98141ebd5754aa5b6f8a6a191fdbea
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCTestHybird.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f2262474b2b1c4c5f9bac35ed7801608
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCMainMenu.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 725576c2d48ec4f2d84a2d3484141850
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCLoading.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 16d6a1a0457ed4f5287f029027202096
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCRoom.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6eb0b75e04bc544d899799dcbc0edaa0
+    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCTestHybird.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 937fd6ceafc9db04d89fb43d363569c2
+    m_Address: Assets/Scenes/Test.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: d7a54ab876c69194aa825fec8213b6b8
+    m_Address: Assets/Scenes/TestHybird.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c27ae52baec765c438c5d4b09cd6a3b0
+    m_Address: Assets/Scenes/StartFromHybrid.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 99c9720ab356a0642a771bea13969a05
+    m_Address: Assets/Scenes/Start.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f4fa75ff7abaa86469ac3cf254ba30a7
+    m_Address: Assets/Scenes/Room.unity
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8c28fec44677ded4ca0bc20acca60420
+    m_Address: Assets/Scenes/MainMenu.unity
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
