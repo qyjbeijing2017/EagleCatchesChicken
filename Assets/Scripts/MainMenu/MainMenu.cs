@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
+
 
 public class MainMenu : MonoBehaviour
 {
     public void StartButtonHandler()
     {
-        Debug.Log("StartButtonHandler");
+        GameManager.instance.LoadScene("Room");
     }
 
     public void OptionButtonHandler()
@@ -17,5 +19,10 @@ public class MainMenu : MonoBehaviour
     public void ExitButtonHandler()
     {
         Application.Quit();
+    }
+
+    public void DevelopmentEnter()
+    {
+         GameManager.instance.LoadScene("Practice");
     }
 }

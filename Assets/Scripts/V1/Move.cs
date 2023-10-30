@@ -31,7 +31,7 @@ public class Move : NetworkBehaviour
     }
 
     // Rigidbody PlayerRigidbody;
-    PlayerInputAction InputActions;
+    PlayerInputActionV1 InputActions;
     BuffManager PlayerBuffManager;
     // JumpManager PlayerJumpManager;
     SkillManager PlayerSkillManager;
@@ -68,7 +68,7 @@ public class Move : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            InputActions = new PlayerInputAction();
+            InputActions = new PlayerInputActionV1();
             InputActions.Move.Enable();
             InputActions.Move.Jump.performed += OnJump;
             PlayerCharacterController = GetComponent<CharacterController>();
@@ -85,7 +85,6 @@ public class Move : NetworkBehaviour
         MoveVelocity.y = jumpSpeed;
         JumpCount++;
     }
-
 
     void InputMove()
     {

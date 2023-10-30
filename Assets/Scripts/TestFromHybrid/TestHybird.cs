@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class TestHybird : MonoBehaviour
 {
-    readonly public static float ExtraLoadingValue = 50f;
+    readonly public static float s_ExtraLoadingValue = 50f;
     public static IEnumerator ExtraLoading(LoadingBase loading)
     {
         Debug.Log("TestHybird ExtraLoading");
+        loading.maxValue += s_ExtraLoadingValue;
         var tickTime = 0;
         while (tickTime < 5)
         {
-            loading.Tick("ExtraLoading...", ExtraLoadingValue / 5);
+            loading.Tick("ExtraLoading...", s_ExtraLoadingValue / 5);
             tickTime++;
             yield return new WaitForSeconds(1);
         }

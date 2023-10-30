@@ -9,7 +9,7 @@ public class MoveCharactor : MonoBehaviour
     [Tooltip("Base move speed in meters per second")]
     float BaseMoveSpeed = 10f;
 
-    PlayerInputAction InputActions;
+    PlayerInputActionV1 InputActions;
     CharacterController CharacterController;
     float GravitationAcceleration = 9.8f;
 
@@ -18,7 +18,7 @@ public class MoveCharactor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        InputActions = new PlayerInputAction();
+        InputActions = new PlayerInputActionV1();
         InputActions.Move.Enable();
         CharacterController = GetComponent<CharacterController>();
     }

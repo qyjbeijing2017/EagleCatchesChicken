@@ -1,0 +1,18 @@
+{
+    "name": "ECCPractice",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1e36711b5e549e640ac929c0b4e5247e",
+        "GUID:30817c1a0e6d646d99c048fc403f5979",
+        "GUID:4ab826aa6b1fbf04b915b765f9b13fbf"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

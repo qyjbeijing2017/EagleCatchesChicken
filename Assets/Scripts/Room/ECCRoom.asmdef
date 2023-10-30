@@ -2,7 +2,8 @@
     "name": "ECCRoom",
     "rootNamespace": "",
     "references": [
-        "GUID:1e36711b5e549e640ac929c0b4e5247e"
+        "GUID:1e36711b5e549e640ac929c0b4e5247e",
+        "GUID:68bd7fdb68ef2684e982e8a9825b18a5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

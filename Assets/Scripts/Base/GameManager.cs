@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Reflection;
-using UnityEditor;
-using UnityEngine.ResourceManagement.ResourceProviders;
-using Unity.Loading;
-using System;
+
+
+#if !DISABLESTEAMWORKS
+using Steamworks;
+#endif
 
 public class GameManager : MonoSingleton<GameManager>
 {
-        private Dictionary<string, Assembly> hotUpdateAsses = new Dictionary<string, Assembly>();
+        #region HybridCLR&Addressables
+        private Dictionary<string, Assembly> m_HotUpdateAsses = new Dictionary<string, Assembly>();
 
         static public string platformName
         {
@@ -36,29 +38,29 @@ public class GameManager : MonoSingleton<GameManager>
 
         public Assembly GetAssembly(string name)
         {
-                if (hotUpdateAsses.ContainsKey(name))
+                if (m_HotUpdateAsses.ContainsKey(name))
                 {
-                        return hotUpdateAsses[name];
+                        return m_HotUpdateAsses[name];
                 }
                 return null;
         }
 
         public bool ContainsAssembly(string name)
         {
-                return hotUpdateAsses.ContainsKey(name);
+                return m_HotUpdateAsses.ContainsKey(name);
         }
 
         public void ReleaseAssembly(string name)
         {
-                if (hotUpdateAsses.ContainsKey(name))
+                if (m_HotUpdateAsses.ContainsKey(name))
                 {
-                        hotUpdateAsses.Remove(name);
+                        m_HotUpdateAsses.Remove(name);
                 }
         }
 
         public void ClearAssembly()
         {
-                hotUpdateAsses.Clear();
+                m_HotUpdateAsses.Clear();
         }
 
         public IEnumerator LoadScript(string name)
@@ -68,7 +70,7 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return handle;
                 var assbleData = handle.Result.bytes;
                 var ass = Assembly.Load(assbleData);
-                hotUpdateAsses[name] = ass;
+                m_HotUpdateAsses[name] = ass;
 
         }
         // Start is called before the first frame update
@@ -85,30 +87,32 @@ public class GameManager : MonoSingleton<GameManager>
                 var loadingType = loadingAss.GetType(name);
 
                 // Loading something from Hotfix
-                var extraLoadingValueProperty = loadingType.GetField("ExtraLoadingValue");
                 var extraLoadingMethod = loadingType.GetMethod("ExtraLoading");
-                if (extraLoadingValueProperty != null)
-                {
-                        float extraLoadingValue = (float)extraLoadingValueProperty.GetValue(null);
-                        loading.maxValue += extraLoadingValue;
-                }
                 if (extraLoadingMethod != null)
                 {
                         yield return StartCoroutine((IEnumerator)extraLoadingMethod.Invoke(null, new object[] { loading }));
                 }
 
                 // Loading scene
-                var operation = Addressables.LoadSceneAsync($"Assets/Scenes/{name}.unity");
+                var operation = Addressables.LoadSceneAsync(
+                        $"Assets/Scenes/{name}.unity", 
+                        UnityEngine.SceneManagement.LoadSceneMode.Single,
+                        false
+                );
 
                 var lastPercent = 0f;
+                var sceneProgress = loading.maxValue - loading.progress;
                 while (!operation.IsDone)
                 {
                         var percent = operation.PercentComplete;
                         var add = percent - lastPercent;
                         lastPercent = percent;
-                        loading.Tick($"Loading Scene...", add * 100);
+                        loading.Tick($"Loading Scene...", add * sceneProgress);
                         yield return null;
                 }
+
+                loading.Tick($"Starting Scene");
+                yield return operation.Result.ActivateAsync();
         }
 
         IEnumerator LoadLoadingScene()
@@ -127,6 +131,63 @@ public class GameManager : MonoSingleton<GameManager>
                         return StartCoroutine(LoadLoadingScene());
                 }
                 return StartCoroutine(LoadSceneHandler(name));
+        }
+        #endregion
+
+        #region Steamworks
+#if !DISABLESTEAMWORKS
+
+        CSteamID m_CSteamID;
+        Callback<GameOverlayActivated_t> m_GameOverlayActivated;
+
+        void StartSteamNetwork()
+        {
+                if (SteamManager.Initialized)
+                {
+                        m_CSteamID = SteamUser.GetSteamID();
+                        string name = SteamFriends.GetPlayerNickname(m_CSteamID) ?? SteamFriends.GetPersonaName();
+                        Debug.Log($"Steam Manager Initialized, name: {name}");
+                }
+                else
+                {
+                        Debug.LogWarning("Steam Manager Failed");
+                }
+        }
+
+        void OnEnable()
+        {
+                if (SteamManager.Initialized)
+                {
+                        if (SteamManager.Initialized)
+                        {
+                                m_GameOverlayActivated = Callback<GameOverlayActivated_t>.Create(OnGameOverlayActivated);
+                        }
+                }
+        }
+
+
+        void OnGameOverlayActivated(GameOverlayActivated_t pCallback)
+        {
+                if (pCallback.m_bActive != 0)
+                {
+                        Time.timeScale = 0;
+                        Debug.Log("Steam Overlay has been activated");
+                }
+                else
+                {
+                        Time.timeScale = 1;
+                        Debug.Log("Steam Overlay has been closed");
+                }
+        }
+
+#endif
+        #endregion
+
+        void Start()
+        {
+#if !DISABLESTEAMWORKS
+                StartSteamNetwork();
+#endif
         }
 
 }

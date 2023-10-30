@@ -74,6 +74,12 @@ public abstract class MonoSingleton<T> : MonoBehaviour where T : MonoSingleton<T
     /// Put all the initializations you need here, as you would do in Awake
     /// </summary>
 	public virtual void Init(){}
+
+    public void OnDestroy()
+    {
+        if( m_Instance == this )
+            m_Instance = null;
+    }
  
     /// Make sure the instance isn't referenced anymore when the user quit, just in case.
     private void OnApplicationQuit()

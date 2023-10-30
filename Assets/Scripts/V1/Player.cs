@@ -84,7 +84,7 @@ public class Player : NetworkBehaviour
         skillManager.Attack = attack;
 
         var damageTypeNames = System.Enum.GetNames(typeof(DamageType));
-        var InputActions = new PlayerInputAction();
+        var InputActions = new PlayerInputActionV1();
         var actions = InputActions.Skill.Get().actions;
         skillManager.Skills = new List<SkillIdentity>(actions.Count * damageTypeNames.Length);
         foreach (string damageTypeName in damageTypeNames)

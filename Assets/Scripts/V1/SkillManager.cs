@@ -29,7 +29,7 @@ public class SkillManager : NetworkBehaviour
     [ReadOnly(true)]
     public DamageType PlayerDamageType = DamageType.None;
 
-    PlayerInputAction InputActions;
+    PlayerInputActionV1 InputActions;
 
     Player MyPlayer;
 
@@ -75,7 +75,7 @@ public class SkillManager : NetworkBehaviour
     {
         MyPlayer = GetComponent<Player>();
         PlayerBuffManager = GetComponent<BuffManager>();
-        InputActions = new PlayerInputAction();
+        InputActions = new PlayerInputActionV1();
         if (isLocalPlayer)
         {
             InputActions.Skill.Enable();

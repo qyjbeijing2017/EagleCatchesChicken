@@ -7,19 +7,19 @@ using TMPro;
 public class LoadingBase : MonoBehaviour
 {
 [SerializeField]
-    private TextMeshProUGUI _text;
+    private TextMeshProUGUI m_Text;
     [SerializeField]
-    private Slider _slider;
+    private Slider m_Slider;
 
     public string text
     {
         get
         {
-            return _text.text;
+            return m_Text.text;
         }
         set
         {
-            _text.text = value;
+            m_Text.text = value;
         }
     }
 
@@ -27,11 +27,11 @@ public class LoadingBase : MonoBehaviour
     {
         get
         {
-            return _slider.value;
+            return m_Slider.value;
         }
         set
         {
-            _slider.value = value;
+            m_Slider.value = value;
         }
     }
 
@@ -39,26 +39,26 @@ public class LoadingBase : MonoBehaviour
     {
         get
         {
-            return _slider.maxValue;
+            return m_Slider.maxValue;
         }
         set
         {
-            _slider.maxValue = value;
+            m_Slider.maxValue = value;
         }
     }
 
-    public void Tick(string text = "", float progressAdd = 1)
+    public void Tick(string text = "", float progressAdd = 0)
     {
-        _text.text = text;
-        _slider.value += progressAdd;
+        m_Text.text = text;
+        m_Slider.value += progressAdd;
     }
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _text.text = "";
-        _slider.value = 0;
+        m_Text.text = "";
+        m_Slider.value = 0;
     }
 
     // Update is called once per frame

@@ -52,7 +52,6 @@ public class ConsoleToScreen : MonoBehaviour
         GUI.Label(new Rect(10, 10, 800, 370), _logStr, new GUIStyle() { fontSize = Math.Max(10, fontSize) });
     }
 
-
     void Start()
     {
 #if DEBUG

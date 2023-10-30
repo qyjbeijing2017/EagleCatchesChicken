@@ -3,7 +3,6 @@ using UnityEditor;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using UnityEditor.VersionControl;
 
 public class ExcelToScriptable : Editor
 {
@@ -15,9 +14,11 @@ public class ExcelToScriptable : Editor
 
     static List<Type> s_GlobalTypes = new List<Type>(){
         typeof(GlobalScriptableObject),
+        typeof(CharacterListScriptableObject),
     };
     static List<Type> s_LocalTypes = new List<Type>()
     {
+        typeof(CharacterScriptableObject),
     };
 
     static void CreateGlobalTable()
@@ -55,7 +56,8 @@ public class ExcelToScriptable : Editor
         {
             var name = localType.Name.Replace("ScriptableObject", "");
             var sheet = xlsx[name];
-            sheet["ExampleValue"].serializeFormScriptableObject(localType, Activator.CreateInstance(localType), false);
+            var exampleValue = Activator.CreateInstance(localType);
+            sheet["ExampleValue"].serializeFormScriptableObject(localType, exampleValue, false);
             sheet.GetCell("A1").setValue("Local");
         }
 
@@ -68,7 +70,7 @@ public class ExcelToScriptable : Editor
     public static void GenerateScriptable()
     {
         var timeStart = DateTime.Now;
-        
+
         if (!Directory.Exists(s_Workspace))
         {
             Directory.CreateDirectory(s_Workspace);
@@ -82,21 +84,6 @@ public class ExcelToScriptable : Editor
 
 
         var xlsx = new XLSX(s_Designer);
-
-        foreach (var globalType in s_GlobalTypes)
-        {
-            var name = globalType.Name.Replace("ScriptableObject", "");
-            var sheet = xlsx[name];
-            var path = $"{s_RelativePath}/{name}.asset";
-
-            var asset = AssetDatabase.LoadAssetAtPath(path, globalType);
-            if (asset == null)
-            {
-                asset = ScriptableObject.CreateInstance(globalType);
-                AssetDatabase.CreateAsset(asset, path);
-            }
-            sheet.serializeToScriptableObject(globalType, asset);
-        }
 
         foreach (var localType in s_LocalTypes)
         {
@@ -118,6 +105,21 @@ public class ExcelToScriptable : Editor
             }
         }
 
+        foreach (var globalType in s_GlobalTypes)
+        {
+            var name = globalType.Name.Replace("ScriptableObject", "");
+            var sheet = xlsx[name];
+            var path = $"{s_RelativePath}/{name}.asset";
+
+            var asset = AssetDatabase.LoadAssetAtPath(path, globalType);
+            if (asset == null)
+            {
+                asset = ScriptableObject.CreateInstance(globalType);
+                AssetDatabase.CreateAsset(asset, path);
+            }
+            sheet.serializeToScriptableObject(globalType, asset);
+        }
+
         AssetDatabase.SaveAssets();
         Debug.Log("Generate Scriptable Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
@@ -127,7 +129,8 @@ public class ExcelToScriptable : Editor
     public static void OverwriteExcels()
     {
         var timeStart = DateTime.Now;
-        if(!EditorUtility.DisplayDialog("Overwrite Excels", "This function will overwrite Designer.xlsx", "Yes", "No")){
+        if (!EditorUtility.DisplayDialog("Overwrite Excels", "This function will overwrite Designer.xlsx", "Yes", "No"))
+        {
             return;
         }
         if (!Directory.Exists(s_Workspace))
@@ -153,7 +156,8 @@ public class ExcelToScriptable : Editor
             var typeName = $"{name}ScriptableObject";
 
             var type = s_GlobalTypes.Find(t => t.Name == typeName) ?? s_LocalTypes.Find(t => t.Name == typeName);
-            if(type == null) {
+            if (type == null)
+            {
                 Debug.LogWarning($"ScriptableObject {fileName} is not exist");
                 continue;
             }
@@ -167,7 +171,8 @@ public class ExcelToScriptable : Editor
             }
             else
             {
-                if(instanceName == null) {
+                if (instanceName == null)
+                {
                     Debug.LogWarning($"LocalScriptableObject {fileName} is not instance");
                     continue;
                 }
@@ -180,4 +185,5 @@ public class ExcelToScriptable : Editor
         xlsx.Save();
         Debug.Log("Ovewrite Excels Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
+
 }
