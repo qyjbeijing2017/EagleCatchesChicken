@@ -9,5 +9,5 @@ public class GlobalScriptableObject : ScriptableObject
     public string EntryPoint = "http://test";
     public int Port = 8080;
 
-    public float g = 9.8f;
+    public float Gravity = 9.8f;
 }

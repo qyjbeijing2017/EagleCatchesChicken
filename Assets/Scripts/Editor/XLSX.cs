@@ -105,6 +105,30 @@ public struct XLSXCell
         return list;
     }
 
+    public static implicit operator List<float>(XLSXCell cell)
+    {
+        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
+        var values = value.Split(';');
+        var list = new List<float>();
+        foreach (var item in values)
+        {
+            list.Add(float.Parse(item));
+        }
+        return list;
+    }
+
+    public static implicit operator List<int>(XLSXCell cell)
+    {
+        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
+        var values = value.Split(';');
+        var list = new List<int>();
+        foreach (var item in values)
+        {
+            list.Add(int.Parse(item));
+        }
+        return list;
+    }
+
     public static implicit operator List<string>(XLSXCell cell)
     {
         var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
@@ -183,6 +207,24 @@ public struct XLSXCell
     }
 
     public static implicit operator XLSXCell(List<double> value)
+    {
+        return new XLSXCell(null)
+        {
+            m_CellType = CellType.String,
+            m_StringValue = string.Join(";", value.ToArray())
+        };
+    }
+
+    public static implicit operator XLSXCell(List<float> value)
+    {
+        return new XLSXCell(null)
+        {
+            m_CellType = CellType.String,
+            m_StringValue = string.Join(";", value.ToArray())
+        };
+    }
+
+    public static implicit operator XLSXCell(List<int> value)
     {
         return new XLSXCell(null)
         {
@@ -293,6 +335,32 @@ public struct XLSXCell
         }
     }
 
+    public void setValue(List<float> value)
+    {
+        if (m_Cell == null)
+        {
+            m_StringValue = string.Join(";", value.ToArray());
+            m_CellType = CellType.String;
+        }
+        else
+        {
+            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
+        }
+    }
+
+    public void setValue(List<int> value)
+    {
+        if (m_Cell == null)
+        {
+            m_StringValue = string.Join(";", value.ToArray());
+            m_CellType = CellType.String;
+        }
+        else
+        {
+            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
+        }
+    }
+
     public void setValue(List<string> value)
     {
         if (m_Cell == null)
@@ -362,6 +430,14 @@ public struct XLSXCell
         {
             setValue((List<double>)fieldInfo.GetValue(obj));
         }
+        else if (fieldInfo.FieldType == typeof(List<float>))
+        {
+            setValue((List<float>)fieldInfo.GetValue(obj));
+        }
+        else if (fieldInfo.FieldType == typeof(List<int>))
+        {
+            setValue((List<int>)fieldInfo.GetValue(obj));
+        }
         else if (fieldInfo.FieldType == typeof(List<string>))
         {
             setValue((List<string>)fieldInfo.GetValue(obj));
@@ -413,6 +489,14 @@ public struct XLSXCell
         else if (fieldInfo.FieldType == typeof(List<double>))
         {
             fieldInfo.SetValue(obj, (List<double>)this);
+        }
+        else if (fieldInfo.FieldType == typeof(List<float>))
+        {
+            fieldInfo.SetValue(obj, (List<float>)this);
+        }
+        else if (fieldInfo.FieldType == typeof(List<int>))
+        {
+            fieldInfo.SetValue(obj, (List<int>)this);
         }
         else if (fieldInfo.FieldType == typeof(List<string>))
         {

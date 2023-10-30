@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028326, g: 0.22571333, b: 0.30692202, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -186,11 +186,48 @@ PrefabInstance:
       propertyPath: m_Name
       value: "003\uFF08xxd\uFF09"
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 025a1b983db2fdc4dab63866c3ccd5e6,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 025a1b983db2fdc4dab63866c3ccd5e6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 267191652}
   m_SourcePrefab: {fileID: 100100000, guid: 025a1b983db2fdc4dab63866c3ccd5e6, type: 3}
+--- !u!1 &267191651 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 025a1b983db2fdc4dab63866c3ccd5e6,
+    type: 3}
+  m_PrefabInstance: {fileID: 267191650}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &267191652
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267191651}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1568016432510859342, guid: 025a1b983db2fdc4dab63866c3ccd5e6, type: 3}
 --- !u!1 &576085545
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,6 +351,7 @@ GameObject:
   - component: {fileID: 1011185521}
   - component: {fileID: 1011185520}
   - component: {fileID: 1011185523}
+  - component: {fileID: 1011185524}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -362,9 +400,9 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 20
   orthographic: 0
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -388,8 +426,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1011185519}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.5025098, y: 0.0012968635, z: -0.0007537482, w: 0.8645702}
+  m_LocalPosition: {x: -2.2, y: 38.8, z: -23.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -439,6 +477,42 @@ MonoBehaviour:
     mipBias: 0
     varianceClampScale: 0.9
     contrastAdaptiveSharpening: 0
+--- !u!114 &1011185524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1011185519}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66b495ed9316743a1bb5d74fad2554c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FollowSpeed:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 1.550355
+      value: 0.0026666522
+      inSlope: 0.22218533
+      outSlope: 0.22218533
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12325082
+    - serializedVersion: 3
+      time: 7.1163445
+      value: 15.894632
+      inSlope: 3.5860522
+      outSlope: 3.5860522
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07040019
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1452359187
 GameObject:
   m_ObjectHideFlags: 0

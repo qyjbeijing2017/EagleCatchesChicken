@@ -8,10 +8,14 @@ using Mirror;
 public class ActorController : NetworkBehaviour
 {
     public CharacterScriptableObject CharacterConfig;
+
+    [HideInInspector]
+    public PlayerController PlayerController;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerController = FindObjectOfType<PlayerController>();
     }
 
     // Update is called once per frame

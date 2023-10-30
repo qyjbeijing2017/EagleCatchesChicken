@@ -90,7 +90,7 @@ public class GameManager : MonoSingleton<GameManager>
                 var extraLoadingMethod = loadingType.GetMethod("ExtraLoading");
                 if (extraLoadingMethod != null)
                 {
-                        yield return StartCoroutine((IEnumerator)extraLoadingMethod.Invoke(null, new object[] { loading }));
+                        // yield return StartCoroutine((IEnumerator)extraLoadingMethod.Invoke(null, new object[] { loading }));
                 }
 
                 // Loading scene

@@ -10,8 +10,9 @@ public class Practice : MonoBehaviour
         loading.maxValue += 1;
         loading.Tick("Loading Player...");
         var handler = GameManager.instance.LoadScript("Player");
-        yield return handler;
-        loading.Tick("Loading Player Finished");
+        yield return GameManager.instance.StartCoroutine(handler);
+        loading.Tick("Loading Player Finished", 1);
+
     }
     
     // Start is called before the first frame update
@@ -28,7 +29,7 @@ public class Practice : MonoBehaviour
 
     void OnDestroy()
     {
-        NetworkManager.singleton.StopHost();
-        Destroy(PlayerController.instance);
+        if(NetworkManager.singleton)
+            NetworkManager.singleton.StopHost();
     }
 }
