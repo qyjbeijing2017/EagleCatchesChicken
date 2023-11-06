@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/StartFromHybrid.unity
     guid: c27ae52baec765c438c5d4b09cd6a3b0
   m_configObjects:
