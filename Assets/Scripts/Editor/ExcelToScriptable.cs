@@ -102,6 +102,8 @@ public class ExcelToScriptable : Editor
                     AssetDatabase.CreateAsset(asset, path);
                 }
                 raw.serializeToScriptableObject(localType, asset);
+                // this is important for saving, editor will not refresh if you don't set dirty    
+                EditorUtility.SetDirty(asset);
             }
         }
 
@@ -118,9 +120,12 @@ public class ExcelToScriptable : Editor
                 AssetDatabase.CreateAsset(asset, path);
             }
             sheet.serializeToScriptableObject(globalType, asset);
+            EditorUtility.SetDirty(asset);
         }
 
         AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
         Debug.Log("Generate Scriptable Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
 
