@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using Mirror;
 using UnityEngine;
+using Mirror;
 
-[RequireComponent(typeof(NetworkIdentity))]
-public class PlayerController : MonoBehaviour
+public class PlayerBoard : NetworkBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        NetworkController.singleton.CreateCharactor("BlackBoss");
+        
     }
 
     // Update is called once per frame

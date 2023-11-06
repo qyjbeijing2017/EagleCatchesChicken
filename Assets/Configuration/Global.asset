@@ -13,4 +13,5 @@ MonoBehaviour:
   m_Name: Global
   m_EditorClassIdentifier: 
   EntryPoint: http://test
-  Port: 8090
+  Port: 8050
+  Gravity: 9.8

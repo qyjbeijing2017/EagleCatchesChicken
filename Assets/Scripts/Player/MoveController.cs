@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
-using System.Security.Cryptography;
-using UnityEditor.Animations;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(NetworkTransform))]
@@ -12,6 +10,7 @@ using UnityEditor.Animations;
 [RequireComponent(typeof(SkillController))]
 public class MoveController : NetworkBehaviour
 {
+
     ActorController m_ActorController;
     CharacterController m_CharacterController;
     PlayerInputAction m_InputActions;
@@ -21,14 +20,15 @@ public class MoveController : NetworkBehaviour
 
     Vector3 m_Velocity;
 
-    int JumpCount = 0;
-    public int jumpCount
+    public Vector3 moveVelocity
     {
         get
         {
-            return JumpCount;
+            return m_Velocity;
         }
     }
+
+    int m_JumpCount = 0;
 
     bool useGravity
     {
@@ -48,21 +48,27 @@ public class MoveController : NetworkBehaviour
 
     void Start()
     {
-        m_ActorController = GetComponent<ActorController>();
-        m_CharacterController = GetComponent<CharacterController>();
-        m_InputActions = new PlayerInputAction();
-        m_Animator = GetComponentInChildren<Animator>();
-        m_SkillController = GetComponent<SkillController>();
-        m_InputActions.Move.Enable();
-        m_InputActions.Move.Jump.performed += OnJump;
+        if (isLocalPlayer)
+        {
+
+            m_ActorController = GetComponent<ActorController>();
+            m_CharacterController = GetComponent<CharacterController>();
+            m_InputActions = new PlayerInputAction();
+            m_Animator = GetComponentInChildren<Animator>();
+            m_SkillController = GetComponent<SkillController>();
+            m_InputActions.Move.Enable();
+            m_InputActions.Move.Jump.performed += OnJump;
+        }
+
     }
 
     void OnJump(InputAction.CallbackContext context)
     {
-        if (JumpCount >= m_ActorController.CharacterConfig.JumpSpeeds.Count) return;
-        var jumpSpeed = m_ActorController.CharacterConfig.JumpSpeeds[JumpCount];
+        if (!isLocalPlayer) return;
+        if (m_JumpCount >= m_ActorController.characterScriptableObject.JumpSpeeds.Count) return;
+        var jumpSpeed = m_ActorController.characterScriptableObject.JumpSpeeds[m_JumpCount];
         m_Velocity.y = jumpSpeed;
-        JumpCount++;
+        m_JumpCount++;
     }
 
     public void AddSpeed(Vector3 velocity)
@@ -72,13 +78,15 @@ public class MoveController : NetworkBehaviour
 
     void InputMove()
     {
-        if (!canMove) {
+        if (!isLocalPlayer) return;
+        if (!canMove)
+        {
             m_Animator.SetBool("IsMove", false);
             return;
         }
 
         var inputAxis = m_InputActions.Move.Move.ReadValue<Vector2>();
-        var BaseMoveSpeed = m_ActorController.CharacterConfig.MoveSpeed;
+        var BaseMoveSpeed = m_ActorController.characterScriptableObject.MoveSpeed;
 
         var moveSpeed = BaseMoveSpeed;
         var inputVelocity = inputAxis * moveSpeed;
@@ -95,8 +103,10 @@ public class MoveController : NetworkBehaviour
         }
     }
 
-    void InputForward()
+    void InputDirect()
     {
+        if (!isLocalPlayer) return;
+        if(!canMove) return;
         var inputForward = m_InputActions.Move.Look.ReadValue<Vector2>();
         if (inputForward.magnitude > 0f)
         {
@@ -119,7 +129,7 @@ public class MoveController : NetworkBehaviour
     void UseGravity()
     {
         if (!useGravity) return;
-        m_Velocity.y -= m_ActorController.PlayerController.GlobalConfig.Gravity * Time.deltaTime;
+        m_Velocity.y -= m_ActorController.globalScriptableObject.Gravity * Time.deltaTime;
 
         RaycastHit hit;
         var layerMask = 1 << LayerMask.NameToLayer("Ground");
@@ -127,20 +137,17 @@ public class MoveController : NetworkBehaviour
         {
             if (m_Velocity.y < 0)
                 m_Velocity.y = 0;
-            JumpCount = 0;
+            m_JumpCount = 0;
         }
     }
 
     void Update()
     {
+        if (!isLocalPlayer) return;
         InputMove();
-        InputForward();
+        InputDirect();
         UseGravity();
         m_CharacterController.Move(m_Velocity * Time.deltaTime);
-    }
-
-    void LateUpdate()
-    {
     }
 
 }

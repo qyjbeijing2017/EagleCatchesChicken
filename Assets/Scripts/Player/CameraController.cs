@@ -23,7 +23,7 @@ public class CameraController : MonoBehaviour
         {
             return;
         }
-        var player = controller.myActor;
+        var player = ActorController.my;
         if (player)
         {
             var targetPosition = player.transform.position + RelativePosition;

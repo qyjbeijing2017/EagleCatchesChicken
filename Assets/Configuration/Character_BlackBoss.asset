@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3660dfd7ca6b59e44a8a45e35c3d8794, type: 3}
   m_Name: Character_BlackBoss
   m_EditorClassIdentifier: 
-  CharacterName: Character Name
-  Description: Character Description
+  CharacterName: BlackBoss
+  Description: "\u9ED1\u56E2\u56E2"
+  MoveSpeed: 4
+  Mass: 50
+  JumpSpeeds:
+  - 8

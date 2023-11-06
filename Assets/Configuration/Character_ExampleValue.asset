@@ -14,3 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: Character Name
   Description: Character Description
+  MoveSpeed: 6
+  Mass: 50
+  JumpSpeeds:
+  - 8

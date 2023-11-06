@@ -10,4 +10,6 @@ public class GlobalScriptableObject : ScriptableObject
     public int Port = 8080;
 
     public float Gravity = 9.8f;
+
+    public float AttackRange = 50f;
 }
