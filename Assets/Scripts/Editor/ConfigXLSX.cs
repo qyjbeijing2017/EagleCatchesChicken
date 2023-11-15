@@ -3,6 +3,9 @@ using NPOI.XSSF.UserModel;
 using System.IO;
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEditor;
+using Codice.Client.BaseCommands;
 
 public enum ConfigType
 {
@@ -42,13 +45,34 @@ public class ConfigRowClass
         }
     }
 
+    public List<string> keys
+    {
+        get
+        {
+            var keys = new List<string>();
+            var headerRow = m_Sheet.GetRow(0);
+            if (headerRow == null)
+            {
+                return keys;
+            }
+            int cellCount = headerRow.LastCellNum;
+            for (int i = 1; i < cellCount; i++)
+            {
+                var cell = m_Row.GetCell(i);
+                if (cell == null) continue;
+                keys.Add(cell.ToString());
+            }
+            return keys;
+        }
+    }
+
     public void SetIRow(IRow row, ISheet sheet = null)
     {
         m_Row = row;
         m_Sheet = sheet;
     }
 
-    public ConfigRowClass(IRow row  = null, ISheet sheet = null)
+    public ConfigRowClass(IRow row = null, ISheet sheet = null)
     {
         m_Row = row;
         m_Sheet = sheet;
@@ -242,6 +266,24 @@ public class ConfigSheet
         }
     }
 
+    public List<string> keys
+    {
+        get
+        {
+            var rowCount = m_Sheet.LastRowNum;
+            var keys = new List<string>();
+            for (int i = 1; i <= rowCount; i++)
+            {
+                var row = m_Sheet.GetRow(i);
+                if (row == null) continue;
+                var cell = row.GetCell(0);
+                if (cell == null) continue;
+                keys.Add(cell.ToString());
+            }
+            return keys;
+        }
+    }
+
     public string GetValue(string key)
     {
         if (m_Sheet == null)
@@ -387,6 +429,154 @@ public class ConfigSheet
 
 public class ConfigXLSX
 {
+    public static void Decompose(string value, out string name, out List<string> tags)
+    {
+        var keys = value
+        .Replace("\n", "")
+        .Replace("\r", "")
+        .Replace("\t", "")
+        .Replace(" ", "")
+        .Split('#');
+        name = keys[0];
+        tags = new List<string>();
+        for (int i = 1; i < keys.Length; i++)
+        {
+            tags.Add(keys[i]);
+        }
+    }
+    public static string TypeToString(Type t, object instance)
+    {
+        if (t == typeof(Vector2))
+        {
+            var value = (Vector2)instance;
+            return $"{value.x},{value.y}";
+        }
+        else if (t == typeof(Vector3))
+        {
+            var value = (Vector3)instance;
+            return $"{value.x},{value.y},{value.z}";
+        }
+        else if (t == typeof(Vector4))
+        {
+            var value = (Vector4)instance;
+            return $"{value.x},{value.y},{value.z},{value.w}";
+        }
+        else if (t == typeof(Quaternion))
+        {
+            var value = (Quaternion)instance;
+            return $"{value.x},{value.y},{value.z},{value.w}";
+        }
+        else if (t == typeof(Color))
+        {
+            var value = (Color)instance;
+            return $"{value.r},{value.g},{value.b},{value.a}";
+        }
+        else if (t == typeof(Color32))
+        {
+            var value = (Color32)instance;
+            return $"{value.r},{value.g},{value.b},{value.a}";
+        }
+        else if (typeof(LocalScriptableObject).IsAssignableFrom(t))
+        {
+            return ((LocalScriptableObject)instance).key;
+        }
+        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
+        {
+            var list = (System.Collections.IList)instance;
+            var str = "";
+            for (int i = 0; i < list.Count; i++)
+            {
+                str += TypeToString(list[i].GetType(), list[i]);
+                if (i < list.Count - 1)
+                {
+                    str += "|";
+                }
+            }
+            return str;
+        }
+        else if (typeof(Enum).IsAssignableFrom(t))
+        {
+            return ((Enum)instance).ToString();
+        }
+
+
+        return JsonUtility.ToJson(instance);
+    }
+
+    public static object StringToType(Type t, string value, string configFolder = "Assets/Configurations")
+    {
+        if (t == typeof(Vector2))
+        {
+            var values = value.Split(',');
+            return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+        }
+        else if (t == typeof(Vector3))
+        {
+            var values = value.Split(',');
+            return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+        }
+        else if (t == typeof(Vector4))
+        {
+            var values = value.Split(',');
+            return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Quaternion))
+        {
+            var values = value.Split(',');
+            return new Quaternion(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Color))
+        {
+            var values = value.Split(',');
+            return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Color32))
+        {
+            var values = value.Split(',');
+            return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+        }
+        else if (typeof(LocalScriptableObject).IsAssignableFrom(t))
+        {
+            return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name}_{value}.asset", t);
+        }
+        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
+        {
+            var list = (System.Collections.IList)Activator.CreateInstance(t);
+            var values = value.Split('|');
+            for (int i = 0; i < values.Length; i++)
+            {
+                list.Add(StringToType(t.GetGenericArguments()[0], values[i]));
+            }
+            return list;
+        }
+        else if (typeof(Enum).IsAssignableFrom(t))
+        {
+            return Enum.Parse(t, value);
+        }
+        else if (t == typeof(string))
+        {
+            return value;
+        }
+        else if (t == typeof(int))
+        {
+            return int.Parse(value);
+        }
+        else if (t == typeof(float))
+        {
+            return float.Parse(value);
+        }
+        else if (t == typeof(bool))
+        {
+            return bool.Parse(value);
+        }
+        else if (t == typeof(long))
+        {
+            return long.Parse(value);
+        }
+
+        return JsonUtility.FromJson(value, t);
+    }
+
     private string m_Path;
     private IWorkbook m_Workbook;
 
@@ -439,6 +629,21 @@ public class ConfigXLSX
         }
     }
 
+    public List<string> sheetNames
+    {
+        get
+        {
+            var sheetNames = new List<string>();
+            int sheetCount = m_Workbook.NumberOfSheets;
+            for (int i = 0; i < sheetCount; i++)
+            {
+                var sheet = m_Workbook.GetSheetAt(i);
+                sheetNames.Add(sheet.SheetName);
+            }
+            return sheetNames;
+        }
+    }
+
     public ConfigSheet GetSheet(string name)
     {
         var iSheet = m_activeSheet.iSheet;
@@ -473,4 +678,21 @@ public class ConfigXLSX
         return m_activeSheet;
     }
 
+    public void SerializeSheet(List<Type> globalTypes, List<Type> localTypes, string configFolder)
+    {
+        foreach (var localType in localTypes)
+        {
+
+        }
+
+        foreach (var globalType in globalTypes)
+        {
+            
+        }
+    }
+
+    public void DeserializeSheet<T>(T instance, string configFolder)
+    {
+
+    }
 }

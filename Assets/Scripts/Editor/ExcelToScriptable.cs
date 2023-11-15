@@ -194,6 +194,10 @@ public class ExcelToScriptable : Editor
 
     [MenuItem("ECC/Configuration/Test")]
     public static void Test(){
-
+        var xlsx = new ConfigXLSX(s_Designer);
+        var sheet = xlsx.GetSheet("Character");
+        var raw = sheet.GetRow("BlackBoss");
+        var vector2 = new Vector2(1, 2);
+        AnimationCurve curve = new AnimationCurve();
     }
 }
