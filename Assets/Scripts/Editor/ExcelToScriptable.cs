@@ -191,4 +191,9 @@ public class ExcelToScriptable : Editor
         Debug.Log("Ovewrite Excels Success, time: " + (DateTime.Now - timeStart).TotalSeconds + "s");
     }
 
+
+    [MenuItem("ECC/Configuration/Test")]
+    public static void Test(){
+
+    }
 }
