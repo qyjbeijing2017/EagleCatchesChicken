@@ -406,6 +406,7 @@ public class TestXLSX
         Assert.AreEqual(3, testLocalCheck.intValue);
         Assert.AreEqual(1, test2Check.objectList.Count);
         Assert.AreEqual(3, test2Check.objectList[0].intValue);
+        // Both testLocalCheck and test2Check.objectList[0] are the same object
         Assert.AreEqual(testLocalCheck, test2Check.objectList[0]);
     }
 
