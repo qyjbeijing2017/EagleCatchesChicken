@@ -4,693 +4,189 @@ using System.IO;
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEditor;
+using System.Reflection;
 
-
-public struct XLSXCell
+public enum XLSXSheetType
 {
-    ICell m_Cell;
-    private CellType m_CellType;
-    private string m_StringValue;
-    private double m_NumberValue;
-    private bool m_BoolValue;
-    private DateTime m_DateValue;
+    Null,
+    Global,
+    Local,
+}
 
-    public XLSXCell(ICell cell)
-    {
-        m_Cell = cell;
-        m_CellType = CellType.Blank;
-        m_StringValue = null;
-        m_NumberValue = 0;
-        m_BoolValue = false;
-        m_DateValue = DateTime.MinValue;
-    }
+public class XLSXRow
+{
+    private ISheet m_Sheet;
+    private IRow m_Row;
 
-    public ICell cell
+    public IRow iRow
     {
         get
         {
-            return m_Cell;
-        }
-        set
-        {
-            m_Cell = value;
-            switch (m_CellType)
-            {
-                case CellType.String:
-                    m_Cell.SetCellValue(m_StringValue);
-                    break;
-                case CellType.Numeric:
-                    m_Cell.SetCellValue(m_NumberValue);
-                    break;
-                case CellType.Boolean:
-                    m_Cell.SetCellValue(m_BoolValue);
-                    break;
-                default:
-                    break;
-            }
+            return m_Row;
         }
     }
-
-
-    public static implicit operator string(XLSXCell cell)
-    {
-        return cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-    }
-
-    public static implicit operator double(XLSXCell cell)
-    {
-        return cell.m_Cell == null ? cell.m_NumberValue : cell.m_Cell.NumericCellValue;
-    }
-
-    public static implicit operator bool(XLSXCell cell)
-    {
-        return cell.m_Cell == null ? cell.m_BoolValue : cell.m_Cell.BooleanCellValue;
-    }
-
-    public static implicit operator Vector2(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var values = value.Split(',');
-        if (values.Length != 2)
-        {
-            Debug.LogError($"XLSXCell: {value} is not Vector2!");
-            return Vector2.zero;
-        }
-        return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
-    }
-
-    public static implicit operator Vector3(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var values = value.Split(',');
-        if (values.Length != 3)
-        {
-            Debug.LogError($"XLSXCell: {value} is not Vector3!");
-            return Vector3.zero;
-        }
-        return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
-    }
-
-    public static implicit operator List<double>(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var values = value.Split(';');
-        var list = new List<double>();
-        foreach (var item in values)
-        {
-            list.Add(double.Parse(item));
-        }
-        return list;
-    }
-
-    public static implicit operator List<float>(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var values = value.Split(';');
-        var list = new List<float>();
-        foreach (var item in values)
-        {
-            list.Add(float.Parse(item));
-        }
-        return list;
-    }
-
-    public static implicit operator List<int>(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var values = value.Split(';');
-        var list = new List<int>();
-        foreach (var item in values)
-        {
-            list.Add(int.Parse(item));
-        }
-        return list;
-    }
-
-    public static implicit operator List<string>(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        return new List<string>(value.Split(';'));
-    }
-
-    public static implicit operator List<CharacterScriptableObject>(XLSXCell cell)
-    {
-        var value = cell.m_Cell == null ? cell.m_StringValue : cell.m_Cell.StringCellValue;
-        var nameList = value.Split(';');
-        var list = new List<CharacterScriptableObject>();
-
-        foreach (var name in nameList)
-        {
-            var path = $"Assets/Configuration/Character_{name}.asset";
-            if (!File.Exists(path))
-            {
-                Debug.LogWarning($"XLSXCell: {path} is not exist!");
-                continue;
-            }
-            var asset = AssetDatabase.LoadAssetAtPath<CharacterScriptableObject>(path);
-            if (asset == null)
-            {
-                Debug.LogWarning($"XLSXCell: {path} is not CharacterScriptableObject!");
-                continue;
-            }
-            list.Add(asset);
-        }
-        return list;
-    }
-
-
-    public static implicit operator XLSXCell(string value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = value
-        };
-    }
-
-    public static implicit operator XLSXCell(double value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.Numeric,
-            m_NumberValue = value
-        };
-    }
-
-    public static implicit operator XLSXCell(bool value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.Boolean,
-            m_BoolValue = value
-        };
-    }
-
-    public static implicit operator XLSXCell(Vector2 value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = $"{value.x},{value.y}"
-        };
-    }
-
-    public static implicit operator XLSXCell(Vector3 value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = $"{value.x},{value.y},{value.z}"
-        };
-    }
-
-    public static implicit operator XLSXCell(List<double> value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = string.Join(";", value.ToArray())
-        };
-    }
-
-    public static implicit operator XLSXCell(List<float> value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = string.Join(";", value.ToArray())
-        };
-    }
-
-    public static implicit operator XLSXCell(List<int> value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = string.Join(";", value.ToArray())
-        };
-    }
-
-    public static implicit operator XLSXCell(List<string> value)
-    {
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = string.Join(";", value.ToArray())
-        };
-    }
-
-    public static implicit operator XLSXCell(List<CharacterScriptableObject> value)
-    {
-        List<string> nameList = new List<string>();
-        foreach (var item in value)
-        {
-            nameList.Add(item.CharacterName);
-        }
-        return new XLSXCell(null)
-        {
-            m_CellType = CellType.String,
-            m_StringValue = string.Join(";", nameList.ToArray())
-        };
-
-    }
-
-    public void setValue(string value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = value;
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(value);
-        }
-    }
-
-    public void setValue(double value)
-    {
-        if (m_Cell == null)
-        {
-            m_NumberValue = value;
-            m_CellType = CellType.Numeric;
-        }
-        else
-        {
-            m_Cell.SetCellValue(value);
-        }
-    }
-
-    public void setValue(bool value)
-    {
-        if (m_Cell == null)
-        {
-            m_BoolValue = value;
-            m_CellType = CellType.Boolean;
-        }
-        else
-        {
-            m_Cell.SetCellValue(value);
-        }
-    }
-
-    public void setValue(Vector2 value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = $"{value.x},{value.y}";
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue($"{value.x},{value.y}");
-        }
-    }
-
-    public void setValue(Vector3 value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = $"{value.x},{value.y},{value.z}";
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue($"{value.x},{value.y},{value.z}");
-        }
-    }
-    
-    public void setValue(List<double> value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = string.Join(";", value.ToArray());
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
-        }
-    }
-
-    public void setValue(List<float> value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = string.Join(";", value.ToArray());
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
-        }
-    }
-
-    public void setValue(List<int> value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = string.Join(";", value.ToArray());
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
-        }
-    }
-
-    public void setValue(List<string> value)
-    {
-        if (m_Cell == null)
-        {
-            m_StringValue = string.Join(";", value.ToArray());
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(string.Join(";", value.ToArray()));
-        }
-    }
-
-    public void setValue(List<CharacterScriptableObject> value)
-    {
-        List<string> nameList = new List<string>();
-        foreach (var item in value)
-        {
-            nameList.Add(item.CharacterName);
-        }
-        if (m_Cell == null)
-        {
-            m_StringValue = string.Join(";", nameList.ToArray());
-            m_CellType = CellType.String;
-        }
-        else
-        {
-            m_Cell.SetCellValue(string.Join(";", nameList.ToArray()));
-        }
-    }
-
-    public void setValue(System.Reflection.FieldInfo fieldInfo, object obj)
-    {
-        if (fieldInfo.FieldType == typeof(string))
-        {
-            setValue((string)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(double))
-        {
-            setValue((double)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(int))
-        {
-            setValue((int)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(float))
-        {
-            setValue((float)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(long))
-        {
-            setValue((long)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(bool))
-        {
-            setValue((bool)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(Vector2))
-        {
-            setValue((Vector2)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(Vector3))
-        {
-            setValue((Vector3)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(List<double>))
-        {
-            setValue((List<double>)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(List<float>))
-        {
-            setValue((List<float>)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(List<int>))
-        {
-            setValue((List<int>)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(List<string>))
-        {
-            setValue((List<string>)fieldInfo.GetValue(obj));
-        }
-        else if (fieldInfo.FieldType == typeof(List<CharacterScriptableObject>))
-        {
-            setValue((List<CharacterScriptableObject>)fieldInfo.GetValue(obj));
-        }
-        else
-        {
-            Debug.LogError($"XLSXCell.setValue: {fieldInfo.Name} type is not supported!");
-        }
-    }
-
-    public void exportToObject(System.Reflection.FieldInfo fieldInfo, object obj)
-    {
-        if (fieldInfo.FieldType == typeof(string))
-        {
-            fieldInfo.SetValue(obj, (string)this);
-        }
-        else if (fieldInfo.FieldType == typeof(double))
-        {
-            fieldInfo.SetValue(obj, (double)this);
-        }
-        else if (fieldInfo.FieldType == typeof(int))
-        {
-            fieldInfo.SetValue(obj, (int)this);
-        }
-        else if (fieldInfo.FieldType == typeof(float))
-        {
-            fieldInfo.SetValue(obj, (float)this);
-        }
-        else if (fieldInfo.FieldType == typeof(long))
-        {
-            fieldInfo.SetValue(obj, (long)this);
-        }
-        else if (fieldInfo.FieldType == typeof(bool))
-        {
-            fieldInfo.SetValue(obj, (bool)this);
-        }
-        else if (fieldInfo.FieldType == typeof(Vector2))
-        {
-            fieldInfo.SetValue(obj, (Vector2)this);
-        }
-        else if (fieldInfo.FieldType == typeof(Vector3))
-        {
-            fieldInfo.SetValue(obj, (Vector3)this);
-        }
-        else if (fieldInfo.FieldType == typeof(List<double>))
-        {
-            fieldInfo.SetValue(obj, (List<double>)this);
-        }
-        else if (fieldInfo.FieldType == typeof(List<float>))
-        {
-            fieldInfo.SetValue(obj, (List<float>)this);
-        }
-        else if (fieldInfo.FieldType == typeof(List<int>))
-        {
-            fieldInfo.SetValue(obj, (List<int>)this);
-        }
-        else if (fieldInfo.FieldType == typeof(List<string>))
-        {
-            fieldInfo.SetValue(obj, (List<string>)this);
-        }
-        else if (fieldInfo.FieldType == typeof(List<CharacterScriptableObject>))
-        {
-            fieldInfo.SetValue(obj, (List<CharacterScriptableObject>)this);
-        }
-        else
-        {
-            Debug.LogError($"XLSXCell.setValue: {fieldInfo.Name} type is not supported!");
-        }
-    }
-
-    public bool IsEmpty()
-    {
-        if (m_Cell != null)
-        {
-            return m_Cell.CellType == CellType.Blank;
-        }
-        else
-        {
-            return m_CellType == CellType.Blank;
-        }
-    }
-
-    public void Clear()
-    {
-        if (m_Cell != null)
-        {
-            m_Cell.SetCellValue(string.Empty);
-        }
-        else
-        {
-            m_CellType = CellType.Blank;
-            m_StringValue = null;
-            m_NumberValue = 0;
-            m_BoolValue = false;
-            m_DateValue = DateTime.MinValue;
-        }
-    }
-}
-
-public struct XLSXRow
-{
-    XLSXTitles m_Titles;
-    IRow m_Row;
 
     public string name
     {
         get
         {
             var cell = m_Row.GetCell(0);
-            if (cell == null) return string.Empty;
-            return cell.StringCellValue;
-        }
-    }
-
-    public IRow row
-    {
-        get
-        {
-            return m_Row;
-        }
-    }
-
-
-    public XLSXRow(IRow row, XLSXTitles titles)
-    {
-        m_Row = row;
-        this.m_Titles = titles;
-    }
-
-    public XLSXCell this[string index]
-    {
-        get
-        {
-            var cell = m_Row.GetCell(m_Titles[index]);
-            if (cell == null)
-            {
-                cell = m_Row.CreateCell(m_Titles[index]);
-            }
-            return new XLSXCell(cell);
+            return cell.ToString();
         }
         set
         {
-            var cell = m_Row.GetCell(m_Titles[index]);
+            var cell = m_Row.GetCell(0);
             if (cell == null)
             {
-                cell = m_Row.CreateCell(m_Titles[index]);
+                cell = m_Row.CreateCell(0);
             }
-            value.cell = cell;
-        }
-
-    }
-
-    public void serializeFormScriptableObject<T>(T obj, bool cover = true) where T : ScriptableObject
-    {
-        var fields = typeof(T).GetFields();
-        foreach (var field in fields)
-        {
-            var cell = this[field.Name];
-            if (cell.IsEmpty() || cover)
-            {
-                cell.setValue(field, obj);
-            }
+            cell.SetCellValue(value);
         }
     }
 
-    public void serializeToScriptableObject<T>(T obj, bool cover = true) where T : ScriptableObject
-    {
-        var fields = typeof(T).GetFields();
-        foreach (var field in fields)
-        {
-            var cell = this[field.Name];
-            if (!cell.IsEmpty() || cover)
-            {
-                cell.exportToObject(field, obj);
-            }
-        }
-    }
-
-    public void serializeFormScriptableObject(Type type, object obj, bool cover = true)
-    {
-        var fields = type.GetFields();
-        foreach (var field in fields)
-        {
-            var cell = this[field.Name];
-            if (cell.IsEmpty() || cover)
-            {
-                cell.setValue(field, obj);
-            }
-        }
-    }
-
-    public void serializeToScriptableObject(Type type, object obj, bool cover = true)
-    {
-        var fields = type.GetFields();
-        foreach (var field in fields)
-        {
-            var cell = this[field.Name];
-            if (!cell.IsEmpty() || cover)
-            {
-                cell.exportToObject(field, obj);
-            }
-        }
-    }
-}
-
-public struct XLSXTitles
-{
-    private IRow m_Row;
-
-    public IRow row
+    public List<string> keys
     {
         get
         {
-            return m_Row;
+            var keys = new List<string>();
+            var headerRow = m_Sheet.GetRow(0);
+            if (headerRow == null)
+            {
+                return keys;
+            }
+            int cellCount = headerRow.LastCellNum;
+            for (int i = 1; i < cellCount; i++)
+            {
+                var cell = m_Row.GetCell(i);
+                if (cell == null) continue;
+                keys.Add(cell.ToString());
+            }
+            return keys;
         }
     }
 
-    public XLSXTitles(IRow row)
+    public void SetIRow(IRow row, ISheet sheet = null)
     {
         m_Row = row;
+        m_Sheet = sheet;
     }
 
-    public int this[string index]
+    public XLSXRow(IRow row = null, ISheet sheet = null)
+    {
+        m_Row = row;
+        m_Sheet = sheet;
+    }
+
+    private ICell GetKeyCell(string key)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        var headerRow = m_Sheet.GetRow(0);
+        if (headerRow == null)
+        {
+            headerRow = m_Sheet.CreateRow(0);
+        }
+        int cellCount = headerRow.LastCellNum;
+        for (int i = 0; i < cellCount; i++)
+        {
+            var cell = headerRow.GetCell(i);
+            if (cell != null && cell.StringCellValue == key)
+            {
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    private ICell CreateKeyCell(string key)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        var headerRow = m_Sheet.GetRow(0);
+        if (headerRow == null)
+        {
+            headerRow = m_Sheet.CreateRow(0);
+        }
+        int cellCount = headerRow.LastCellNum;
+        for (int i = 0; i < cellCount; i++)
+        {
+            var cell = headerRow.GetCell(i);
+            if (cell != null && cell.StringCellValue == key)
+            {
+                return cell;
+            }
+        }
+        var keyCell = headerRow.CreateCell(cellCount);
+        keyCell.SetCellValue(key);
+        return keyCell;
+    }
+
+    public string GetValue(string key)
+    {
+        var keyCell = GetKeyCell(key);
+        if (keyCell == null) return "";
+        if (m_Row == null)
+        {
+            Debug.LogError("row is null");
+            throw new Exception("row is null");
+        }
+        var valueCell = m_Row.GetCell(keyCell.ColumnIndex);
+        if (valueCell == null) return "";
+        return valueCell.ToString();
+    }
+
+    public T GetValue<T>(string key)
+    {
+        return (T)XLSX.StringToType(typeof(T), GetValue(key), "");
+    }
+
+    public void SetValue(string key, string value)
+    {
+        var keyCell = CreateKeyCell(key);
+        if (m_Row == null)
+        {
+            Debug.LogError("row is null");
+            throw new Exception("row is null");
+        }
+
+        var valueCell = m_Row.GetCell(keyCell.ColumnIndex);
+        if (valueCell == null)
+        {
+            valueCell = m_Row.CreateCell(keyCell.ColumnIndex);
+        }
+        valueCell.SetCellValue(value);
+    }
+
+    public void SetValue(string key, object value)
+    {
+        SetValue(key, XLSX.TypeToString(value.GetType(), value));
+    }
+
+    public object this[string name]
     {
         get
         {
-            ICell cell;
-            for (int i = 1; i < m_Row.LastCellNum; i++)
-            {
-                cell = m_Row.GetCell(i);
-                if (cell == null) continue;
-                if (cell.StringCellValue == index)
-                {
-                    return i;
-                }
-            }
-
-            cell = m_Row.CreateCell(m_Row.LastCellNum);
-            cell.SetCellValue(index);
-            return m_Row.LastCellNum;
+            return GetValue(name);
+        }
+        set
+        {
+            SetValue(name, value.ToString());
         }
     }
 }
 
-public struct XLSXSheet
+public class XLSXSheet
 {
-    ISheet m_Sheet;
+    private ISheet m_Sheet;
 
-    public ISheet sheet
+    public ISheet iSheet
     {
         get
         {
@@ -704,168 +200,553 @@ public struct XLSXSheet
         {
             return m_Sheet.SheetName;
         }
+        set
+        {
+            m_Sheet.Workbook.SetSheetName(m_Sheet.Workbook.GetSheetIndex(m_Sheet), value);
+        }
     }
 
-    public List<XLSXRow> raws
+    public XLSXSheetType sheetType
     {
         get
         {
-            var list = new List<XLSXRow>();
-            for (int i = 1; i <= m_Sheet.LastRowNum; i++)
+            if (m_Sheet == null)
             {
-                var row = m_Sheet.GetRow(i);
-                if (row == null) continue;
-                list.Add(new XLSXRow(row, titles));
+                Debug.LogError("sheet is null");
+                throw new Exception("sheet is null");
             }
-            return list;
+            var row0 = m_Sheet.GetRow(0);
+            if (row0 == null)
+            {
+                return XLSXSheetType.Null;
+            }
+            var cell0 = row0.GetCell(0);
+            if (cell0 == null)
+            {
+                return XLSXSheetType.Null;
+            }
+            if (cell0.ToString() == "Global")
+            {
+                return XLSXSheetType.Global;
+            }
+            else if (cell0.ToString() == "Local")
+            {
+                return XLSXSheetType.Local;
+            }
+            else
+            {
+                return XLSXSheetType.Null;
+            }
         }
-    }
-
-    static List<Char> words = new List<Char>()
-    {
-        'A','B','C','D','E','F','G','H','I','J','K','L','M',
-        'N','O','P','Q','R','S','T','U','V','W','X','Y','Z'
-    };
-    public static int WordsToNumber(string words)
-    {
-        int number = 0;
-        for (int i = 0; i < words.Length; i++)
+        set
         {
-            number += (int)Mathf.Pow(26, i) * (words[words.Length - 1 - i] - 'A' + 1);
+            if (m_Sheet == null)
+            {
+                Debug.LogError("sheet is null");
+                throw new Exception("sheet is null");
+            }
+            var row0 = m_Sheet.GetRow(0);
+            if (row0 == null)
+            {
+                row0 = m_Sheet.CreateRow(0);
+            }
+            var cell0 = row0.GetCell(0);
+            if (cell0 == null)
+            {
+                cell0 = row0.CreateCell(0);
+            }
+            if (value == XLSXSheetType.Global)
+            {
+                cell0.SetCellValue("Global");
+            }
+            else if (value == XLSXSheetType.Local)
+            {
+                cell0.SetCellValue("Local");
+            }
+            else
+            {
+                cell0.SetCellValue("");
+            }
         }
-        return number;
     }
 
-    public XLSXCell GetCell(string index)
-    {
-        var colunmPattern = @"^[A-Z]+";
-        var rowPattern = @"\d+$";
-        var colunmIndex = XLSXSheet.WordsToNumber(Regex.Match(index, colunmPattern).Value) - 1;
-        var rowIndex = int.Parse(Regex.Match(index, rowPattern).Value) - 1;
-        var row = m_Sheet.GetRow(rowIndex);
-        if (row == null) row = m_Sheet.CreateRow(rowIndex);
-        var cell = row.GetCell(colunmIndex);
-        if (cell == null) cell = row.CreateCell(colunmIndex);
-        return new XLSXCell(cell);
-    }
-
-    public XLSXTitles titles;
-    public XLSXSheet(ISheet sheet)
-    {
-        m_Sheet = sheet;
-        var titlesRow = m_Sheet.GetRow(0);
-        if (titlesRow == null)
-        {
-            titlesRow = m_Sheet.CreateRow(0);
-            titlesRow.CreateCell(0);
-        }
-        titles = new XLSXTitles(titlesRow);
-    }
-
-    public XLSXRow this[string index]
+    private ICell valueCell
     {
         get
         {
-            for (int i = 1; i <= m_Sheet.LastRowNum; i++)
+            if (sheetType != XLSXSheetType.Global) return null;
+
+            var headerRow = m_Sheet.GetRow(0);
+            if (headerRow == null)
+            {
+                headerRow = m_Sheet.CreateRow(0);
+            }
+            int cellCount = Mathf.Max(headerRow.LastCellNum, 1);
+            for (int i = 1; i < cellCount; i++)
+            {
+                var cell = headerRow.GetCell(i);
+                if (cell != null && cell.ToString() == "Value")
+                {
+                    return cell;
+                }
+            }
+            var valueCell = headerRow.CreateCell(cellCount);
+            valueCell.SetCellValue("Value");
+            return valueCell;
+        }
+    }
+
+    public List<string> keys
+    {
+        get
+        {
+            var rowCount = m_Sheet.LastRowNum;
+            var keys = new List<string>();
+            for (int i = 1; i <= rowCount; i++)
             {
                 var row = m_Sheet.GetRow(i);
                 if (row == null) continue;
                 var cell = row.GetCell(0);
                 if (cell == null) continue;
-                if (cell.StringCellValue == index)
+                keys.Add(cell.ToString());
+            }
+            return keys;
+        }
+    }
+
+    public string GetValue(string key)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        if (sheetType != XLSXSheetType.Global)
+        {
+            Debug.LogError("GetValue only support Global sheet");
+            throw new Exception("GetValue only support Global sheet");
+        }
+        int rowCount = m_Sheet.LastRowNum;
+        int colunmIndex = valueCell.ColumnIndex;
+        for (int i = 1; i <= rowCount; i++)
+        {
+            var row = m_Sheet.GetRow(i);
+            if (row == null) continue;
+            var cell = row.GetCell(0);
+            if (cell == null) continue;
+            if (cell.ToString() == key)
+            {
+                var valueCell = row.GetCell(colunmIndex);
+                if (valueCell == null)
                 {
-                    return new XLSXRow(row, titles);
+                    return "";
+                }
+                return valueCell.ToString();
+            }
+        }
+        return "";
+    }
+
+    public T GetValue<T>(string key)
+    {
+        return (T)XLSX.StringToType(typeof(T), GetValue(key), "");
+    }
+
+    public void SetValue(string key, string value)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        if (sheetType != XLSXSheetType.Global)
+        {
+            Debug.LogError("SetValue only support Global sheet");
+            throw new Exception("SetValue only support Global sheet");
+        }
+        int rowCount = m_Sheet.LastRowNum;
+        int colunmIndex = valueCell.ColumnIndex;
+        for (int i = 1; i <= rowCount; i++)
+        {
+            var row = m_Sheet.GetRow(i);
+            if (row == null) continue;
+            var cell = row.GetCell(0);
+            if (cell == null) continue;
+            if (cell.ToString() == key)
+            {
+                var valueCell = row.GetCell(colunmIndex);
+                if (valueCell == null)
+                {
+                    valueCell = row.CreateCell(colunmIndex);
+                }
+                valueCell.SetCellValue(value);
+                return;
+            }
+        }
+        var newRow = m_Sheet.CreateRow(rowCount + 1);
+        var newKeyCell = newRow.CreateCell(0);
+        newKeyCell.SetCellValue(key);
+        var newValueCell = newRow.CreateCell(colunmIndex);
+        newValueCell.SetCellValue(value);
+    }
+
+    public void SetValue(string key, object value)
+    {
+        SetValue(key, XLSX.TypeToString(value.GetType(), value));
+    }
+
+    private XLSXRow m_activeRow = new XLSXRow();
+
+    public XLSXRow GetRow(string key)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        if (sheetType != XLSXSheetType.Local)
+        {
+            Debug.LogError("GetRow only support Local sheet");
+            throw new Exception("GetRow only support Local sheet");
+        }
+        var iRow = m_activeRow.iRow;
+        int rowCount = m_Sheet.LastRowNum;
+        for (int i = 1; i <= rowCount; i++)
+        {
+            var row = m_Sheet.GetRow(i);
+            if (row == null) continue;
+            m_activeRow.SetIRow(row, m_Sheet);
+            if (m_activeRow.name == key)
+            {
+                return m_activeRow;
+            }
+        }
+        m_activeRow.SetIRow(iRow, m_Sheet);
+        return null;
+
+    }
+
+    public XLSXRow CreateRow(string key)
+    {
+        if (m_Sheet == null)
+        {
+            Debug.LogError("sheet is null");
+            throw new Exception("sheet is null");
+        }
+        if (sheetType != XLSXSheetType.Local)
+        {
+            Debug.LogError("CreateRow only support Classes sheet");
+            throw new Exception("CreateRow only support Classes sheet");
+        }
+        int rowCount = m_Sheet.LastRowNum;
+        for (int i = 1; i <= rowCount; i++)
+        {
+            var row = m_Sheet.GetRow(i);
+            if (row == null) continue;
+            m_activeRow.SetIRow(row, m_Sheet);
+            if (m_activeRow.name == key)
+            {
+                return m_activeRow;
+            }
+        }
+        var newRow = m_Sheet.CreateRow(rowCount + 1);
+        var newKeyCell = newRow.CreateCell(0);
+        newKeyCell.SetCellValue(key);
+        m_activeRow.SetIRow(newRow, m_Sheet);
+        return m_activeRow;
+    }
+
+    public XLSXSheet(ISheet sheet = null)
+    {
+        m_Sheet = sheet;
+    }
+
+    public void SetISheet(ISheet sheet)
+    {
+        m_Sheet = sheet;
+    }
+
+    public void CreateKey(string key)
+    {
+        if (sheetType == XLSXSheetType.Local)
+        {
+            var headerRow = m_Sheet.GetRow(0);
+            if (headerRow == null)
+            {
+                headerRow = m_Sheet.CreateRow(0);
+            }
+            var cellCount = headerRow.LastCellNum;
+            for (int i = 0; i < cellCount; i++)
+            {
+                var cell = headerRow.GetCell(i);
+                if (cell != null && cell.ToString() == key)
+                {
+                    return;
                 }
             }
-            var newRow = m_Sheet.CreateRow(m_Sheet.LastRowNum + 1);
-            newRow.CreateCell(0).SetCellValue(index);
-            return new XLSXRow(newRow, titles);
+            headerRow.CreateCell(cellCount).SetCellValue(key);
+        }
+        else
+        {
+            var rowCount = m_Sheet.LastRowNum;
+            for (int i = 1; i <= rowCount; i++)
+            {
+                var row = m_Sheet.GetRow(i);
+                if (row == null) continue;
+                var cell = row.GetCell(0);
+                if (cell != null && cell.ToString() == key)
+                {
+                    return;
+                }
+            }
+            var newRow = m_Sheet.CreateRow(rowCount + 1);
+            newRow.CreateCell(0).SetCellValue(key);
         }
     }
 
-    public void serializeFormScriptableObject<T>(T obj, bool cover = true) where T : ScriptableObject
+    public object this[string name]
     {
-        var fields = typeof(T).GetFields();
-        foreach (var field in fields)
+        get
         {
-            var row = this[field.Name];
-            var cell = row["value"];
-            if (cell.IsEmpty() || cover)
+            if (sheetType == XLSXSheetType.Global)
             {
-                cell.setValue(field, obj);
+                return GetValue(name);
+            }
+            else
+            {
+                return GetRow(name);
+            }
+        }
+        set
+        {
+            if (sheetType == XLSXSheetType.Global)
+            {
+                SetValue(name, XLSX.TypeToString(value.GetType(), value));
+            }
+            else
+            {
+                Debug.LogError("Local sheet can not set value");
+                throw new Exception("Local sheet can not set value");
             }
         }
     }
 
-    public void serializeToScriptableObject<T>(T obj, bool cover = true) where T : ScriptableObject
+    public void SerializeFormScriptableObject(ScriptableObject scriptableObject)
     {
-        var fields = typeof(T).GetFields();
-        foreach (var field in fields)
-        {
-            var row = this[field.Name];
-            var cell = row["value"];
-            if (!cell.IsEmpty() || cover)
-            {
-                cell.exportToObject(field, obj);
-            }
-        }
-    }
-
-
-    public void serializeFormScriptableObject(Type type, object obj, bool cover = true)
-    {
+        sheetType = XLSXSheetType.Global;
+        var type = scriptableObject.GetType();
         var fields = type.GetFields();
         foreach (var field in fields)
         {
-            var row = this[field.Name];
-            var cell = row["value"];
-            if (cell.IsEmpty() || cover)
-            {
-                cell.setValue(field, obj);
-            }
+            var key = field.Name;
+            if (key == "key") continue;
+            var valueString = XLSX.TypeToString(field.FieldType, field.GetValue(scriptableObject));
+            SetValue(key, valueString);
         }
     }
 
-    public void serializeToScriptableObject(Type type, object obj, bool cover = true)
+    public void DeserializeToScriptableObject(ScriptableObject scriptableObject, string configFolder = "")
     {
+        var type = scriptableObject.GetType();
         var fields = type.GetFields();
         foreach (var field in fields)
         {
-            var row = this[field.Name];
-            var cell = row["value"];
-            if (!cell.IsEmpty() || cover)
-            {
-                cell.exportToObject(field, obj);
-            }
+            var key = field.Name;
+            if (key == "key") continue;
+            field.SetValue(scriptableObject, XLSX.StringToType(field.FieldType, GetValue(key), configFolder));
         }
     }
 }
 
 public class XLSX
 {
-    private string m_Path;
-    private IWorkbook m_Workbook;
-
-    public IWorkbook workbook
+    public static void Decompose(string value, out string name, out List<string> tags)
     {
-        get
+        var keys = value
+        .Replace("\n", "")
+        .Replace("\r", "")
+        .Replace("\t", "")
+        .Replace(" ", "")
+        .Split('#');
+        name = keys[0];
+        tags = new List<string>();
+        for (int i = 1; i < keys.Length; i++)
         {
-            return m_Workbook;
+            tags.Add(keys[i]);
         }
     }
-
-    public List<XLSXSheet> sheets
+    public static string TypeToString(Type t, object instance)
     {
-        get
+        if (t == typeof(Vector2))
         {
-            var list = new List<XLSXSheet>();
-            for (int i = 0; i < m_Workbook.NumberOfSheets; i++)
+            var value = (Vector2)instance;
+            return $"{value.x},{value.y}";
+        }
+        else if (t == typeof(Vector3))
+        {
+            var value = (Vector3)instance;
+            return $"{value.x},{value.y},{value.z}";
+        }
+        else if (t == typeof(Vector4))
+        {
+            var value = (Vector4)instance;
+            return $"{value.x},{value.y},{value.z},{value.w}";
+        }
+        else if (t == typeof(Quaternion))
+        {
+            var value = (Quaternion)instance;
+            return $"{value.x},{value.y},{value.z},{value.w}";
+        }
+        else if (t == typeof(Color))
+        {
+            var value = (Color)instance;
+            return $"{value.r},{value.g},{value.b},{value.a}";
+        }
+        else if (t == typeof(Color32))
+        {
+            var value = (Color32)instance;
+            return $"{value.r},{value.g},{value.b},{value.a}";
+        }
+        else if (typeof(ScriptableObject).IsAssignableFrom(t))
+        {
+            return ((ScriptableObject)instance).name.Split('_')[1];
+        }
+        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
+        {
+            var list = (System.Collections.IList)instance;
+            var str = "";
+            for (int i = 0; i < list.Count; i++)
             {
-                list.Add(new XLSXSheet(m_Workbook.GetSheetAt(i)));
+                var value = list[i];
+                if (value != null)
+                    str += TypeToString(list[i].GetType(), list[i]);
+                if (i < list.Count - 1)
+                {
+                    str += "|";
+                }
+            }
+            Debug.Log(str);
+            return str;
+        }
+        else if (typeof(Enum).IsAssignableFrom(t))
+        {
+            return ((Enum)instance).ToString();
+        }
+        else if (t == typeof(string))
+        {
+            return (string)instance;
+        }
+        else if (t == typeof(int))
+        {
+            return ((int)instance).ToString();
+        }
+        else if (t == typeof(float))
+        {
+            return ((float)instance).ToString();
+        }
+        else if (t == typeof(bool))
+        {
+            return ((bool)instance).ToString();
+        }
+        else if (t == typeof(long))
+        {
+            return ((long)instance).ToString();
+        }
+        else if (instance == null)
+        {
+            return "";
+        }
+
+        Debug.LogWarning($"TypeToString not support type {t.Name}");
+        return JsonUtility.ToJson(instance);
+    }
+
+    public static object StringToType(Type t, string value, string configFolder = "")
+    {
+
+        if (t == typeof(Vector2))
+        {
+            var values = value.Split(',');
+            return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+        }
+        else if (t == typeof(Vector3))
+        {
+            var values = value.Split(',');
+            return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
+        }
+        else if (t == typeof(Vector4))
+        {
+            var values = value.Split(',');
+            return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Quaternion))
+        {
+            var values = value.Split(',');
+            return new Quaternion(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Color))
+        {
+            var values = value.Split(',');
+            return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
+        }
+        else if (t == typeof(Color32))
+        {
+            var values = value.Split(',');
+            return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
+        }
+        else if (typeof(ScriptableObject).IsAssignableFrom(t))
+        {
+            return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name.Replace("ScriptableObject", "")}_{value}.asset", t);
+        }
+        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
+        {
+            var list = (System.Collections.IList)Activator.CreateInstance(t);
+            var values = value.Split('|');
+            if (values.Length == 1 && values[0] == "")
+            {
+                return list;
+            }
+            for (int i = 0; i < values.Length; i++)
+            {
+                list.Add(StringToType(t.GetGenericArguments()[0], values[i], configFolder));
             }
             return list;
         }
+        else if (typeof(Enum).IsAssignableFrom(t))
+        {
+            return Enum.Parse(t, value);
+        }
+        else if (t == typeof(string))
+        {
+            return value;
+        }
+        else if (t == typeof(int))
+        {
+            return int.Parse(value);
+        }
+        else if (t == typeof(float))
+        {
+            return float.Parse(value);
+        }
+        else if (t == typeof(bool))
+        {
+            return bool.Parse(value);
+        }
+        else if (t == typeof(long))
+        {
+            return long.Parse(value);
+        }
+        else if (value == "")
+        {
+            return null;
+        }
+
+        Debug.LogWarning($"StringToType not support type {t.Name}");
+        return JsonUtility.FromJson(value, t);
     }
+
+    private string m_Path;
+    private IWorkbook m_Workbook;
 
     public XLSX(string path)
     {
@@ -904,26 +785,241 @@ public class XLSX
                 File.Delete(savePath);
             throw e;
         }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
-    public XLSXSheet this[string index]
+    private XLSXSheet m_activeSheet = new XLSXSheet();
+
+    public XLSXSheet activeSheet
     {
         get
         {
-            var sheet = m_Workbook.GetSheet(index);
-            if (sheet == null)
-            {
-                sheet = m_Workbook.CreateSheet(index);
-            }
-            return new XLSXSheet(sheet);
+            return m_activeSheet;
         }
     }
 
-    public bool HasSheet(string name)
+    public List<string> sheetNames
     {
-        return m_Workbook.GetSheet(name) != null;
+        get
+        {
+            var sheetNames = new List<string>();
+            int sheetCount = m_Workbook.NumberOfSheets;
+            for (int i = 0; i < sheetCount; i++)
+            {
+                var sheet = m_Workbook.GetSheetAt(i);
+                sheetNames.Add(sheet.SheetName);
+            }
+            return sheetNames;
+        }
+    }
+
+    public XLSXSheet GetSheet(string name)
+    {
+        var iSheet = m_activeSheet.iSheet;
+        int sheetCount = m_Workbook.NumberOfSheets;
+        for (int i = 0; i < sheetCount; i++)
+        {
+            var sheet = m_Workbook.GetSheetAt(i);
+            m_activeSheet.SetISheet(sheet);
+            if (m_activeSheet.name == name)
+            {
+                return m_activeSheet;
+            }
+        }
+        m_activeSheet.SetISheet(iSheet);
+        return null;
+    }
+
+    public XLSXSheet CreateSheet(string name)
+    {
+        int sheetCount = m_Workbook.NumberOfSheets;
+        for (int i = 0; i < sheetCount; i++)
+        {
+            var sheet = m_Workbook.GetSheetAt(i);
+            m_activeSheet.SetISheet(sheet);
+            if (m_activeSheet.name == name)
+            {
+                return m_activeSheet;
+            }
+        }
+        var newSheet = m_Workbook.CreateSheet(name);
+        m_activeSheet.SetISheet(newSheet);
+        return m_activeSheet;
+    }
+
+    private bool IsGlobal(Type type)
+    {
+        return type.GetTypeInfo().GetCustomAttribute<LocalScriptableObjectAttribute>() == null;
+    }
+
+    public void SerializeGlobal(Type type, object instance)
+    {
+        var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
+        sheet.sheetType = XLSXSheetType.Global;
+        var fields = type.GetFields();
+        foreach (var filed in fields)
+        {
+            var key = filed.Name;
+            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
+            sheet.SetValue(key, valueString);
+        }
+    }
+
+    public void SerializeLocal(Type type, object instance)
+    {
+        var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
+        sheet.sheetType = XLSXSheetType.Local;
+        var row = sheet.CreateRow(((ScriptableObject)instance).name.Split('_')[1]);
+        var fields = type.GetFields();
+        foreach (var filed in fields)
+        {
+            var key = filed.Name;
+            if (key == "key") continue;
+            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
+            row.SetValue(key, valueString);
+        }
+    }
+
+    public void SerializeAll(List<Type> types, string configFolder)
+    {
+
+        var filesPath = AssetDatabase.FindAssets("t:ScriptableObject", new string[] { configFolder });
+        foreach (var filePath in filesPath)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(filePath));
+            var names = fileName.Split('_');
+            var typeName = names[0];
+
+            var type = types.Find(t => t.Name == typeName || t.Name == $"{typeName}ScriptableObject");
+            if (type == null)
+            {
+                Debug.LogWarning($"ScriptableObject {fileName} is not exist");
+                continue;
+            }
+            var isGlobal = IsGlobal(type);
+
+            if (isGlobal)
+            {
+                SerializeGlobal(type, AssetDatabase.LoadAssetAtPath($"{configFolder}/{fileName}.asset", type));
+            }
+            else
+            {
+                SerializeLocal(type, AssetDatabase.LoadAssetAtPath($"{configFolder}/{fileName}.asset", type));
+            }
+        }
+    }
+
+    public void DeserializeGlobal(Type type, string configFolder)
+    {
+        var sheet = GetSheet(type.Name.Replace("ScriptableObject", ""));
+        if (sheet == null)
+        {
+            Debug.LogWarning($"Sheet {type.Name} is not exist");
+            return;
+        }
+        var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name.Replace("ScriptableObject", "")}.asset", type);
+        if (instance == null)
+        {
+            instance = ScriptableObject.CreateInstance(type);
+            AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name.Replace("ScriptableObject", "")}.asset");
+        }
+        var fields = type.GetFields();
+        foreach (var filed in fields)
+        {
+            var key = filed.Name;
+            var valueString = sheet.GetValue(key);
+            if (valueString == null) continue;
+            filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        EditorUtility.SetDirty(instance);
+    }
+
+    public void DeserializeLocal(Type type, string configFolder)
+    {
+        var sheet = GetSheet(type.Name.Replace("ScriptableObject", ""));
+        if (sheet == null)
+        {
+            Debug.LogWarning($"Sheet {type.Name} is not exist");
+            return;
+        }
+        var fields = type.GetFields();
+        var rows = sheet.keys;
+        foreach (var row in rows)
+        {
+            var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{row}.asset", type);
+            if (instance == null)
+            {
+                instance = ScriptableObject.CreateInstance(type);
+                AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{row}.asset");
+            }
+            var rowClass = sheet.GetRow(row);
+            foreach (var filed in fields)
+            {
+                var key = filed.Name;
+                if (key == "key") continue;
+                var valueString = rowClass.GetValue(key);
+                if (valueString == null) continue;
+                filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
+            }
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorUtility.SetDirty(instance);
+        }
+    }
+
+    public void DeserializeAll(List<Type> types, string configFolder)
+    {
+        foreach (var type in types)
+        {
+            var isGlobal = IsGlobal(type);
+
+            if (isGlobal)
+            {
+                DeserializeGlobal(type, configFolder);
+            }
+            else
+            {
+                DeserializeLocal(type, configFolder);
+            }
+        }
+    }
+
+    public void CreateSheets(List<Type> types)
+    {
+        foreach (var type in types)
+        {
+            var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
+            var isGlobal = IsGlobal(type);
+            if (isGlobal)
+            {
+                sheet.sheetType = XLSXSheetType.Global;
+            }
+            else
+            {
+                sheet.sheetType = XLSXSheetType.Local;
+            }
+            var defaultInstance = ScriptableObject.CreateInstance(type);
+            foreach (var field in type.GetFields())
+            {
+                sheet.CreateKey(field.Name);
+                if (isGlobal)
+                {
+                    if (sheet.GetValue(field.Name) == "")
+                        sheet.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                }
+                else
+                {
+                    var row = sheet.CreateRow("default");
+                    if (row.GetValue(field.Name) == "")
+                        row.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                }
+            }
+        }
     }
 
 
-
+    public XLSXSheet this[string name] { get { return CreateSheet(name); } }
 }
