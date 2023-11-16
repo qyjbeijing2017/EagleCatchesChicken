@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using System.Reflection;
+using HybridCLR;
 
 
 #if !DISABLESTEAMWORKS
@@ -70,6 +71,7 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return handle;
                 var assbleData = handle.Result.bytes;
                 var ass = Assembly.Load(assbleData);
+                RuntimeApi.LoadMetadataForAOTAssembly(assbleData, HomologousImageMode.Consistent);
                 m_HotUpdateAsses[name] = ass;
 
         }

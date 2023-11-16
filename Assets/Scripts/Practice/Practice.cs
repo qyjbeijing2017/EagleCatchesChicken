@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
+
 public class Practice : MonoBehaviour
 {
     public static IEnumerator ExtraLoading(LoadingBase loading)
@@ -18,7 +19,7 @@ public class Practice : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        NetworkManager.singleton.StartHost();
+        // NetworkController.singleton.StartHost();
     }
 
     // Update is called once per frame
