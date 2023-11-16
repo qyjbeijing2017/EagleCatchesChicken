@@ -7,7 +7,7 @@ using System;
 public class ExcelToScriptable : Editor
 {
 
-    static string s_WorkDir = "Configuration";
+    static string s_WorkDir = "Configurations";
     static string s_RelativePath = $"Assets/{s_WorkDir}";
     static string s_Workspace = $"{Application.dataPath}/{s_WorkDir}";
     static string s_Designer = $"{s_Workspace}/Designer.xlsx";
@@ -210,6 +210,27 @@ public class ExcelToScriptable : Editor
             typeof(CharacterScriptableObject),
         });
         xlsx.Save();
+    }
+
+    [MenuItem("ECC/Configuration/Serialize")]
+    public static void Serialize(){
+        var xlsx = new ConfigXLSX($"{s_Workspace}/test.xlsx");
+        xlsx.SerializeAll(new List<Type>(){
+            typeof(GlobalScriptableObject),
+            typeof(CharacterListScriptableObject),
+            typeof(CharacterScriptableObject),
+        }, s_RelativePath);
+        xlsx.Save();
+    }
+
+    [MenuItem("ECC/Configuration/Deserialize")]
+    public static void Deserialize(){
+        var xlsx = new ConfigXLSX($"{s_Workspace}/test.xlsx");
+        xlsx.DeserializeAll(new List<Type>(){
+            typeof(CharacterScriptableObject),
+            typeof(CharacterListScriptableObject),
+            typeof(GlobalScriptableObject),
+        }, s_RelativePath);
     }
     
 }

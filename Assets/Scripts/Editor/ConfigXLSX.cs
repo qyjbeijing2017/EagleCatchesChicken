@@ -84,7 +84,7 @@ public class ConfigRowClass
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return null;
+            throw new Exception("sheet is null");
         }
         var headerRow = m_Sheet.GetRow(0);
         if (headerRow == null)
@@ -108,7 +108,7 @@ public class ConfigRowClass
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return null;
+            throw new Exception("sheet is null");
         }
         var headerRow = m_Sheet.GetRow(0);
         if (headerRow == null)
@@ -124,7 +124,9 @@ public class ConfigRowClass
                 return cell;
             }
         }
-        return headerRow.CreateCell(cellCount);
+        var keyCell = headerRow.CreateCell(cellCount);
+        keyCell.SetCellValue(key);
+        return keyCell;
     }
 
     public string GetValue(string key)
@@ -134,7 +136,7 @@ public class ConfigRowClass
         if (m_Row == null)
         {
             Debug.LogError("row is null");
-            return "";
+            throw new Exception("row is null");
         }
         var valueCell = m_Row.GetCell(keyCell.ColumnIndex);
         if (valueCell == null) return "";
@@ -147,7 +149,7 @@ public class ConfigRowClass
         if (m_Row == null)
         {
             Debug.LogError("row is null");
-            return;
+            throw new Exception("row is null");
         }
 
         var valueCell = m_Row.GetCell(keyCell.ColumnIndex);
@@ -190,18 +192,16 @@ public class ConfigSheet
             if (m_Sheet == null)
             {
                 Debug.LogError("sheet is null");
-                return ConfigType.Null;
+                throw new Exception("sheet is null");
             }
             var row0 = m_Sheet.GetRow(0);
             if (row0 == null)
             {
-                Debug.LogError("row0 is null");
                 return ConfigType.Null;
             }
             var cell0 = row0.GetCell(0);
             if (cell0 == null)
             {
-                Debug.LogError("cell0 is null");
                 return ConfigType.Null;
             }
             if (cell0.ToString() == "Global")
@@ -222,7 +222,7 @@ public class ConfigSheet
             if (m_Sheet == null)
             {
                 Debug.LogError("sheet is null");
-                return;
+                throw new Exception("sheet is null");
             }
             var row0 = m_Sheet.GetRow(0);
             if (row0 == null)
@@ -298,12 +298,12 @@ public class ConfigSheet
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return "";
+            throw new Exception("sheet is null");
         }
         if (sheetType != ConfigType.Global)
         {
             Debug.LogError("GetValue only support Global sheet");
-            return "";
+            throw new Exception("GetValue only support Global sheet");
         }
         int rowCount = m_Sheet.LastRowNum;
         int colunmIndex = valueCell.ColumnIndex;
@@ -331,12 +331,12 @@ public class ConfigSheet
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return;
+            throw new Exception("sheet is null");
         }
         if (sheetType != ConfigType.Global)
         {
             Debug.LogError("SetValue only support Global sheet");
-            return;
+            throw new Exception("SetValue only support Global sheet");
         }
         int rowCount = m_Sheet.LastRowNum;
         int colunmIndex = valueCell.ColumnIndex;
@@ -371,12 +371,12 @@ public class ConfigSheet
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return null;
+            throw new Exception("sheet is null");
         }
         if (sheetType != ConfigType.Local)
         {
             Debug.LogError("GetRow only support Local sheet");
-            return null;
+            throw new Exception("GetRow only support Local sheet");
         }
         var iRow = m_activeRow.iRow;
         int rowCount = m_Sheet.LastRowNum;
@@ -400,12 +400,12 @@ public class ConfigSheet
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return null;
+            throw new Exception("sheet is null");
         }
         if (sheetType != ConfigType.Local)
         {
             Debug.LogError("CreateRow only support Classes sheet");
-            return null;
+            throw new Exception("CreateRow only support Classes sheet");
         }
         int rowCount = m_Sheet.LastRowNum;
         for (int i = 1; i <= rowCount; i++)
@@ -493,6 +493,7 @@ public class ConfigXLSX
     }
     public static string TypeToString(Type t, object instance)
     {
+        Debug.Log(t.Name);
         if (t == typeof(Vector2))
         {
             var value = (Vector2)instance;
@@ -533,7 +534,9 @@ public class ConfigXLSX
             var str = "";
             for (int i = 0; i < list.Count; i++)
             {
-                str += TypeToString(list[i].GetType(), list[i]);
+                var value = list[i];
+                if(value != null)
+                    str += TypeToString(list[i].GetType(), list[i]);
                 if (i < list.Count - 1)
                 {
                     str += "|";
@@ -545,7 +548,8 @@ public class ConfigXLSX
         {
             return ((Enum)instance).ToString();
         }
-        else if (t == typeof(string)){
+        else if (t == typeof(string))
+        {
             return (string)instance;
         }
         else if (t == typeof(int))
@@ -564,12 +568,18 @@ public class ConfigXLSX
         {
             return ((long)instance).ToString();
         }
+        else if (instance == null)
+        {
+            return "";
+        }
 
+        Debug.LogError($"TypeToString not support type {t.Name}");
         return JsonUtility.ToJson(instance);
     }
 
-    public static object StringToType(Type t, string value, string configFolder = "Assets/Configurations")
+    public static object StringToType(Type t, string value, string configFolder)
     {
+
         if (t == typeof(Vector2))
         {
             var values = value.Split(',');
@@ -602,15 +612,19 @@ public class ConfigXLSX
         }
         else if (typeof(ScriptableObject).IsAssignableFrom(t))
         {
-            return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name}_{value}.asset", t);
+            return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name.Replace("ScriptableObject", "")}_{value}.asset", t);
         }
         else if (typeof(System.Collections.IList).IsAssignableFrom(t))
         {
             var list = (System.Collections.IList)Activator.CreateInstance(t);
             var values = value.Split('|');
+            if(values.Length == 1 && values[0] == "")
+            {
+                return list;
+            }
             for (int i = 0; i < values.Length; i++)
             {
-                list.Add(StringToType(t.GetGenericArguments()[0], values[i]));
+                list.Add(StringToType(t.GetGenericArguments()[0], values[i], configFolder));
             }
             return list;
         }
@@ -638,7 +652,12 @@ public class ConfigXLSX
         {
             return long.Parse(value);
         }
+        else if (value == "")
+        {
+            return null;
+        }
 
+        Debug.LogError($"StringToType not support type {t.Name}");
         return JsonUtility.FromJson(value, t);
     }
 
@@ -752,20 +771,20 @@ public class ConfigXLSX
 
     public void SerializeGlobal(Type type, object instance)
     {
-        var sheet = CreateSheet(type.Name);
+        var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
         sheet.sheetType = ConfigType.Global;
         var fields = type.GetFields();
         foreach (var filed in fields)
         {
             var key = filed.Name;
-            var valueString = TypeToString(filed.GetType(), filed.GetValue(instance));
+            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
             sheet.SetValue(key, valueString);
         }
     }
 
     public void SerializeLocal(Type type, object instance)
     {
-        var sheet = CreateSheet(type.Name);
+        var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
         sheet.sheetType = ConfigType.Local;
         var row = sheet.CreateRow(((ScriptableObject)instance).name.Split('_')[1]);
         var fields = type.GetFields();
@@ -773,7 +792,7 @@ public class ConfigXLSX
         {
             var key = filed.Name;
             if (key == "key") continue;
-            var valueString = TypeToString(filed.GetType(), filed.GetValue(instance));
+            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
             row.SetValue(key, valueString);
         }
     }
@@ -809,17 +828,17 @@ public class ConfigXLSX
 
     public void DeserializeGlobal(Type type, string configFolder)
     {
-        var sheet = GetSheet(type.Name);
+        var sheet = GetSheet(type.Name.Replace("ScriptableObject", ""));
         if (sheet == null)
         {
             Debug.LogWarning($"Sheet {type.Name} is not exist");
             return;
         }
-        var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name}.asset", type);
+        var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name.Replace("ScriptableObject", "")}.asset", type);
         if (instance == null)
         {
             instance = ScriptableObject.CreateInstance(type);
-            AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name}.asset");
+            AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name.Replace("ScriptableObject", "")}.asset");
         }
         var fields = type.GetFields();
         foreach (var filed in fields)
@@ -827,7 +846,7 @@ public class ConfigXLSX
             var key = filed.Name;
             var valueString = sheet.GetValue(key);
             if (valueString == null) continue;
-            filed.SetValue(instance, StringToType(filed.GetType(), valueString, configFolder));
+            filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -836,7 +855,7 @@ public class ConfigXLSX
 
     public void DeserializeLocal(Type type, string configFolder)
     {
-        var sheet = GetSheet(type.Name);
+        var sheet = GetSheet(type.Name.Replace("ScriptableObject", ""));
         if (sheet == null)
         {
             Debug.LogWarning($"Sheet {type.Name} is not exist");
@@ -846,11 +865,11 @@ public class ConfigXLSX
         var rows = sheet.keys;
         foreach (var row in rows)
         {
-            var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name}_{row}.asset", type);
+            var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{row}.asset", type);
             if (instance == null)
             {
                 instance = ScriptableObject.CreateInstance(type);
-                AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name}.asset");
+                AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{row}.asset");
             }
             var rowClass = sheet.GetRow(row);
             foreach (var filed in fields)
@@ -859,7 +878,7 @@ public class ConfigXLSX
                 if (key == "key") continue;
                 var valueString = rowClass.GetValue(key);
                 if (valueString == null) continue;
-                filed.SetValue(instance, StringToType(filed.GetType(), valueString, configFolder));
+                filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
             }
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -871,13 +890,6 @@ public class ConfigXLSX
     {
         foreach (var type in types)
         {
-            var sheet = GetSheet(type.Name);
-            if (sheet == null)
-            {
-                Debug.LogWarning($"Sheet {type.Name} is not exist");
-                continue;
-            }
-
             var isGlobal = IsGlobal(type);
 
             if (isGlobal)
@@ -905,7 +917,7 @@ public class ConfigXLSX
             {
                 sheet.sheetType = ConfigType.Local;
             }
-            var defaultInstance = Activator.CreateInstance(type);
+            var defaultInstance = ScriptableObject.CreateInstance(type);
             foreach (var field in type.GetFields())
             {
                 sheet.CreateKey(field.Name);
