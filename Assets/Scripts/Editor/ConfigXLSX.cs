@@ -5,7 +5,8 @@ using System;
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
-using Codice.Client.BaseCommands;
+using System.Reflection;
+
 
 public enum ConfigType
 {
@@ -129,14 +130,14 @@ public class ConfigRowClass
     public string GetValue(string key)
     {
         var keyCell = GetKeyCell(key);
-        if (keyCell == null) return null;
+        if (keyCell == null) return "";
         if (m_Row == null)
         {
             Debug.LogError("row is null");
-            return null;
+            return "";
         }
         var valueCell = m_Row.GetCell(keyCell.ColumnIndex);
-        if (valueCell == null) return null;
+        if (valueCell == null) return "";
         return valueCell.ToString();
     }
 
@@ -189,23 +190,25 @@ public class ConfigSheet
             if (m_Sheet == null)
             {
                 Debug.LogError("sheet is null");
-                return ConfigType.Global;
+                return ConfigType.Null;
             }
             var row0 = m_Sheet.GetRow(0);
             if (row0 == null)
             {
-                row0 = m_Sheet.CreateRow(0);
+                Debug.LogError("row0 is null");
+                return ConfigType.Null;
             }
             var cell0 = row0.GetCell(0);
             if (cell0 == null)
             {
-                cell0 = row0.CreateCell(0);
+                Debug.LogError("cell0 is null");
+                return ConfigType.Null;
             }
-            if (cell0.StringCellValue == "Global")
+            if (cell0.ToString() == "Global")
             {
                 return ConfigType.Global;
             }
-            else if (cell0.StringCellValue == "Local")
+            else if (cell0.ToString() == "Local")
             {
                 return ConfigType.Local;
             }
@@ -239,6 +242,10 @@ public class ConfigSheet
             {
                 cell0.SetCellValue("Local");
             }
+            else
+            {
+                cell0.SetCellValue("");
+            }
         }
     }
 
@@ -249,20 +256,22 @@ public class ConfigSheet
             if (sheetType != ConfigType.Global) return null;
 
             var headerRow = m_Sheet.GetRow(0);
-            if (headerRow != null)
+            if (headerRow == null)
             {
                 headerRow = m_Sheet.CreateRow(0);
             }
-            int cellCount = headerRow.LastCellNum;
-            for (int i = 0; i < cellCount; i++)
+            int cellCount = Mathf.Max(headerRow.LastCellNum, 1);
+            for (int i = 1; i < cellCount; i++)
             {
                 var cell = headerRow.GetCell(i);
-                if (cell != null && cell.StringCellValue == "Value")
+                if (cell != null && cell.ToString() == "Value")
                 {
                     return cell;
                 }
             }
-            return headerRow.CreateCell(cellCount);
+            var valueCell = headerRow.CreateCell(cellCount);
+            valueCell.SetCellValue("Value");
+            return valueCell;
         }
     }
 
@@ -289,12 +298,12 @@ public class ConfigSheet
         if (m_Sheet == null)
         {
             Debug.LogError("sheet is null");
-            return null;
+            return "";
         }
         if (sheetType != ConfigType.Global)
         {
             Debug.LogError("GetValue only support Global sheet");
-            return null;
+            return "";
         }
         int rowCount = m_Sheet.LastRowNum;
         int colunmIndex = valueCell.ColumnIndex;
@@ -309,12 +318,12 @@ public class ConfigSheet
                 var valueCell = row.GetCell(colunmIndex);
                 if (valueCell == null)
                 {
-                    return null;
+                    return "";
                 }
                 return valueCell.ToString();
             }
         }
-        return null;
+        return "";
     }
 
     public void SetValue(string key, string value)
@@ -425,6 +434,44 @@ public class ConfigSheet
     {
         m_Sheet = sheet;
     }
+
+    public void CreateKey(string key)
+    {
+        if (sheetType == ConfigType.Local)
+        {
+            var headerRow = m_Sheet.GetRow(0);
+            if (headerRow == null)
+            {
+                headerRow = m_Sheet.CreateRow(0);
+            }
+            var cellCount = headerRow.LastCellNum;
+            for (int i = 0; i < cellCount; i++)
+            {
+                var cell = headerRow.GetCell(i);
+                if (cell != null && cell.ToString() == key)
+                {
+                    return;
+                }
+            }
+            headerRow.CreateCell(cellCount).SetCellValue(key);
+        }
+        else
+        {
+            var rowCount = m_Sheet.LastRowNum;
+            for (int i = 1; i <= rowCount; i++)
+            {
+                var row = m_Sheet.GetRow(i);
+                if (row == null) continue;
+                var cell = row.GetCell(0);
+                if (cell != null && cell.ToString() == key)
+                {
+                    return;
+                }
+            }
+            var newRow = m_Sheet.CreateRow(rowCount + 1);
+            newRow.CreateCell(0).SetCellValue(key);
+        }
+    }
 }
 
 public class ConfigXLSX
@@ -476,9 +523,9 @@ public class ConfigXLSX
             var value = (Color32)instance;
             return $"{value.r},{value.g},{value.b},{value.a}";
         }
-        else if (typeof(LocalScriptableObject).IsAssignableFrom(t))
+        else if (typeof(ScriptableObject).IsAssignableFrom(t))
         {
-            return ((LocalScriptableObject)instance).key;
+            return ((ScriptableObject)instance).name.Split('_')[1];
         }
         else if (typeof(System.Collections.IList).IsAssignableFrom(t))
         {
@@ -498,7 +545,25 @@ public class ConfigXLSX
         {
             return ((Enum)instance).ToString();
         }
-
+        else if (t == typeof(string)){
+            return (string)instance;
+        }
+        else if (t == typeof(int))
+        {
+            return ((int)instance).ToString();
+        }
+        else if (t == typeof(float))
+        {
+            return ((float)instance).ToString();
+        }
+        else if (t == typeof(bool))
+        {
+            return ((bool)instance).ToString();
+        }
+        else if (t == typeof(long))
+        {
+            return ((long)instance).ToString();
+        }
 
         return JsonUtility.ToJson(instance);
     }
@@ -535,7 +600,7 @@ public class ConfigXLSX
             var values = value.Split(',');
             return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
         }
-        else if (typeof(LocalScriptableObject).IsAssignableFrom(t))
+        else if (typeof(ScriptableObject).IsAssignableFrom(t))
         {
             return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name}_{value}.asset", t);
         }
@@ -617,6 +682,8 @@ public class ConfigXLSX
                 File.Delete(savePath);
             throw e;
         }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
     }
 
     private ConfigSheet m_activeSheet = new ConfigSheet();
@@ -678,21 +745,182 @@ public class ConfigXLSX
         return m_activeSheet;
     }
 
-    public void SerializeSheet(List<Type> globalTypes, List<Type> localTypes, string configFolder)
+    private bool IsGlobal(Type type)
     {
-        foreach (var localType in localTypes)
-        {
+        return type.GetTypeInfo().GetCustomAttribute<LocalScriptableObjectAttribute>() == null;
+    }
 
-        }
-
-        foreach (var globalType in globalTypes)
+    public void SerializeGlobal(Type type, object instance)
+    {
+        var sheet = CreateSheet(type.Name);
+        sheet.sheetType = ConfigType.Global;
+        var fields = type.GetFields();
+        foreach (var filed in fields)
         {
-            
+            var key = filed.Name;
+            var valueString = TypeToString(filed.GetType(), filed.GetValue(instance));
+            sheet.SetValue(key, valueString);
         }
     }
 
-    public void DeserializeSheet<T>(T instance, string configFolder)
+    public void SerializeLocal(Type type, object instance)
+    {
+        var sheet = CreateSheet(type.Name);
+        sheet.sheetType = ConfigType.Local;
+        var row = sheet.CreateRow(((ScriptableObject)instance).name.Split('_')[1]);
+        var fields = type.GetFields();
+        foreach (var filed in fields)
+        {
+            var key = filed.Name;
+            if (key == "key") continue;
+            var valueString = TypeToString(filed.GetType(), filed.GetValue(instance));
+            row.SetValue(key, valueString);
+        }
+    }
+
+    public void SerializeAll(List<Type> types, string configFolder)
     {
 
+        var filesPath = AssetDatabase.FindAssets("t:ScriptableObject", new string[] { configFolder });
+        foreach (var filePath in filesPath)
+        {
+            var fileName = Path.GetFileNameWithoutExtension(AssetDatabase.GUIDToAssetPath(filePath));
+            var names = fileName.Split('_');
+            var typeName = names[0];
+
+            var type = types.Find(t => t.Name == typeName || t.Name == $"{typeName}ScriptableObject");
+            if (type == null)
+            {
+                Debug.LogWarning($"ScriptableObject {fileName} is not exist");
+                continue;
+            }
+            var isGlobal = IsGlobal(type);
+
+            if (isGlobal)
+            {
+                SerializeGlobal(type, AssetDatabase.LoadAssetAtPath($"{configFolder}/{fileName}.asset", type));
+            }
+            else
+            {
+                SerializeLocal(type, AssetDatabase.LoadAssetAtPath($"{configFolder}/{fileName}.asset", type));
+            }
+        }
+    }
+
+    public void DeserializeGlobal(Type type, string configFolder)
+    {
+        var sheet = GetSheet(type.Name);
+        if (sheet == null)
+        {
+            Debug.LogWarning($"Sheet {type.Name} is not exist");
+            return;
+        }
+        var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name}.asset", type);
+        if (instance == null)
+        {
+            instance = ScriptableObject.CreateInstance(type);
+            AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name}.asset");
+        }
+        var fields = type.GetFields();
+        foreach (var filed in fields)
+        {
+            var key = filed.Name;
+            var valueString = sheet.GetValue(key);
+            if (valueString == null) continue;
+            filed.SetValue(instance, StringToType(filed.GetType(), valueString, configFolder));
+        }
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        EditorUtility.SetDirty(instance);
+    }
+
+    public void DeserializeLocal(Type type, string configFolder)
+    {
+        var sheet = GetSheet(type.Name);
+        if (sheet == null)
+        {
+            Debug.LogWarning($"Sheet {type.Name} is not exist");
+            return;
+        }
+        var fields = type.GetFields();
+        var rows = sheet.keys;
+        foreach (var row in rows)
+        {
+            var instance = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name}_{row}.asset", type);
+            if (instance == null)
+            {
+                instance = ScriptableObject.CreateInstance(type);
+                AssetDatabase.CreateAsset(instance, $"{configFolder}/{type.Name}.asset");
+            }
+            var rowClass = sheet.GetRow(row);
+            foreach (var filed in fields)
+            {
+                var key = filed.Name;
+                if (key == "key") continue;
+                var valueString = rowClass.GetValue(key);
+                if (valueString == null) continue;
+                filed.SetValue(instance, StringToType(filed.GetType(), valueString, configFolder));
+            }
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            EditorUtility.SetDirty(instance);
+        }
+    }
+
+    public void DeserializeAll(List<Type> types, string configFolder)
+    {
+        foreach (var type in types)
+        {
+            var sheet = GetSheet(type.Name);
+            if (sheet == null)
+            {
+                Debug.LogWarning($"Sheet {type.Name} is not exist");
+                continue;
+            }
+
+            var isGlobal = IsGlobal(type);
+
+            if (isGlobal)
+            {
+                DeserializeGlobal(type, configFolder);
+            }
+            else
+            {
+                DeserializeLocal(type, configFolder);
+            }
+        }
+    }
+
+    public void CreateSheets(List<Type> types)
+    {
+        foreach (var type in types)
+        {
+            var sheet = CreateSheet(type.Name.Replace("ScriptableObject", ""));
+            var isGlobal = IsGlobal(type);
+            if (isGlobal)
+            {
+                sheet.sheetType = ConfigType.Global;
+            }
+            else
+            {
+                sheet.sheetType = ConfigType.Local;
+            }
+            var defaultInstance = Activator.CreateInstance(type);
+            foreach (var field in type.GetFields())
+            {
+                sheet.CreateKey(field.Name);
+                if (isGlobal)
+                {
+                    if (sheet.GetValue(field.Name) == "")
+                        sheet.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                }
+                else
+                {
+                    var row = sheet.CreateRow("default");
+                    if (row.GetValue(field.Name) == "")
+                        row.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                }
+            }
+        }
     }
 }

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-public abstract class LocalScriptableObject : ScriptableObject
-{
-    public string key;
-}
+using System;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class LocalScriptableObjectAttribute : Attribute { }

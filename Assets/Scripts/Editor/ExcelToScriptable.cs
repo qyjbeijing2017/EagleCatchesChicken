@@ -200,4 +200,16 @@ public class ExcelToScriptable : Editor
         var vector2 = new Vector2(1, 2);
         AnimationCurve curve = new AnimationCurve();
     }
+
+    [MenuItem("ECC/Configuration/CreateExcel")]
+    public static void CreateExcel(){
+        var xlsx = new ConfigXLSX($"{s_Workspace}/test.xlsx");
+        xlsx.CreateSheets(new List<Type>(){
+            typeof(GlobalScriptableObject),
+            typeof(CharacterListScriptableObject),
+            typeof(CharacterScriptableObject),
+        });
+        xlsx.Save();
+    }
+    
 }
