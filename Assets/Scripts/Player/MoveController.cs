@@ -63,8 +63,8 @@ public class MoveController : NetworkBehaviour
     void OnJump(InputAction.CallbackContext context)
     {
         if (!isLocalPlayer) return;
-        if (m_JumpCount >= m_ActorController.characterScriptableObject.JumpSpeeds.Count) return;
-        var jumpSpeed = m_ActorController.characterScriptableObject.JumpSpeeds[m_JumpCount];
+        if (m_JumpCount >= m_ActorController.character.JumpSpeeds.Count) return;
+        var jumpSpeed = m_ActorController.character.JumpSpeeds[m_JumpCount];
         m_Velocity.y = jumpSpeed;
         m_JumpCount++;
     }
@@ -84,7 +84,7 @@ public class MoveController : NetworkBehaviour
         }
 
         var inputAxis = m_InputActions.Move.Move.ReadValue<Vector2>();
-        var BaseMoveSpeed = m_ActorController.characterScriptableObject.MoveSpeed;
+        var BaseMoveSpeed = m_ActorController.character.MoveSpeed;
 
         var moveSpeed = BaseMoveSpeed;
         var inputVelocity = inputAxis * moveSpeed;
@@ -127,7 +127,7 @@ public class MoveController : NetworkBehaviour
     void UseGravity()
     {
         if (!useGravity) return;
-        m_Velocity.y -= m_ActorController.globalScriptableObject.Gravity * Time.deltaTime;
+        m_Velocity.y -= m_ActorController.global.Gravity * Time.deltaTime;
 
         RaycastHit hit;
         var layerMask = 1 << LayerMask.NameToLayer("Ground");

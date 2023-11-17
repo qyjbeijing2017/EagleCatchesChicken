@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: BlackBoss
   Description: "\u9ED1\u56E2\u56E2"
-  MoveSpeed: 0
+  MoveSpeed: 6
   Mass: 50
   JumpSpeeds:
   - 8

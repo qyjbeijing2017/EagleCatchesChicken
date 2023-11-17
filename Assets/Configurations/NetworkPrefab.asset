@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3281c1c6dda4d744b9c935c43028c4fe, type: 3}
+  m_Name: NetworkPrefab
+  m_EditorClassIdentifier: 
+  prefabIDMap:
+  - Name: FireBuffExample
+    ID: 2093473897
+    Path: Assets/Prefabs/Buff/FireBuffExample.prefab
+  - Name: IceBuffExample
+    ID: 2737803754
+    Path: Assets/Prefabs/Buff/IceBuffExample.prefab
+  - Name: FireBall
+    ID: 3298020442
+    Path: Assets/Prefabs/Bullet/FireBall.prefab
+  - Name: BlackBoss
+    ID: 3552132377
+    Path: Assets/Prefabs/Characters/BlackBoss.prefab
+  - Name: Baby
+    ID: 3019281079
+    Path: Assets/Prefabs/Charactor/Baby.prefab
+  - Name: Character
+    ID: 4133940207
+    Path: Assets/Prefabs/Charactor/Character.prefab
+  - Name: CharacterExample
+    ID: 504623618
+    Path: Assets/Prefabs/Charactor/CharacterExample.prefab
+  - Name: Eagle
+    ID: 3103489466
+    Path: Assets/Prefabs/Charactor/Eagle.prefab
+  - Name: Mom
+    ID: 328946675
+    Path: Assets/Prefabs/Charactor/Mom.prefab
+  - Name: MyTestPlayer
+    ID: 2239586818
+    Path: Assets/Prefabs/Charactor/MyTestPlayer.prefab
+  - Name: Player
+    ID: 2100708268
+    Path: Assets/Prefabs/Charactor/Player.prefab
+  - Name: EmptyPlayer 1
+    ID: 619005188
+    Path: Assets/Prefabs/CharactorV2/EmptyPlayer 1.prefab
+  - Name: EmptyPlayer
+    ID: 320469304
+    Path: Assets/Prefabs/CharactorV2/EmptyPlayer.prefab
+  - Name: BurnBuff
+    ID: 2235642898
+    Path: Assets/Prefabs/Example/BurnBuff.prefab
+  - Name: EagleExample
+    ID: 3555599939
+    Path: Assets/Prefabs/Example/EagleExample.prefab
+  - Name: FireBallEagleExample
+    ID: 1096054513
+    Path: Assets/Prefabs/Example/FireBallEagleExample.prefab
+  - Name: FireBallMomExample
+    ID: 1681392008
+    Path: Assets/Prefabs/Example/FireBallMomExample.prefab
+  - Name: MomExample
+    ID: 3273369817
+    Path: Assets/Prefabs/Example/MomExample.prefab
+  - Name: PlayerExample
+    ID: 749872214
+    Path: Assets/Prefabs/Example/PlayerExample.prefab
+  - Name: SlowDownBuff
+    ID: 1958464012
+    Path: Assets/Prefabs/Example/SlowDownBuff.prefab
+  - Name: PlayerController
+    ID: 1476681251
+    Path: Assets/Prefabs/PlayerController.prefab

@@ -1,4 +1,5 @@
 using Mirror;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
@@ -32,21 +33,11 @@ public class NetworkController : NetworkManager
         base.OnClientConnect();
     }
 
-    [Client]
-    public void CreateCharactor(string name)
-    {
-        Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/{name}.prefab").Completed += prefab =>
-        {
-            NetworkClient.RegisterPrefab(prefab.Result);
-            NetworkClient.Send(new CreateCharacterMessage(name));
-        };
-    }
-
     void OnCharactorCreate(NetworkConnectionToClient conn, CreateCharacterMessage message)
     {
         Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/{message.name}.prefab").Completed += prefab =>
         {
-            NetworkClient.RegisterPrefab(prefab.Result);
+            // NetworkClient.RegisterPrefab(prefab.Result);
             var obj = Instantiate(prefab.Result);
             NetworkServer.ReplacePlayerForConnection(conn, obj);
         };

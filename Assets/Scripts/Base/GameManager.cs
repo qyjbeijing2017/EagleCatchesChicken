@@ -130,7 +130,9 @@ public class GameManager : MonoSingleton<GameManager>
                 {
                         yield return StartCoroutine(LoadScript("Loading"));
                 }
-                yield return Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
+                var handler = Addressables.LoadSceneAsync("Assets/Scenes/Loading.unity");
+                yield return handler;
+                handler.Result.ActivateAsync();
         }
 
         public Coroutine LoadScene(string name)

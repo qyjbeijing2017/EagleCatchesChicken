@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
+using UnityEngine.AddressableAssets;
 
 
 public class Practice : MonoBehaviour
@@ -20,6 +21,10 @@ public class Practice : MonoBehaviour
     void Start()
     {
         // NetworkController.singleton.StartHost();
+        Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/BlackBoss.prefab").Completed += prefab =>
+        {
+            NetworkClient.RegisterPrefab(prefab.Result);
+        };
     }
 
     // Update is called once per frame

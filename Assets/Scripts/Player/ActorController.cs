@@ -25,7 +25,7 @@ public class ActorController : NetworkBehaviour
     [SerializeField]
     GlobalScriptableObject m_GlobalScriptableObject;
 
-    public GlobalScriptableObject globalScriptableObject
+    public GlobalScriptableObject global
     {
         get
         {
@@ -36,25 +36,11 @@ public class ActorController : NetworkBehaviour
     [SerializeField]
     CharacterScriptableObject m_CharacterScriptableObject;
 
-    public CharacterScriptableObject characterScriptableObject
+    public CharacterScriptableObject character
     {
         get
         {
             return m_CharacterScriptableObject;
         }
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
-    void OnDestroy()
-    {
     }
 }
