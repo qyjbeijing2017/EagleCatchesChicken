@@ -152,6 +152,66 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6668af3ef6321f447a82d2d85a4f0c0a
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCLoading.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 902e0b5922e9cb14fb2f1c04b99e588c
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCLoading.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1d1e3028d5de3d2458de14900d2f556a
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e4602ddf2e42a1e4197f2ddd817bc273
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCMainMenu.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2ae1b6de1ec87944b8b63426481cfafc
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCPlayer.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0b2571751e9623b4bb0cc2dd7e9e898b
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCPlayer.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 390fb16eb790d62419df819331b9104a
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCPractice.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 5865e3072ba516e4880de3d2035a9b2e
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCPractice.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9c1861fec8fd5984e9614477f311d5f7
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCRoom.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 40877d68efe3b134982bb4143797f8ff
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCRoom.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b473677c30267c24ea762215bc1e5861
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.dll.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 0c3c074590ab5ee4e84f4b7f5af76c44
+    m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
