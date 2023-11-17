@@ -64,6 +64,15 @@ public class GameManager : MonoSingleton<GameManager>
                 m_HotUpdateAsses.Clear();
         }
 
+        public IEnumerator LoadMetadataForAOTAssembly(string name)
+        {
+                Debug.Log($"Load AOT source Assets/HotFix/{platformName}/{name}.bytes");
+                var handle = Addressables.LoadAssetAsync<TextAsset>($"Assets/HotFix/{platformName}/{name}.bytes");
+                yield return handle;
+                var assbleData = handle.Result.bytes;
+                RuntimeApi.LoadMetadataForAOTAssembly(assbleData, HomologousImageMode.SuperSet);
+        }
+
         public IEnumerator LoadScript(string name)
         {
                 Debug.Log($"Load source Assets/HotFix/{platformName}/ECC{name}.dll.bytes");
@@ -71,7 +80,6 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return handle;
                 var assbleData = handle.Result.bytes;
                 var ass = Assembly.Load(assbleData);
-                RuntimeApi.LoadMetadataForAOTAssembly(assbleData, HomologousImageMode.Consistent);
                 m_HotUpdateAsses[name] = ass;
 
         }
@@ -82,7 +90,6 @@ public class GameManager : MonoSingleton<GameManager>
                 yield return StartCoroutine(LoadLoadingScene());
                 var loading = FindObjectOfType<LoadingBase>();
                 loading.maxValue = 100;
-                // TODO: Loading Scene
                 loading.Tick("Loading scripts...", 0);
                 yield return LoadScript(name);
                 var loadingAss = GetAssembly(name);
@@ -97,7 +104,7 @@ public class GameManager : MonoSingleton<GameManager>
 
                 // Loading scene
                 var operation = Addressables.LoadSceneAsync(
-                        $"Assets/Scenes/{name}.unity", 
+                        $"Assets/Scenes/{name}.unity",
                         UnityEngine.SceneManagement.LoadSceneMode.Single,
                         false
                 );
@@ -133,6 +140,26 @@ public class GameManager : MonoSingleton<GameManager>
                         return StartCoroutine(LoadLoadingScene());
                 }
                 return StartCoroutine(LoadSceneHandler(name));
+        }
+
+        IEnumerator LoadAllMetadataForAOTAssemblyHandler()
+        {
+                yield return StartCoroutine(LoadLoadingScene());
+                var loading = FindObjectOfType<LoadingBase>();
+                loading.maxValue = AOTGenericReferences.PatchedAOTAssemblyList.Count;
+                loading.Tick("Loading AOT metadata...", 0);
+
+                foreach (var name in AOTGenericReferences.PatchedAOTAssemblyList)
+                {
+                        loading.Tick($"Loading AOT metadata for {name}...");
+                        yield return StartCoroutine(LoadMetadataForAOTAssembly(name));
+                        loading.Tick($"Loading AOT metadata for {name} finished!", 1);
+                }
+        }
+
+        public Coroutine LoadAllMetadataForAOTAssembly()
+        {
+                return StartCoroutine(LoadAllMetadataForAOTAssemblyHandler());
         }
         #endregion
 

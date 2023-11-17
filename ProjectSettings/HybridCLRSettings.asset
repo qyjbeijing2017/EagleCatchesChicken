@@ -21,7 +21,6 @@ MonoBehaviour:
   - {fileID: 5897886265953266890, guid: 81d7755c6f4243f49b27e50ba3442593, type: 3}
   - {fileID: 5897886265953266890, guid: dd9a321f4bddb8b49b19daf51e4fcd81, type: 3}
   - {fileID: 5897886265953266890, guid: 263b3af8ccc2d1b428cc742851ce57ff, type: 3}
-  - {fileID: 5897886265953266890, guid: 4ab826aa6b1fbf04b915b765f9b13fbf, type: 3}
   - {fileID: 5897886265953266890, guid: 6ef55e0e175379346a4c5c0966189b7f, type: 3}
   hotUpdateAssemblies: []
   preserveHotUpdateAssemblies: []
