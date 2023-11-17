@@ -804,8 +804,10 @@ PlayerSettings:
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
+    Server: 1
     Standalone: 1
   il2cppCompilerConfiguration:
+    Server: 0
     Standalone: 0
   il2cppCodeGeneration:
     Standalone: 0
