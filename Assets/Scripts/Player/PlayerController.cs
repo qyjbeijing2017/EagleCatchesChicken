@@ -11,18 +11,16 @@ public class PlayerController : NetworkBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (isLocalPlayer)
-            CreateCharactor("BlackBoss");
     }
 
-    public void CreateCharactor(string name)
-    {
-        Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/{name}.prefab").Completed += prefab =>
-        {
-            NetworkClient.RegisterPrefab(prefab.Result);
-            NetworkClient.Send(new CreateCharacterMessage(name));
-        };
-    }
+    // public void CreateCharactor(string name)
+    // {
+    //     Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/{name}.prefab").Completed += prefab =>
+    //     {
+    //         NetworkClient.RegisterPrefab(prefab.Result);
+    //         NetworkClient.Send(new CreateCharacterMessage(name));
+    //     };
+    // }
 
 
     // Update is called once per frame

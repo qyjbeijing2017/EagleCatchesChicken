@@ -15,13 +15,13 @@ public class AutoNetworkPrefabIDMap : Editor
             networkPrefabScriptableObject = ScriptableObject.CreateInstance<NetworkPrefabScriptableObject>();
             AssetDatabase.CreateAsset(networkPrefabScriptableObject, "Assets/Configurations/NetworkPrefab.asset");
         }
-        networkPrefabScriptableObject.prefabIDMap.Clear();
+        networkPrefabScriptableObject.prefabInfo.Clear();
         var prefabGUIDList = AssetDatabase.FindAssets("t:Prefab", new[] {"Assets/Prefabs"});
         foreach (var prefabGUID in prefabGUIDList)
         {
             var prefab = AssetDatabase.LoadAssetAtPath<NetworkIdentity>(AssetDatabase.GUIDToAssetPath(prefabGUID));
             if(prefab == null) continue;
-            networkPrefabScriptableObject.prefabIDMap.Add(new NetworkPrefabIDMap()
+            networkPrefabScriptableObject.prefabInfo.Add(new NetworkPrefabInfo()
             {
                 Name = prefab.name,
                 ID = prefab.assetId,
