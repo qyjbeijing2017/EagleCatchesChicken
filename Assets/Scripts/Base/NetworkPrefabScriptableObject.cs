@@ -7,17 +7,9 @@ using Mirror;
 public struct NetworkPrefabInfo
 {
     [HideInInspector]
-    private string Name;
+    public string Name;
     public uint ID;
     public string Path;
-
-    public string name
-    {
-        get
-        {
-            return Name;
-        }
-    }
 }
 
 public class NetworkPrefabScriptableObject : ScriptableObject
@@ -29,7 +21,7 @@ public class NetworkPrefabScriptableObject : ScriptableObject
     {
         foreach (var info in prefabInfo)
         {
-            if (info.name == name)
+            if (info.Name == name)
             {
                 return info;
             }
