@@ -25,6 +25,14 @@ public abstract class PlayerComponent : NetworkBehaviour
         }
     }
 
+    public PlayerIdentity identity
+    {
+        get
+        {
+            return m_PlayerController.identity;
+        }
+    }
+
     // Start is called before the first frame update
     protected virtual void Awake()
     {

@@ -34,4 +34,26 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    [SyncVar]
+    PlayerIdentity m_Identity;
+    public PlayerIdentity identity
+    {
+        get
+        {
+            return m_Identity;
+        }
+        set
+        {
+            gameObject.layer = (int)value;
+            m_Identity = value;
+        }
+    }
+
+    void Start()
+    {
+        identity = Character.Identity;
+    }
+
+
+
 }

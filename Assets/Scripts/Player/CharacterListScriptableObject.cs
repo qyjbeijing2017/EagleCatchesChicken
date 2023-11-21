@@ -6,7 +6,5 @@ using UnityEngine;
 #endif
 public class CharacterListScriptableObject : ScriptableObject
 {
-    public List<CharacterScriptableObject> MomList = new List<CharacterScriptableObject>();
-    public List<CharacterScriptableObject> BabyList = new List<CharacterScriptableObject>();
-    public List<CharacterScriptableObject> EagleList = new List<CharacterScriptableObject>();
+    public List<CharacterScriptableObject> Characters = new List<CharacterScriptableObject>();
 }

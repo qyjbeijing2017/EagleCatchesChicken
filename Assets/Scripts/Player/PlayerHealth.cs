@@ -6,7 +6,11 @@ public class PlayerHealth : PlayerComponent
 {
     [SerializeField]
     private int m_Health;
+    public int health => m_Health;
 
+    [SerializeField]
+    private Transform m_HealthBar;
+    public Transform healthBar => m_HealthBar;
 
     // Start is called before the first frame update
     void Start()
