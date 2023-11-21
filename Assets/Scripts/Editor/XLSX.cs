@@ -712,7 +712,7 @@ public class XLSX
     }
 
     private bool IsGlobal(Type type)
-    {      
+    {
         return type.GetTypeInfo().GetCustomAttribute<XLSXLocalAttribute>() == null;
     }
 
@@ -756,9 +756,18 @@ public class XLSX
             var type = types.Find(t => t.Name == typeName || t.Name == $"{typeName}ScriptableObject");
             if (type == null)
             {
-                Debug.LogWarning($"ScriptableObject {fileName} is not exist");
                 continue;
             }
+
+            var filedAttributes = type.GetCustomAttributes<IXLSXFiledAttribute>();
+            var isReadOnly = false;
+            foreach (var filedAttribute in filedAttributes)
+            {
+                isReadOnly = isReadOnly || filedAttribute.isReadOnly;
+            }
+            if (isReadOnly) continue;
+
+
             var isGlobal = IsGlobal(type);
 
             if (isGlobal)
@@ -772,7 +781,8 @@ public class XLSX
         }
     }
 
-    public void SerializeAll(string configFolder){
+    public void SerializeAll(string configFolder)
+    {
         SerializeAll(XLSXTools.AllTypes(), configFolder);
     }
 
@@ -842,6 +852,15 @@ public class XLSX
     {
         foreach (var type in types)
         {
+            var filedAttributes = type.GetCustomAttributes<IXLSXFiledAttribute>();
+            var isWriteOnly = false;
+            foreach (var filedAttribute in filedAttributes)
+            {
+                isWriteOnly = isWriteOnly || filedAttribute.isWriteOnly;
+            }
+            if (isWriteOnly) continue;
+
+
             var isGlobal = IsGlobal(type);
 
             if (isGlobal)
@@ -855,7 +874,8 @@ public class XLSX
         }
     }
 
-    public void DeserializeAll(string configFolder) {
+    public void DeserializeAll(string configFolder)
+    {
         DeserializeAll(XLSXTools.AllTypes(), configFolder);
     }
 

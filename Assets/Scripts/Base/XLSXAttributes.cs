@@ -11,6 +11,8 @@ using UnityEditor;
 
 public abstract class XLSXClassAttribute : Attribute
 {
+    public virtual bool isReadOnly => false;
+    public virtual bool isWriteOnly => false;
 }
 
 public abstract class IXLSXFiledAttribute : Attribute
