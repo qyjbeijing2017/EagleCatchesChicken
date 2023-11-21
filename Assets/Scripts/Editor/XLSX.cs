@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
 using System.Reflection;
+using System.Linq;
 
 public enum XLSXSheetType
 {
@@ -144,7 +145,7 @@ public class XLSXRow
 
     public T GetValue<T>(string key)
     {
-        return (T)XLSX.StringToType(typeof(T), GetValue(key), "");
+        return (T)XLSXTools.StringToType(typeof(T), GetValue(key), "");
     }
 
     public void SetValue(string key, string value)
@@ -166,7 +167,7 @@ public class XLSXRow
 
     public void SetValue(string key, object value)
     {
-        SetValue(key, XLSX.TypeToString(value.GetType(), value));
+        SetValue(key, XLSXTools.TypeToString(value.GetType(), value));
     }
 
     public object this[string name]
@@ -349,7 +350,7 @@ public class XLSXSheet
 
     public T GetValue<T>(string key)
     {
-        return (T)XLSX.StringToType(typeof(T), GetValue(key), "");
+        return (T)XLSXTools.StringToType(typeof(T), GetValue(key), "");
     }
 
     public void SetValue(string key, string value)
@@ -392,7 +393,7 @@ public class XLSXSheet
 
     public void SetValue(string key, object value)
     {
-        SetValue(key, XLSX.TypeToString(value.GetType(), value));
+        SetValue(key, XLSXTools.TypeToString(value.GetType(), value));
     }
 
     private XLSXRow m_activeRow = new XLSXRow();
@@ -521,7 +522,7 @@ public class XLSXSheet
         {
             if (sheetType == XLSXSheetType.Global)
             {
-                SetValue(name, XLSX.TypeToString(value.GetType(), value));
+                SetValue(name, XLSXTools.TypeToString(value.GetType(), value));
             }
             else
             {
@@ -540,8 +541,8 @@ public class XLSXSheet
         {
             var key = field.Name;
             if (key == "key") continue;
-            var valueString = XLSX.TypeToString(field.FieldType, field.GetValue(scriptableObject));
-            SetValue(key, valueString);
+            var valueString = XLSX.FiledToString(field, field.GetValue(scriptableObject));
+            if (valueString != null) SetValue(key, valueString);
         }
     }
 
@@ -553,7 +554,8 @@ public class XLSXSheet
         {
             var key = field.Name;
             if (key == "key") continue;
-            field.SetValue(scriptableObject, XLSX.StringToType(field.FieldType, GetValue(key), configFolder));
+            var objectValue = XLSX.StringToFiled(field, GetValue(key), configFolder);
+            if (objectValue != null) field.SetValue(scriptableObject, objectValue);
         }
     }
 }
@@ -575,174 +577,35 @@ public class XLSX
             tags.Add(keys[i]);
         }
     }
-    public static string TypeToString(Type t, object instance)
-    {
-        if (t == typeof(Vector2))
-        {
-            var value = (Vector2)instance;
-            return $"{value.x},{value.y}";
-        }
-        else if (t == typeof(Vector3))
-        {
-            var value = (Vector3)instance;
-            return $"{value.x},{value.y},{value.z}";
-        }
-        else if (t == typeof(Vector4))
-        {
-            var value = (Vector4)instance;
-            return $"{value.x},{value.y},{value.z},{value.w}";
-        }
-        else if (t == typeof(Quaternion))
-        {
-            var value = (Quaternion)instance;
-            return $"{value.x},{value.y},{value.z},{value.w}";
-        }
-        else if (t == typeof(Color))
-        {
-            var value = (Color)instance;
-            return $"{value.r},{value.g},{value.b},{value.a}";
-        }
-        else if (t == typeof(Color32))
-        {
-            var value = (Color32)instance;
-            return $"{value.r},{value.g},{value.b},{value.a}";
-        }
-        else if (typeof(ScriptableObject).IsAssignableFrom(t))
-        {
-            return ((ScriptableObject)instance).name.Split('_')[1];
-        }
-        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
-        {
-            var list = (System.Collections.IList)instance;
-            var str = "";
-            for (int i = 0; i < list.Count; i++)
-            {
-                var value = list[i];
-                if (value != null)
-                    str += TypeToString(list[i].GetType(), list[i]);
-                if (i < list.Count - 1)
-                {
-                    str += "|";
-                }
-            }
-            Debug.Log(str);
-            return str;
-        }
-        else if (typeof(Enum).IsAssignableFrom(t))
-        {
-            return ((Enum)instance).ToString();
-        }
-        else if (t == typeof(string))
-        {
-            return (string)instance;
-        }
-        else if (t == typeof(int))
-        {
-            return ((int)instance).ToString();
-        }
-        else if (t == typeof(float))
-        {
-            return ((float)instance).ToString();
-        }
-        else if (t == typeof(bool))
-        {
-            return ((bool)instance).ToString();
-        }
-        else if (t == typeof(long))
-        {
-            return ((long)instance).ToString();
-        }
-        else if (instance == null)
-        {
-            return "";
-        }
 
-        Debug.LogWarning($"TypeToString not support type {t.Name}");
-        return JsonUtility.ToJson(instance);
+    public static string FiledToString(FieldInfo info, object instance)
+    {
+        var filedAttributes = info.GetCustomAttributes<IXLSXFiledAttribute>();
+        var isReadOnly = false;
+        Func<object, string> writer = null;
+        foreach (var filedAttribute in filedAttributes)
+        {
+            isReadOnly = isReadOnly || filedAttribute.isReadOnly;
+            writer = writer ?? filedAttribute.writer;
+        }
+        if (isReadOnly) return null;
+        if (writer != null) return writer(instance);
+        return XLSXTools.TypeToString(info.FieldType, info.GetValue(instance));
     }
 
-    public static object StringToType(Type t, string value, string configFolder = "")
+    public static object StringToFiled(FieldInfo info, string value, string configFolder)
     {
-
-        if (t == typeof(Vector2))
+        var filedAttributes = info.GetCustomAttributes<IXLSXFiledAttribute>();
+        var isWriteOnly = false;
+        Func<string, object> reader = null;
+        foreach (var filedAttribute in filedAttributes)
         {
-            var values = value.Split(',');
-            return new Vector2(float.Parse(values[0]), float.Parse(values[1]));
+            isWriteOnly = isWriteOnly || filedAttribute.isWriteOnly;
+            reader = reader ?? filedAttribute.reader;
         }
-        else if (t == typeof(Vector3))
-        {
-            var values = value.Split(',');
-            return new Vector3(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]));
-        }
-        else if (t == typeof(Vector4))
-        {
-            var values = value.Split(',');
-            return new Vector4(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-        }
-        else if (t == typeof(Quaternion))
-        {
-            var values = value.Split(',');
-            return new Quaternion(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-        }
-        else if (t == typeof(Color))
-        {
-            var values = value.Split(',');
-            return new Color(float.Parse(values[0]), float.Parse(values[1]), float.Parse(values[2]), float.Parse(values[3]));
-        }
-        else if (t == typeof(Color32))
-        {
-            var values = value.Split(',');
-            return new Color32(byte.Parse(values[0]), byte.Parse(values[1]), byte.Parse(values[2]), byte.Parse(values[3]));
-        }
-        else if (typeof(ScriptableObject).IsAssignableFrom(t))
-        {
-            return AssetDatabase.LoadAssetAtPath($"{configFolder}/{t.Name.Replace("ScriptableObject", "")}_{value}.asset", t);
-        }
-        else if (typeof(System.Collections.IList).IsAssignableFrom(t))
-        {
-            var list = (System.Collections.IList)Activator.CreateInstance(t);
-            var values = value.Split('|');
-            if (values.Length == 1 && values[0] == "")
-            {
-                return list;
-            }
-            for (int i = 0; i < values.Length; i++)
-            {
-                list.Add(StringToType(t.GetGenericArguments()[0], values[i], configFolder));
-            }
-            return list;
-        }
-        else if (typeof(Enum).IsAssignableFrom(t))
-        {
-            return Enum.Parse(t, value);
-        }
-        else if (t == typeof(string))
-        {
-            return value;
-        }
-        else if (t == typeof(int))
-        {
-            return int.Parse(value);
-        }
-        else if (t == typeof(float))
-        {
-            return float.Parse(value);
-        }
-        else if (t == typeof(bool))
-        {
-            return bool.Parse(value);
-        }
-        else if (t == typeof(long))
-        {
-            return long.Parse(value);
-        }
-        else if (value == "")
-        {
-            return null;
-        }
-
-        Debug.LogWarning($"StringToType not support type {t.Name}");
-        return JsonUtility.FromJson(value, t);
+        if (isWriteOnly) return null;
+        if (reader != null) return reader(value);
+        return XLSXTools.StringToType(info.FieldType, value, configFolder);
     }
 
     private string m_Path;
@@ -849,8 +712,8 @@ public class XLSX
     }
 
     private bool IsGlobal(Type type)
-    {
-        return type.GetTypeInfo().GetCustomAttribute<LocalScriptableObjectAttribute>() == null;
+    {      
+        return type.GetTypeInfo().GetCustomAttribute<XLSXLocalAttribute>() == null;
     }
 
     public void SerializeGlobal(Type type, object instance)
@@ -861,8 +724,8 @@ public class XLSX
         foreach (var filed in fields)
         {
             var key = filed.Name;
-            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
-            sheet.SetValue(key, valueString);
+            var valueString = FiledToString(filed, filed.GetValue(instance));
+            if (valueString != null) sheet.SetValue(key, valueString);
         }
     }
 
@@ -876,14 +739,13 @@ public class XLSX
         {
             var key = filed.Name;
             if (key == "key") continue;
-            var valueString = TypeToString(filed.FieldType, filed.GetValue(instance));
-            row.SetValue(key, valueString);
+            var valueString = FiledToString(filed, filed.GetValue(instance));
+            if (valueString != null) row.SetValue(key, valueString);
         }
     }
 
     public void SerializeAll(List<Type> types, string configFolder)
     {
-
         var filesPath = AssetDatabase.FindAssets("t:ScriptableObject", new string[] { configFolder });
         foreach (var filePath in filesPath)
         {
@@ -910,6 +772,10 @@ public class XLSX
         }
     }
 
+    public void SerializeAll(string configFolder){
+        SerializeAll(XLSXTools.AllTypes(), configFolder);
+    }
+
     public void DeserializeGlobal(Type type, string configFolder)
     {
         var sheet = GetSheet(type.Name.Replace("ScriptableObject", ""));
@@ -930,7 +796,8 @@ public class XLSX
             var key = filed.Name;
             var valueString = sheet.GetValue(key);
             if (valueString == null) continue;
-            filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
+            var objectValue = StringToFiled(filed, valueString, configFolder);
+            if (objectValue != null) filed.SetValue(instance, objectValue);
         }
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
@@ -962,7 +829,8 @@ public class XLSX
                 if (key == "key") continue;
                 var valueString = rowClass.GetValue(key);
                 if (valueString == null) continue;
-                filed.SetValue(instance, StringToType(filed.FieldType, valueString, configFolder));
+                var objectValue = StringToFiled(filed, valueString, configFolder);
+                if (objectValue != null) filed.SetValue(instance, objectValue);
             }
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -987,6 +855,10 @@ public class XLSX
         }
     }
 
+    public void DeserializeAll(string configFolder) {
+        DeserializeAll(XLSXTools.AllTypes(), configFolder);
+    }
+
     public void CreateSheets(List<Type> types)
     {
         foreach (var type in types)
@@ -1008,18 +880,19 @@ public class XLSX
                 if (isGlobal)
                 {
                     if (sheet.GetValue(field.Name) == "")
-                        sheet.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                        sheet.SetValue(field.Name, FiledToString(field, field.GetValue(defaultInstance)) ?? "");
                 }
                 else
                 {
-                    var row = sheet.CreateRow("default");
+                    var row = sheet.CreateRow("example");
                     if (row.GetValue(field.Name) == "")
-                        row.SetValue(field.Name, TypeToString(field.FieldType, field.GetValue(defaultInstance)));
+                        row.SetValue(field.Name, FiledToString(field, field.GetValue(defaultInstance)) ?? "");
                 }
             }
         }
     }
 
-
     public XLSXSheet this[string name] { get { return CreateSheet(name); } }
+
+
 }

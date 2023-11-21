@@ -9,7 +9,7 @@ public enum PlayerIdentity
 }
 
 [CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/PlayerListScriptableObject", order = 1)]
-[LocalScriptableObject]
+[XLSXLocal]
 public class CharacterScriptableObject : ScriptableObject
 {
     public string CharacterName = "Character Name";

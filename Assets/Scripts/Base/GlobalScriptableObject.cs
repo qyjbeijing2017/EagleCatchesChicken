@@ -1,8 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
 [CreateAssetMenu(fileName = "Global", menuName = "ScriptableObjects/GlobalScriptableObject", order = 1)]
+#endif
 public class GlobalScriptableObject : ScriptableObject
 {
     [Header("Network")]

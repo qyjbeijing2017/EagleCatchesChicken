@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[LocalScriptableObject]
+[XLSXLocal]
 public class TestLocalScriptableObject : ScriptableObject
 {
     public int intValue = 123;

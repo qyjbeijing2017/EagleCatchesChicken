@@ -4,10 +4,12 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(NetworkTransform))]
+[RequireComponent(typeof(PlayerBuff))]
 public class PlayerMove : PlayerComponent
 {
     CharacterController m_CharacterController;
     PlayerInputAction m_InputActions;
+    PlayerBuff m_PlayerBuff;
     Vector3 m_Velocity;
 
     public Vector3 moveVelocity
@@ -25,6 +27,7 @@ public class PlayerMove : PlayerComponent
         if (isLocalPlayer)
         {
             m_CharacterController = GetComponent<CharacterController>();
+            m_PlayerBuff = GetComponent<PlayerBuff>();
             m_InputActions = new PlayerInputAction();
             m_InputActions.Move.Enable();
             m_InputActions.Move.Jump.performed += OnJump;
@@ -33,6 +36,7 @@ public class PlayerMove : PlayerComponent
 
     void OnJump(InputAction.CallbackContext context)
     {
+        if (m_PlayerBuff.beStunning) return;
         if (m_JumpCount >= character.JumpSpeeds.Count) return;
         var jumpSpeed = character.JumpSpeeds[m_JumpCount];
         m_Velocity.y = jumpSpeed;
@@ -46,9 +50,10 @@ public class PlayerMove : PlayerComponent
 
     void InputMove()
     {
+        if (m_PlayerBuff.beStunning) return;
         var inputAxis = m_InputActions.Move.Move.ReadValue<Vector2>();
 
-        var moveSpeed = character.MoveSpeed;
+        var moveSpeed = character.MoveSpeed * m_PlayerBuff.speedMultiplier + m_PlayerBuff.speedAddition;
         var inputVelocity = inputAxis * moveSpeed;
         m_Velocity.x = inputVelocity.x;
         m_Velocity.z = inputVelocity.y;
@@ -56,6 +61,7 @@ public class PlayerMove : PlayerComponent
 
     void InputDirect()
     {
+        if (m_PlayerBuff.beStunning) return;
         var inputForward = m_InputActions.Move.Look.ReadValue<Vector2>();
         if (inputForward.magnitude > 0f)
         {
