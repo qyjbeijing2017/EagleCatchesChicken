@@ -3,18 +3,18 @@ using Mirror;
 public abstract class PlayerComponent : NetworkBehaviour
 {
     private PlayerController m_PlayerController;
-    public CharacterScriptableObject character
+    public CharacterScriptableObject playerConfig
     {
         get
         {
-            return m_PlayerController.Character;
+            return m_PlayerController.PlayerConfig;
         }
     }
-    public GlobalScriptableObject global
+    public GlobalScriptableObject globalConfig
     {
         get
         {
-            return m_PlayerController.global;
+            return m_PlayerController.globalConfig;
         }
     }
     public NetworkController network

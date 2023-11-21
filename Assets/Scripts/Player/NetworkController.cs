@@ -5,14 +5,7 @@ using UnityEngine;
 public partial class NetworkController : NetworkManager
 {
     [SerializeField]
-    private GlobalScriptableObject m_Global;
-    public GlobalScriptableObject global
-    {
-        get
-        {
-            return m_Global;
-        }
-    }
+    public GlobalScriptableObject GlobalConfig;
 
     public static new NetworkController singleton
     {

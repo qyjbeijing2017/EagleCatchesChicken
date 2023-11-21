@@ -12,4 +12,5 @@ public class GlobalScriptableObject : ScriptableObject
     public float Gravity = 9.8f;
 
     public float AttackRange = 50f;
+    public float Drag = 0.5f;
 }

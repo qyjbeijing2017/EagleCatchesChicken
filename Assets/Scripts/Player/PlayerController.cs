@@ -9,12 +9,13 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]
-    public CharacterScriptableObject Character;
-    public GlobalScriptableObject global
+    public CharacterScriptableObject PlayerConfig;
+
+    public GlobalScriptableObject globalConfig
     {
         get
         {
-            return NetworkController.singleton.global;
+            return NetworkController.singleton.GlobalConfig;
         }
     }
 
@@ -51,7 +52,7 @@ public class PlayerController : NetworkBehaviour
 
     void Start()
     {
-        identity = Character.Identity;
+        identity = PlayerConfig.Identity;
     }
 
 

@@ -12,9 +12,12 @@ public struct NetworkPrefabInfo
     public string Path;
 }
 
+#if UNITY_EDITOR
+[CreateAssetMenu(fileName = "NetworkPrefab", menuName = "ScriptableObjects/NetworkPrefabScriptableObject", order = 1)]
+#endif
 public class NetworkPrefabScriptableObject : ScriptableObject
 {
-    [SerializeField]
+    [XLSXWriteOnly]
     public List<NetworkPrefabInfo> prefabInfo = new List<NetworkPrefabInfo>();
 
     public NetworkPrefabInfo GetInfo(string name)

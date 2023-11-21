@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(NetworkTransform))]
@@ -9,8 +10,10 @@ public class PlayerMove : PlayerComponent
 {
     CharacterController m_CharacterController;
     PlayerInputAction m_InputActions;
+    PlayerHealth m_PlayerHealth;
     PlayerBuff m_PlayerBuff;
     Vector3 m_Velocity;
+    Vector3 m_MovePosition;
 
     public Vector3 moveVelocity
     {
@@ -28,6 +31,7 @@ public class PlayerMove : PlayerComponent
         {
             m_CharacterController = GetComponent<CharacterController>();
             m_PlayerBuff = GetComponent<PlayerBuff>();
+            m_PlayerHealth = GetComponent<PlayerHealth>();
             m_InputActions = new PlayerInputAction();
             m_InputActions.Move.Enable();
             m_InputActions.Move.Jump.performed += OnJump;
@@ -37,30 +41,45 @@ public class PlayerMove : PlayerComponent
     void OnJump(InputAction.CallbackContext context)
     {
         if (m_PlayerBuff.beStunning) return;
-        if (m_JumpCount >= character.JumpSpeeds.Count) return;
-        var jumpSpeed = character.JumpSpeeds[m_JumpCount];
+        if (m_PlayerHealth.isDead) return;
+        if (m_PlayerHealth.isKnockedBack) return;
+        if (m_PlayerHealth.isKnockedOff) return;
+        if (m_JumpCount >= playerConfig.JumpSpeeds.Count) return;
+        var jumpSpeed = playerConfig.JumpSpeeds[m_JumpCount];
         m_Velocity.y = jumpSpeed;
         m_JumpCount++;
     }
 
-    public void AddSpeed(Vector3 velocity)
+    public void AddVelocity(Vector3 velocity)
     {
         m_Velocity += velocity;
     }
 
+    public void AddMovePosition(Vector3 movePosition)
+    {
+        m_MovePosition += movePosition;
+    }
+
     void InputMove()
     {
+        if (m_PlayerHealth.isDead) return;
+        if (m_PlayerHealth.isKnockedBack) return;
+        if (m_PlayerHealth.isKnockedOff) return;
         if (m_PlayerBuff.beStunning) return;
+
         var inputAxis = m_InputActions.Move.Move.ReadValue<Vector2>();
 
-        var moveSpeed = character.MoveSpeed * m_PlayerBuff.speedMultiplier + m_PlayerBuff.speedAddition;
+        var moveSpeed = playerConfig.MoveSpeed * m_PlayerBuff.speedMultiplier + m_PlayerBuff.speedAddition;
         var inputVelocity = inputAxis * moveSpeed;
-        m_Velocity.x = inputVelocity.x;
-        m_Velocity.z = inputVelocity.y;
+        m_MovePosition.x = inputVelocity.x * Time.deltaTime;
+        m_MovePosition.z = inputVelocity.y * Time.deltaTime;
     }
 
     void InputDirect()
     {
+        if (m_PlayerHealth.isDead) return;
+        if (m_PlayerHealth.isKnockedBack) return;
+        if (m_PlayerHealth.isKnockedOff) return;
         if (m_PlayerBuff.beStunning) return;
         var inputForward = m_InputActions.Move.Look.ReadValue<Vector2>();
         if (inputForward.magnitude > 0f)
@@ -80,10 +99,9 @@ public class PlayerMove : PlayerComponent
         }
     }
 
-
     void UseGravity()
     {
-        m_Velocity.y -= global.Gravity * Time.deltaTime;
+        m_Velocity.y -= globalConfig.Gravity * Time.deltaTime;
 
         RaycastHit hit;
         var layerMask = 1 << LayerMask.NameToLayer("Ground");
@@ -101,7 +119,12 @@ public class PlayerMove : PlayerComponent
         InputMove();
         InputDirect();
         UseGravity();
-        m_CharacterController.Move(m_Velocity * Time.deltaTime);
+        m_CharacterController.Move(m_Velocity * Time.deltaTime + m_MovePosition);
+        m_Velocity = m_CharacterController.velocity - m_MovePosition / Time.deltaTime;
+        var speed = m_Velocity.magnitude - globalConfig.Drag * Time.deltaTime;
+        if (speed < 0) speed = 0;
+        m_Velocity = m_Velocity.normalized * speed;
+        m_MovePosition = Vector3.zero;
     }
 
 }

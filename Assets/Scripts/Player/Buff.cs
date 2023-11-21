@@ -7,8 +7,7 @@ using System.Collections;
 public class Buff : NetworkBehaviour
 {
     [SerializeField]
-    BuffScriptableObject m_BuffScriptableObject;
-    public BuffScriptableObject buffAttribute => m_BuffScriptableObject;
+    public BuffScriptableObject buffConfig;
 
     [SyncVar]
     private PlayerBuff m_Target;
@@ -23,7 +22,7 @@ public class Buff : NetworkBehaviour
     float m_StartTime;
     public float startTime => m_StartTime;
 
-    public bool isActivated => Time.time - m_StartTime < m_BuffScriptableObject.Duration;
+    public bool isActivated => Time.time - m_StartTime < buffConfig.Duration;
 
     [Server]
     public void StartBuff(PlayerBuff target, PlayerBuff owner)
@@ -33,7 +32,7 @@ public class Buff : NetworkBehaviour
         target.Buffs.Add(this);
         m_StartTime = Time.time;
         enabled = true;
-        if(m_BuffScriptableObject.BeDamageOverTime != 0) {
+        if(buffConfig.BeDamageOverTime != 0) {
             StartCoroutine(DamageOverTime());
         }
     }
@@ -42,7 +41,7 @@ public class Buff : NetworkBehaviour
     IEnumerator DamageOverTime()
     {
         while(isActivated) {
-            yield return new WaitForSeconds(m_BuffScriptableObject.Interval);
+            yield return new WaitForSeconds(buffConfig.Interval);
         }
     }
 

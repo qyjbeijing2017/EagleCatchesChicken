@@ -13,7 +13,7 @@ public class PlayerBuff : PlayerComponent
             float result = 1;
             foreach (Buff buff in Buffs)
             {
-                result *= buff.buffAttribute.SpeedMultiplier;
+                result *= buff.buffConfig.SpeedMultiplier;
             }
             return result;
         }
@@ -25,7 +25,7 @@ public class PlayerBuff : PlayerComponent
             float result = 0;
             foreach (Buff buff in Buffs)
             {
-                result += buff.buffAttribute.SpeedAddition;
+                result += buff.buffConfig.SpeedAddition;
             }
             return result;
         }
@@ -37,7 +37,7 @@ public class PlayerBuff : PlayerComponent
             float result = 1;
             foreach (Buff buff in Buffs)
             {
-                result *= buff.buffAttribute.DamageMultiplier;
+                result *= buff.buffConfig.DamageMultiplier;
             }
             return result;
         }
@@ -49,7 +49,7 @@ public class PlayerBuff : PlayerComponent
             float result = 0;
             foreach (Buff buff in Buffs)
             {
-                result += buff.buffAttribute.DamageAddition;
+                result += buff.buffConfig.DamageAddition;
             }
             return result;
         }
@@ -61,7 +61,7 @@ public class PlayerBuff : PlayerComponent
             float result = 1;
             foreach (Buff buff in Buffs)
             {
-                result *= buff.buffAttribute.BeHurtMultiplier;
+                result *= buff.buffConfig.BeHurtMultiplier;
             }
             return result;
         }
@@ -73,7 +73,7 @@ public class PlayerBuff : PlayerComponent
             float result = 0;
             foreach (Buff buff in Buffs)
             {
-                result += buff.buffAttribute.BeHurtAddition;
+                result += buff.buffConfig.BeHurtAddition;
             }
             return result;
         }
@@ -84,7 +84,7 @@ public class PlayerBuff : PlayerComponent
         {
             foreach (Buff buff in Buffs)
             {
-                if (buff.buffAttribute.BeStunning)
+                if (buff.buffConfig.BeStunning)
                 {
                     return true;
                 }

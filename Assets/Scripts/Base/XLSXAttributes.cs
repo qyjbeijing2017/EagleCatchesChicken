@@ -9,12 +9,35 @@ using System.Reflection;
 using UnityEditor;
 #endif
 
+#region ClassAttribute
+[AttributeUsage(AttributeTargets.Class, Inherited = true)]
 public abstract class XLSXClassAttribute : Attribute
 {
     public virtual bool isReadOnly => false;
     public virtual bool isWriteOnly => false;
 }
 
+
+public class XLSXLocalAttribute : XLSXClassAttribute { }
+public class XLSXReadOnlyCalssAttribute : XLSXClassAttribute
+{
+    public override bool isReadOnly => true;
+}
+public class XLSXWriteOnlyCalssAttribute : XLSXClassAttribute
+{
+    public override bool isWriteOnly => true;
+}
+public class XLSXIgnoreCalssAttribute : XLSXClassAttribute
+{
+    public override bool isReadOnly => true;
+    public override bool isWriteOnly => true;
+}
+
+#endregion
+
+
+#region FieldAttribute
+[AttributeUsage(AttributeTargets.Field, Inherited = true)]
 public abstract class IXLSXFiledAttribute : Attribute
 {
     public virtual bool isReadOnly => false;
@@ -24,67 +47,20 @@ public abstract class IXLSXFiledAttribute : Attribute
     public virtual HashSet<Type> referenceTypes { get; protected set; }
 }
 
-[AttributeUsage(AttributeTargets.Class)]
-public class XLSXLocalAttribute : XLSXClassAttribute { }
-
-[AttributeUsage(AttributeTargets.Field)]
 public class XLSXReadOnlyAttribute : IXLSXFiledAttribute
 {
     public override bool isReadOnly => true;
 }
-
-[AttributeUsage(AttributeTargets.Field)]
 public class XLSXWriteOnlyAttribute : IXLSXFiledAttribute
 {
     public override bool isWriteOnly => true;
 }
-
-[AttributeUsage(AttributeTargets.Field)]
 public class XLSXIgnoreAttribute : IXLSXFiledAttribute
 {
     public override bool isReadOnly => true;
     public override bool isWriteOnly => true;
 }
-
-[AttributeUsage(AttributeTargets.Field)]
-public class XLSXReaderAttribute : IXLSXFiledAttribute
-{
-    public XLSXReaderAttribute(Func<string, object> reader)
-    {
-        this.reader = reader;
-    }
-}
-
-[AttributeUsage(AttributeTargets.Field)]
-public class XLSXWriterAttribute : IXLSXFiledAttribute
-{
-    public XLSXWriterAttribute(Func<object, string> writer)
-    {
-        this.writer = writer;
-    }
-}
-
-[AttributeUsage(AttributeTargets.Field)]
-public class XLSXBehaviorToScriptableObject : IXLSXFiledAttribute
-{
-    public XLSXBehaviorToScriptableObject(string configFolder)
-    {
-#if UNITY_EDITOR
-        reader = (value) =>
-        {
-            var type = Type.GetType(value);
-            var asset = AssetDatabase.LoadAssetAtPath($"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{value}.asset", type);
-            if (asset == null)
-            {
-                asset = ScriptableObject.CreateInstance(type);
-                AssetDatabase.CreateAsset(asset, $"{configFolder}/{type.Name.Replace("ScriptableObject", "")}_{value}.asset");
-                AssetDatabase.SaveAssets();
-            }
-            return asset;
-        };
-#endif
-    }
-}
+#endregion
 
 public class XLSXTools
 {
