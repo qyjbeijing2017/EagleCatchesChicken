@@ -47,10 +47,12 @@ public class PlayerHealth : PlayerComponent
 
 
     PlayerMove m_PlayerMove;
+    PlayerBuff m_PlayerBuff;
 
     void Start()
     {
         m_PlayerMove = GetComponent<PlayerMove>();
+        m_PlayerBuff = GetComponent<PlayerBuff>();
     }
 
     [Server]
@@ -64,6 +66,10 @@ public class PlayerHealth : PlayerComponent
         m_IsKnockedOffTime = attack.KnockoffDuration;
         var offWorldVelocity = owner.transform.TransformVector(attack.KnockoffInitialVelocity);
         m_PlayerMove.AddVelocity(offWorldVelocity);
+        foreach (var buff in attack.Buffs)
+        {
+
+        }
     }
 
     public void Update()
