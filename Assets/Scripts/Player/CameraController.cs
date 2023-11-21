@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     private Vector3 RelativePosition;
     [SerializeField]
     private AnimationCurve FollowSpeed;
-    PlayerController m_PlayerController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,12 +16,7 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        var controller = FindObjectOfType<PlayerController>();
-        if(!controller)
-        {
-            return;
-        }
-        var player = ActorController.my;
+        var player = PlayerController.my;
         if (player)
         {
             var targetPosition = player.transform.position + RelativePosition;

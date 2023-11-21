@@ -325,6 +325,8 @@ MonoBehaviour:
     dynamicAdjustmentTolerance: 1
     deliveryTimeEmaDuration: 2
   timeInterpolationGui: 0
+  m_Global: {fileID: 0}
+  m_NetworkPrefabs: {fileID: 0}
 --- !u!114 &576085551
 MonoBehaviour:
   m_ObjectHideFlags: 0

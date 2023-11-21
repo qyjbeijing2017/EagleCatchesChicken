@@ -1,32 +1,37 @@
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.Networking;
 
 [RequireComponent(typeof(NetworkIdentity))]
+[RequireComponent(typeof(PlayerMove))]
+[RequireComponent(typeof(PlayerSkill))]
+[RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(PlayerHealth))]
 public class PlayerController : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    public CharacterScriptableObject Character;
+    public GlobalScriptableObject global
     {
-        
+        get
+        {
+            return NetworkController.singleton.global;
+        }
     }
 
-    // public void CreateCharactor(string name)
-    // {
-    //     Addressables.LoadAsset<GameObject>($"Assets/Prefabs/Characters/{name}.prefab").Completed += prefab =>
-    //     {
-    //         NetworkClient.RegisterPrefab(prefab.Result);
-    //         NetworkClient.Send(new CreateCharacterMessage(name));
-    //     };
-    // }
-
-
-    // Update is called once per frame
-    void Update()
+    public static PlayerController my
     {
-
+        get
+        {
+            var players = FindObjectsByType<PlayerController>(FindObjectsSortMode.None);
+            foreach (var player in players)
+            {
+                if (player.isLocalPlayer)
+                {
+                    return player;
+                }
+            }
+            return null;
+        }
     }
+
 }

@@ -77,11 +77,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: ea8277cd3b9f34a469bca1d722cd3eda
-    m_Address: Assets/Prefabs/Characters/BlackBoss.prefab
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6fbad8a3bac93234e9374186814f71d0
     m_Address: Assets/HotFix/StandaloneWindows64/ECCLoading.dll.bytes
     m_ReadOnly: 0
@@ -209,6 +204,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 0c3c074590ab5ee4e84f4b7f5af76c44
     m_Address: Assets/HotFix/StandaloneWindows64/ECCTestHybird.pdb.bytes
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ea8277cd3b9f34a469bca1d722cd3eda
+    m_Address: Assets/Prefabs/Characters/BlackBoss.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
