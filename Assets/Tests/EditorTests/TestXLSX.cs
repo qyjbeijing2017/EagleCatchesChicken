@@ -159,26 +159,26 @@ public class TestXLSX
         var sheetCheck = xlsxCheck[s_sheetName];
 
         // Assert
-        Assert.AreEqual("test_read", (string)XLSX.StringToType(typeof(string), (string)sheetCheck["stringValue"]));
-        Assert.AreEqual(6, (int)XLSX.StringToType(typeof(int), (string)sheetCheck["intValue"]));
-        Assert.AreEqual(4.5f, (float)XLSX.StringToType(typeof(float), (string)sheetCheck["floatValue"]));
-        Assert.AreEqual(true, (bool)XLSX.StringToType(typeof(bool), (string)sheetCheck["boolValue"]));
-        Assert.AreEqual(2, ((List<int>)XLSX.StringToType(typeof(List<int>), (string)sheetCheck["intList"])).Count);
-        Assert.AreEqual(4, ((List<int>)XLSX.StringToType(typeof(List<int>), (string)sheetCheck["intList"]))[0]);
-        Assert.AreEqual(5, ((List<int>)XLSX.StringToType(typeof(List<int>), (string)sheetCheck["intList"]))[1]);
-        Assert.AreEqual(1, ((List<string>)XLSX.StringToType(typeof(List<string>), (string)sheetCheck["stringList"])).Count);
-        Assert.AreEqual("string4", ((List<string>)XLSX.StringToType(typeof(List<string>), (string)sheetCheck["stringList"]))[0]);
-        Assert.AreEqual(2, ((List<float>)XLSX.StringToType(typeof(List<float>), (string)sheetCheck["floatList"])).Count);
-        Assert.AreEqual(1.2f, ((List<float>)XLSX.StringToType(typeof(List<float>), (string)sheetCheck["floatList"]))[0]);
-        Assert.AreEqual(2.3f, ((List<float>)XLSX.StringToType(typeof(List<float>), (string)sheetCheck["floatList"]))[1]);
-        Assert.AreEqual(2, ((List<bool>)XLSX.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"])).Count);
-        Assert.AreEqual(false, ((List<bool>)XLSX.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"]))[0]);
-        Assert.AreEqual(true, ((List<bool>)XLSX.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"]))[1]);
+        Assert.AreEqual("test_read", (string)XLSXTools.StringToType(typeof(string), (string)sheetCheck["stringValue"]));
+        Assert.AreEqual(6, (int)XLSXTools.StringToType(typeof(int), (string)sheetCheck["intValue"]));
+        Assert.AreEqual(4.5f, (float)XLSXTools.StringToType(typeof(float), (string)sheetCheck["floatValue"]));
+        Assert.AreEqual(true, (bool)XLSXTools.StringToType(typeof(bool), (string)sheetCheck["boolValue"]));
+        Assert.AreEqual(2, ((List<int>)XLSXTools.StringToType(typeof(List<int>), (string)sheetCheck["intList"])).Count);
+        Assert.AreEqual(4, ((List<int>)XLSXTools.StringToType(typeof(List<int>), (string)sheetCheck["intList"]))[0]);
+        Assert.AreEqual(5, ((List<int>)XLSXTools.StringToType(typeof(List<int>), (string)sheetCheck["intList"]))[1]);
+        Assert.AreEqual(1, ((List<string>)XLSXTools.StringToType(typeof(List<string>), (string)sheetCheck["stringList"])).Count);
+        Assert.AreEqual("string4", ((List<string>)XLSXTools.StringToType(typeof(List<string>), (string)sheetCheck["stringList"]))[0]);
+        Assert.AreEqual(2, ((List<float>)XLSXTools.StringToType(typeof(List<float>), (string)sheetCheck["floatList"])).Count);
+        Assert.AreEqual(1.2f, ((List<float>)XLSXTools.StringToType(typeof(List<float>), (string)sheetCheck["floatList"]))[0]);
+        Assert.AreEqual(2.3f, ((List<float>)XLSXTools.StringToType(typeof(List<float>), (string)sheetCheck["floatList"]))[1]);
+        Assert.AreEqual(2, ((List<bool>)XLSXTools.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"])).Count);
+        Assert.AreEqual(false, ((List<bool>)XLSXTools.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"]))[0]);
+        Assert.AreEqual(true, ((List<bool>)XLSXTools.StringToType(typeof(List<bool>), (string)sheetCheck["boolList"]))[1]);
 
-        Assert.AreEqual((int)XLSX.StringToType(typeof(int), (string)sheetCheck["intValue"]), sheetCheck.GetValue<int>("intValue"));
-        Assert.AreEqual((string)XLSX.StringToType(typeof(string), (string)sheetCheck["stringValue"]), sheetCheck.GetValue<string>("stringValue"));
-        Assert.AreEqual((float)XLSX.StringToType(typeof(float), (string)sheetCheck["floatValue"]), sheetCheck.GetValue<float>("floatValue"));
-        Assert.AreEqual((bool)XLSX.StringToType(typeof(bool), (string)sheetCheck["boolValue"]), sheetCheck.GetValue<bool>("boolValue"));
+        Assert.AreEqual((int)XLSXTools.StringToType(typeof(int), (string)sheetCheck["intValue"]), sheetCheck.GetValue<int>("intValue"));
+        Assert.AreEqual((string)XLSXTools.StringToType(typeof(string), (string)sheetCheck["stringValue"]), sheetCheck.GetValue<string>("stringValue"));
+        Assert.AreEqual((float)XLSXTools.StringToType(typeof(float), (string)sheetCheck["floatValue"]), sheetCheck.GetValue<float>("floatValue"));
+        Assert.AreEqual((bool)XLSXTools.StringToType(typeof(bool), (string)sheetCheck["boolValue"]), sheetCheck.GetValue<bool>("boolValue"));
     }
 
     [Test]
