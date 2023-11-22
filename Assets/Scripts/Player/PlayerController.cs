@@ -6,6 +6,7 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerSkill))]
 [RequireComponent(typeof(PlayerAnimator))]
 [RequireComponent(typeof(PlayerHealth))]
+[RequireComponent(typeof(PlayerBuff))]
 public class PlayerController : NetworkBehaviour
 {
     [SerializeField]

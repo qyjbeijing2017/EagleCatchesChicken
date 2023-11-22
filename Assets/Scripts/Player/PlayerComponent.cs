@@ -3,6 +3,7 @@ using Mirror;
 public abstract class PlayerComponent : NetworkBehaviour
 {
     private PlayerController m_PlayerController;
+    public PlayerController player => m_PlayerController;
     public CharacterScriptableObject playerConfig
     {
         get

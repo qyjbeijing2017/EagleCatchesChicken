@@ -20,4 +20,5 @@ public class CharacterScriptableObject : ScriptableObject
     public float MoveSpeed = 6.0f;
     public float Mass = 50.0f;
     public List<float> JumpSpeeds = new List<float> { 8.0f };
+    public List<SkillScriptableObject> Skills = new List<SkillScriptableObject>();
 }

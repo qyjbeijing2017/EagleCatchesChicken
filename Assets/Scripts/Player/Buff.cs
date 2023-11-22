@@ -12,10 +12,19 @@ public class Buff : NetworkBehaviour
     [SyncVar]
     private PlayerBuff m_Target;
     public PlayerBuff target => m_Target;
+    public PlayerHealth m_TargetHealth;
+    public PlayerHealth targetHealth {
+        get {
+            if(m_TargetHealth == null && m_Target != null) {
+                m_TargetHealth = m_Target.GetComponent<PlayerHealth>();
+            }
+            return m_TargetHealth;
+        }
+    }
 
     [SyncVar]
-    private PlayerBuff m_Owner;
-    public PlayerBuff owner => m_Owner;
+    private PlayerController m_Owner;
+    public PlayerController owner => m_Owner;
 
 
     [SyncVar]
@@ -25,13 +34,12 @@ public class Buff : NetworkBehaviour
     public bool isActivated => Time.time - m_StartTime < buffConfig.Duration;
 
     [Server]
-    public void StartBuff(PlayerBuff target, PlayerBuff owner)
+    public void StartBuff(PlayerBuff target, PlayerController owner)
     {
         m_Target = target;
         m_Owner = owner;
         target.Buffs.Add(this);
         m_StartTime = Time.time;
-        enabled = true;
         if(buffConfig.BeDamageOverTime != 0) {
             StartCoroutine(DamageOverTime());
         }
@@ -41,6 +49,14 @@ public class Buff : NetworkBehaviour
     IEnumerator DamageOverTime()
     {
         while(isActivated) {
+            targetHealth.BeAttacked(new Attack() {
+                Damage = buffConfig.BeDamageOverTime,
+                KnockbackDistance = buffConfig.KnockbackDistance,
+                KnockbackDuration = buffConfig.KnockbackDuration,
+                KnockoffInitialVelocity = buffConfig.KnockoffInitialVelocity,
+                KnockoffDuration = buffConfig.KnockoffDuration,
+                Buffs = new System.Collections.Generic.List<Buff>(),
+            }, owner);
             yield return new WaitForSeconds(buffConfig.Interval);
         }
     }
@@ -50,7 +66,7 @@ public class Buff : NetworkBehaviour
     {
         m_StartTime = -1000;
         m_Target.Buffs.Remove(this);
-        enabled = false;
+        BuffPool.getSingleton(this).Return(this);
     }
 
     // Start is called before the first frame update

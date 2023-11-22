@@ -57,7 +57,6 @@ public class AnimatorManager : NetworkBehaviour
     }
 
 
-
     void Update()
     {
         if (isLocalPlayer)
@@ -68,7 +67,6 @@ public class AnimatorManager : NetworkBehaviour
 
             animator.SetFloat("Forward", forwardVelocity);
             animator.SetFloat("Right", rightVelocity);
-            // animator.SetFloat("Up", upVelocity);
             animator.SetInteger("JumpCount", PlayerMove.jumpCount);
             animator.SetBool("Grounded", PlayerMove.isGrounded);
             if(PlayerSkillManager.attack != null)

@@ -75,15 +75,15 @@ public class BuffScriptableObject : ScriptableObject
     public float SpeedMultiplier;
     public float SpeedAddition;
     public float DamageMultiplier;
-    public float DamageAddition;
+    public int DamageAddition;
     public float BeHurtMultiplier;
-    public float BeHurtAddition;
+    public int BeHurtAddition;
     public bool BeStunning;
 
 
     public float Interval;
-    public float BeDamageOverTime;
-    public float KnockbackDistance;
+    public int BeDamageOverTime;
+    public Vector3 KnockbackDistance;
     public float KnockbackDuration;
     public Vector3 KnockoffInitialVelocity;
     public float KnockoffDuration;

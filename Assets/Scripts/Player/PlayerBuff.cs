@@ -42,11 +42,11 @@ public class PlayerBuff : PlayerComponent
             return result;
         }
     }
-    public float damageAddition
+    public int damageAddition
     {
         get
         {
-            float result = 0;
+            int result = 0;
             foreach (Buff buff in Buffs)
             {
                 result += buff.buffConfig.DamageAddition;
@@ -66,11 +66,11 @@ public class PlayerBuff : PlayerComponent
             return result;
         }
     }
-    public float beHurtAddition
+    public int beHurtAddition
     {
         get
         {
-            float result = 0;
+            int result = 0;
             foreach (Buff buff in Buffs)
             {
                 result += buff.buffConfig.BeHurtAddition;

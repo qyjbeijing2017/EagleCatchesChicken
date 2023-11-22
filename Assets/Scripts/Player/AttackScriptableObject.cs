@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
-public interface Attack
+public interface IAttack
 {
     public int Damage { get; }
     public Vector3 KnockbackDistance { get; }
@@ -14,9 +13,10 @@ public interface Attack
 #if UNITY_EDITOR
 [CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/AttackScriptableObject", order = 1)]
 #endif
-public class AttackScriptableObject : ScriptableObject, Attack
+public class AttackScriptableObject : ScriptableObject, IAttack
 {
     public bool ForMyself;
+    public LayerMask TargetLayer;
     public AttackRangeScriptableObject AttackRange;
     public int Damage;
     public Vector3 KnockbackDistance;
@@ -28,15 +28,15 @@ public class AttackScriptableObject : ScriptableObject, Attack
     [XLSXBuffList]
     public List<Buff> Buffs;
 
-    int Attack.Damage => Damage;
+    int IAttack.Damage => Damage;
 
-    Vector3 Attack.KnockbackDistance => KnockbackDistance;
+    Vector3 IAttack.KnockbackDistance => KnockbackDistance;
 
-    float Attack.KnockbackDuration => KnockbackDuration;
+    float IAttack.KnockbackDuration => KnockbackDuration;
 
-    Vector3 Attack.KnockoffInitialVelocity => KnockoffInitialVelocity;
+    Vector3 IAttack.KnockoffInitialVelocity => KnockoffInitialVelocity;
 
-    float Attack.KnockoffDuration => KnockoffDuration;
+    float IAttack.KnockoffDuration => KnockoffDuration;
 
-    List<Buff> Attack.Buffs => Buffs;
+    List<Buff> IAttack.Buffs => Buffs;
 }

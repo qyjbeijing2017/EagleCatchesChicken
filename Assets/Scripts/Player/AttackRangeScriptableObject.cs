@@ -5,7 +5,6 @@ public enum AttackRangeType
     Circle,
     Sector,
     Rectangle,
-    Shoot,
 }
 
 #if UNITY_EDITOR
@@ -16,7 +15,7 @@ public class AttackRangeScriptableObject : ScriptableObject
     public AttackRangeType AttackRangeType;
     public float NearDistance;
     public float FarDistance;
-    public float Angle;
+    public float SectorAngle;
     public float Width;
-    public float AngleOffset;
+    public float OffsetAngle;
 }

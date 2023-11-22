@@ -2,6 +2,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
+using System;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(NetworkTransform))]
@@ -14,6 +15,15 @@ public class PlayerMove : PlayerComponent
     PlayerBuff m_PlayerBuff;
     Vector3 m_Velocity;
     Vector3 m_MovePosition;
+    Vector3 m_InputVelocity;
+
+    public Vector3 inputVelocity
+    {
+        get
+        {
+            return m_InputVelocity;
+        }
+    }
 
     public Vector3 moveVelocity
     {
@@ -23,7 +33,20 @@ public class PlayerMove : PlayerComponent
         }
     }
 
-    int m_JumpCount = 0;
+    public Vector3 movePosition
+    {
+        get
+        {
+            return m_MovePosition;
+        }
+    }
+
+    public int jumpCount { get; private set; }
+
+    public bool isGrounded { get; private set; }
+
+    public event Action onJump;
+    public event Action onGrounded;
 
     void Start()
     {
@@ -44,10 +67,11 @@ public class PlayerMove : PlayerComponent
         if (m_PlayerHealth.isDead) return;
         if (m_PlayerHealth.isKnockedBack) return;
         if (m_PlayerHealth.isKnockedOff) return;
-        if (m_JumpCount >= playerConfig.JumpSpeeds.Count) return;
-        var jumpSpeed = playerConfig.JumpSpeeds[m_JumpCount];
+        if (jumpCount >= playerConfig.JumpSpeeds.Count) return;
+        var jumpSpeed = playerConfig.JumpSpeeds[jumpCount];
         m_Velocity.y = jumpSpeed;
-        m_JumpCount++;
+        jumpCount++;
+        onJump?.Invoke();
     }
 
     public void AddVelocity(Vector3 velocity)
@@ -71,8 +95,10 @@ public class PlayerMove : PlayerComponent
 
         var moveSpeed = playerConfig.MoveSpeed * m_PlayerBuff.speedMultiplier + m_PlayerBuff.speedAddition;
         var inputVelocity = inputAxis * moveSpeed;
-        m_MovePosition.x = inputVelocity.x * Time.deltaTime;
-        m_MovePosition.z = inputVelocity.y * Time.deltaTime;
+        m_InputVelocity.x = inputVelocity.x * Time.deltaTime;
+        m_InputVelocity.z = inputVelocity.y * Time.deltaTime;
+        m_MovePosition.x += inputVelocity.x * Time.deltaTime;
+        m_MovePosition.z += inputVelocity.y * Time.deltaTime;
     }
 
     void InputDirect()
@@ -109,7 +135,17 @@ public class PlayerMove : PlayerComponent
         {
             if (m_Velocity.y < 0)
                 m_Velocity.y = 0;
-            m_JumpCount = 0;
+            jumpCount = 0;
+            if (!isGrounded)
+            {
+                isGrounded = true;
+                onGrounded?.Invoke();
+            }
+
+        }
+        else
+        {
+            isGrounded = false;
         }
     }
 
@@ -125,6 +161,7 @@ public class PlayerMove : PlayerComponent
         if (speed < 0) speed = 0;
         m_Velocity = m_Velocity.normalized * speed;
         m_MovePosition = Vector3.zero;
+        m_InputVelocity = Vector3.zero;
     }
 
 }
