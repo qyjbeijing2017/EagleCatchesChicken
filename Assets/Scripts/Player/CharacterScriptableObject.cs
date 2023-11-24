@@ -8,7 +8,9 @@ public enum PlayerIdentity
     Baby = 9,
 }
 
-[CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/PlayerListScriptableObject", order = 1)]
+#if UNITY_EDITOR
+[CreateAssetMenu(fileName = "Character_", menuName = "ScriptableObjects/PlayerListScriptableObject", order = 1)]
+#endif
 [XLSXLocal]
 public class CharacterScriptableObject : ScriptableObject
 {

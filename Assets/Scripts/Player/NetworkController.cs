@@ -39,7 +39,7 @@ public partial class NetworkController : NetworkManager
         InitClientResponsible();
         InitSpawnRegister();
 
-        yield return RegisterSpawns(registeredSpawnIds);
+        // yield return RegisterSpawns(registeredSpawnIds);
         yield return null;
         base.OnClientConnect();
     }

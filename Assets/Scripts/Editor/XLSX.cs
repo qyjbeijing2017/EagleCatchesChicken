@@ -589,7 +589,7 @@ public class XLSX
             writer = writer ?? filedAttribute.writer;
         }
         if (isReadOnly) return null;
-        if (writer != null) return writer(instance);
+        if (writer != null) return writer(info.GetValue(instance));
         return XLSXTools.TypeToString(info.FieldType, info.GetValue(instance));
     }
 
@@ -724,7 +724,7 @@ public class XLSX
         foreach (var filed in fields)
         {
             var key = filed.Name;
-            var valueString = FiledToString(filed, filed.GetValue(instance));
+            var valueString = FiledToString(filed, instance);
             if (valueString != null) sheet.SetValue(key, valueString);
         }
     }
@@ -739,7 +739,7 @@ public class XLSX
         {
             var key = filed.Name;
             if (key == "key") continue;
-            var valueString = FiledToString(filed, filed.GetValue(instance));
+            var valueString = FiledToString(filed, instance);
             if (valueString != null) row.SetValue(key, valueString);
         }
     }
@@ -897,19 +897,13 @@ public class XLSX
             foreach (var field in type.GetFields())
             {
                 sheet.CreateKey(field.Name);
-                if (isGlobal)
-                {
-                    if (sheet.GetValue(field.Name) == "")
-                        sheet.SetValue(field.Name, FiledToString(field, field.GetValue(defaultInstance)) ?? "");
-                }
-                else
-                {
-                    var row = sheet.CreateRow("example");
-                    if (row.GetValue(field.Name) == "")
-                        row.SetValue(field.Name, FiledToString(field, field.GetValue(defaultInstance)) ?? "");
-                }
             }
         }
+    }
+
+    public void CreateSheets()
+    {
+        CreateSheets(XLSXTools.AllTypes());
     }
 
     public XLSXSheet this[string name] { get { return CreateSheet(name); } }

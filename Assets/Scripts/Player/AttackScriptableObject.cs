@@ -11,22 +11,26 @@ public interface IAttack
 }
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/AttackScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "Attack_", menuName = "ScriptableObjects/AttackScriptableObject", order = 1)]
 #endif
+[XLSXLocal]
 public class AttackScriptableObject : ScriptableObject, IAttack
 {
-    public bool ForMyself;
-    public LayerMask TargetLayer;
-    public AttackRangeScriptableObject AttackRange;
-    public int Damage;
-    public Vector3 KnockbackDistance;
-    public float KnockbackDuration;
+    public bool ForMyself = false;
+    public LayerMask TargetLayer = 1 << 8 | 1 << 9;
+    public AttackRangeScriptableObject AttackRange = null;
+    public int Damage = 0;
+    public Vector3 KnockbackDistance = Vector3.zero;
+    public float KnockbackDuration = 0f;
 
-    public Vector3 KnockoffInitialVelocity;
-    public float KnockoffDuration;
+    public Vector3 KnockoffInitialVelocity = Vector3.zero;
+    public float KnockoffDuration = 0f;
+
+    [XLSXBullet]
+    public GameObject ShootBullet = null;
 
     [XLSXBuffList]
-    public List<Buff> Buffs;
+    public List<GameObject> Buffs = new List<GameObject>();
 
     int IAttack.Damage => Damage;
 
@@ -38,5 +42,17 @@ public class AttackScriptableObject : ScriptableObject, IAttack
 
     float IAttack.KnockoffDuration => KnockoffDuration;
 
-    List<Buff> IAttack.Buffs => Buffs;
+    List<Buff> IAttack.Buffs
+    {
+        get
+        {
+            List<Buff> buffs = new List<Buff>();
+            foreach (var buff in Buffs)
+            {
+                buffs.Add(buff.GetComponent<Buff>());
+            }
+            return buffs;
+
+        }
+    }
 }

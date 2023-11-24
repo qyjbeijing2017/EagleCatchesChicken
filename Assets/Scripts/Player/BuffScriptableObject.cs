@@ -8,13 +8,12 @@ using System.Collections.Generic;
 
 class XLSXBuffList : IXLSXFiledAttribute
 {
-    public override HashSet<Type> referenceTypes => new HashSet<Type>() { typeof(Buff) };
     public XLSXBuffList()
     {
 #if UNITY_EDITOR
         writer = (object obj) =>
         {
-            var buffs = obj as List<Buff>;
+            var buffs = obj as List<GameObject>;
             var str = "";
             foreach (var buff in buffs)
             {
@@ -29,7 +28,7 @@ class XLSXBuffList : IXLSXFiledAttribute
 
         reader = (string str) =>
         {
-            List<Buff> buffs = new List<Buff>();
+            List<GameObject> buffs = new List<GameObject>();
             var buffNames = str.Split('|');
             if (buffNames.Length == 1 && buffNames[0] == "")
             {
@@ -37,15 +36,17 @@ class XLSXBuffList : IXLSXFiledAttribute
             }
             foreach (var buffName in buffNames)
             {
-                var buffPath = $"Assets/Prefabs/Buffs/{buffName}.asset";
+                var buffPath = $"Assets/Prefabs/Buffs/{buffName}.prefab";
                 var configPath = $"Assets/Configurations/Buff_{buffName}.asset";
                 var buffObj = AssetDatabase.LoadAssetAtPath<GameObject>(buffPath);
                 var configObj = AssetDatabase.LoadAssetAtPath<BuffScriptableObject>(configPath);
 
                 if (buffObj == null)
                 {
-                    buffObj = new GameObject(buffName);
-                    buffObj.AddComponent<Buff>();
+                    var gameObject = new GameObject(buffName);
+                    gameObject.AddComponent<Buff>();
+                    buffObj = PrefabUtility.SaveAsPrefabAsset(gameObject, buffPath);
+                    GameObject.DestroyImmediate(gameObject);
                 }
                 if (buffObj.GetComponent<Buff>() == null)
                 {
@@ -54,7 +55,7 @@ class XLSXBuffList : IXLSXFiledAttribute
                 
                 buffObj.GetComponent<Buff>().buffConfig = configObj;
                 EditorUtility.SetDirty(buffObj);
-                buffs.Add(buffObj.GetComponent<Buff>());
+                buffs.Add(buffObj);
             }
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -66,8 +67,9 @@ class XLSXBuffList : IXLSXFiledAttribute
 }
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/BuffScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "Buff_", menuName = "ScriptableObjects/BuffScriptableObject", order = 1)]
 #endif
+[XLSXLocal]
 public class BuffScriptableObject : ScriptableObject
 {
     public float Duration;

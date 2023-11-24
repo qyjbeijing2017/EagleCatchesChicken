@@ -249,7 +249,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  PlayerConfig: {fileID: 0}
+  PlayerConfig: {fileID: 11400000, guid: a66ded4eca8d4244fb628307f2d24cf4, type: 2}
 --- !u!114 &447276747022160357
 MonoBehaviour:
   m_ObjectHideFlags: 0

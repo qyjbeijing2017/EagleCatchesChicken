@@ -15,22 +15,22 @@ public class PlayerAnimator : PlayerComponent
         m_PlayerMove = GetComponent<PlayerMove>();
         m_PlayerSkill = GetComponent<PlayerSkill>();
 
-        m_PlayerMove.onJump += () => m_Animator.SetTrigger("Jump");
-        m_PlayerMove.onGrounded += ()=> m_Animator.SetTrigger("Grounded");
-        m_PlayerSkill.OnSkill += (index) => m_Animator.SetTrigger($"Skill{index + 1}");
+        m_PlayerMove.onJump += () => {
+            m_Animator.SetTrigger("OnJump");
+        };
+        m_PlayerSkill.OnSkill += (index) => m_Animator.SetTrigger($"OnSkill{index + 1}");
     }
 
     // Update is called once per frame
     void Update()
     {
         // Move
-        var localVelocity = transform.InverseTransformDirection(m_PlayerMove.inputVelocity);
+        var localVelocity = transform.worldToLocalMatrix * m_PlayerMove.inputVelocity / playerConfig.MoveSpeed;
         if (isLocalPlayer)
         {
             m_Animator.SetFloat("Forward", localVelocity.z);
             m_Animator.SetFloat("Right", localVelocity.x);
             m_Animator.SetBool("IsGrounded", m_PlayerMove.isGrounded);
-            if (localVelocity.y > 0) m_Animator.SetTrigger("Jump");
             for (var i = 0; i < m_PlayerSkill.RunningSkills.Count; i++)
             {
                 if (m_PlayerSkill.RunningSkills[i])

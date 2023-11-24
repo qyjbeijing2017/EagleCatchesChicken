@@ -9,11 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa44b0d9fe1e8e142bd9c04a0e3484f1, type: 3}
-  m_Name: Global
+  m_Script: {fileID: 11500000, guid: 6170645be940d584d8eb37cd8feaa003, type: 3}
+  m_Name: AttackRange_BlackBossAttack
   m_EditorClassIdentifier: 
-  EntryPoint: http://test
-  Port: 8080
-  Gravity: 9.8
-  AttackRange: 50
-  Drag: 0.5
+  AttackRangeType: 1
+  NearDistance: 0
+  FarDistance: 0
+  SectorAngle: 0
+  Width: 0
+  OffsetAngle: 0

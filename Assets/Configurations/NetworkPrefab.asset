@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3281c1c6dda4d744b9c935c43028c4fe, type: 3}
   m_Name: NetworkPrefab
   m_EditorClassIdentifier: 
-  prefabIDMap:
+  prefabInfo:
   - Name: FireBuffExample
     ID: 2093473897
     Path: Assets/Prefabs/Buff/FireBuffExample.prefab
@@ -73,6 +73,3 @@ MonoBehaviour:
   - Name: SlowDownBuff
     ID: 1958464012
     Path: Assets/Prefabs/Example/SlowDownBuff.prefab
-  - Name: PlayerController
-    ID: 1476681251
-    Path: Assets/Prefabs/PlayerController.prefab

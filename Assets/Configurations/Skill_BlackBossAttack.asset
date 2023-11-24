@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f9769b688c9dc649ad759020647cb13, type: 3}
+  m_Name: Skill_BlackBossAttack
+  m_EditorClassIdentifier: 
+  AutoAttack: 1
+  AutoPrepareRange: {fileID: 11400000, guid: a41e5e6e9352d4142a741af1e980e993, type: 2}
+  AutoAttackRange: {fileID: 11400000, guid: 6cb77b9c20d4905469643ddf28f203b9, type: 2}
+  AutoTargetLayer:
+    serializedVersion: 2
+    m_Bits: 768
+  Duration: 0.4
+  CoolDown: 1
+  Speed:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RotationY:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  AttackEvents:
+  - time: 0.2
+    attack: {fileID: 0}

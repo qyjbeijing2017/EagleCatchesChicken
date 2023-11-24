@@ -99,7 +99,18 @@ public class XLSXTools
         }
         else if (typeof(ScriptableObject).IsAssignableFrom(t))
         {
-            return ((ScriptableObject)instance).name.Split('_')[1];
+            try
+            {
+                var scriptable = (ScriptableObject)instance;
+                if (scriptable == null) return "";
+                var str = scriptable.name.Split('_')[1];
+                return str;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"ScriptableObject Translate Error: TypeName: {t.Name}, Instance: {instance}");
+                throw e;
+            }
         }
         else if (typeof(System.Collections.IList).IsAssignableFrom(t))
         {
@@ -112,10 +123,9 @@ public class XLSXTools
                     str += TypeToString(list[i].GetType(), list[i]);
                 if (i < list.Count - 1)
                 {
-                    str += "|";
+                    str += "\n";
                 }
             }
-            Debug.Log(str);
             return str;
         }
         else if (typeof(Enum).IsAssignableFrom(t))
@@ -145,6 +155,26 @@ public class XLSXTools
         else if (instance == null)
         {
             return "";
+        }
+        else if (t == typeof(LayerMask))
+        {
+            var layerNames = "";
+            var layerMask = (LayerMask)instance;
+            var layerCode = layerMask.value;
+            for (int i = 0; i < 32; i++)
+            {
+                if ((layerCode & (1 << i)) != 0)
+                {
+                    if (layerNames != "")
+                    {
+                        layerNames += "\n";
+                    }
+                    layerNames += LayerMask.LayerToName(i);
+                }
+                
+            }
+            return layerNames;
+
         }
 
         return JsonUtility.ToJson(instance);
@@ -190,7 +220,7 @@ public class XLSXTools
         else if (typeof(System.Collections.IList).IsAssignableFrom(t))
         {
             var list = (System.Collections.IList)Activator.CreateInstance(t);
-            var values = value.Split('|');
+            var values = value.Split('\n');
             if (values.Length == 1 && values[0] == "")
             {
                 return list;
@@ -229,6 +259,16 @@ public class XLSXTools
         {
             return null;
         }
+        else if (t == typeof(LayerMask))
+        {
+            var layerMask = 0;
+            var layerNames = value.Split('\n');
+            foreach (var layerName in layerNames)
+            {
+                layerMask |= 1 << LayerMask.NameToLayer(layerName);
+            }
+            return new LayerMask { value = layerMask };
+        }
 
         return JsonUtility.FromJson(value, t);
     }
@@ -249,9 +289,9 @@ public class XLSXTools
                 {
                     return 1;
                 }
-                if(field.FieldType.IsGenericType)
+                if (field.FieldType.IsGenericType)
                 {
-                    if(b.GetGenericArguments().Contains(field.FieldType)) return 1;
+                    if (b.GetGenericArguments().Contains(field.FieldType)) return 1;
                 }
 
                 field.GetCustomAttributes<IXLSXFiledAttribute>();
@@ -267,9 +307,9 @@ public class XLSXTools
                 {
                     return -1;
                 }
-                if(field.FieldType.IsGenericType)
+                if (field.FieldType.IsGenericType)
                 {
-                    if(a.GetGenericArguments().Contains(field.FieldType)) return -1;
+                    if (a.GetGenericArguments().Contains(field.FieldType)) return -1;
                 }
 
                 field.GetCustomAttributes<IXLSXFiledAttribute>();

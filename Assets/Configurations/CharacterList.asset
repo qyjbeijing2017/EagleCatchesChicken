@@ -12,6 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 106debccf8bcd854e87bc1abd326fba3, type: 3}
   m_Name: CharacterList
   m_EditorClassIdentifier: 
-  MomList: []
-  BabyList: []
-  EagleList: []
+  Characters:
+  - {fileID: 11400000, guid: a66ded4eca8d4244fb628307f2d24cf4, type: 2}

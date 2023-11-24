@@ -37,7 +37,6 @@ public abstract class PlayerComponent : NetworkBehaviour
     // Start is called before the first frame update
     protected virtual void Awake()
     {
-        if(isLocalPlayer)
         m_PlayerController = GetComponent<PlayerController>();
     }
 }

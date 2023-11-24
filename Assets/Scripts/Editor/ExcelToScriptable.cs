@@ -11,10 +11,14 @@ public class ExcelToScriptable : Editor
     static string s_FilePath = $"{s_Workspace}/Designer.xlsx";
 
     static List<Type> s_ScriptableTypes = new List<Type>(){
-        typeof(GlobalScriptableObject),
-        typeof(CharacterListScriptableObject),
+        typeof(AttackRangeScriptableObject),
+        typeof(BuffScriptableObject),
+        typeof(AttackScriptableObject),
+        typeof(SkillScriptableObject),
         typeof(CharacterScriptableObject),
+        typeof(CharacterListScriptableObject),
         typeof(NetworkPrefabScriptableObject),
+        typeof(GlobalScriptableObject),
     };
 
     [MenuItem("ECC/Configuration/CreateExcel")]

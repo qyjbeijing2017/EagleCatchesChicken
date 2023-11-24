@@ -41,27 +41,33 @@ public class PlayerMove : PlayerComponent
         }
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("OnColliderEnter");
+    }
+
     public int jumpCount { get; private set; }
 
     public bool isGrounded { get; private set; }
 
     public event Action onJump;
-    public event Action onGrounded;
+    Vector3 m_LastPosition;
 
     void Start()
     {
         if (isLocalPlayer)
         {
+            m_LastPosition = transform.position;
             m_CharacterController = GetComponent<CharacterController>();
             m_PlayerBuff = GetComponent<PlayerBuff>();
             m_PlayerHealth = GetComponent<PlayerHealth>();
             m_InputActions = new PlayerInputAction();
             m_InputActions.Move.Enable();
-            m_InputActions.Move.Jump.performed += OnJump;
+            m_InputActions.Move.Jump.performed += OnInputJump;
         }
     }
 
-    void OnJump(InputAction.CallbackContext context)
+    void OnInputJump(InputAction.CallbackContext context)
     {
         if (m_PlayerBuff.beStunning) return;
         if (m_PlayerHealth.isDead) return;
@@ -95,10 +101,8 @@ public class PlayerMove : PlayerComponent
 
         var moveSpeed = playerConfig.MoveSpeed * m_PlayerBuff.speedMultiplier + m_PlayerBuff.speedAddition;
         var inputVelocity = inputAxis * moveSpeed;
-        m_InputVelocity.x = inputVelocity.x * Time.deltaTime;
-        m_InputVelocity.z = inputVelocity.y * Time.deltaTime;
-        m_MovePosition.x += inputVelocity.x * Time.deltaTime;
-        m_MovePosition.z += inputVelocity.y * Time.deltaTime;
+        m_InputVelocity.x = inputVelocity.x;
+        m_InputVelocity.z = inputVelocity.y;
     }
 
     void InputDirect()
@@ -127,41 +131,36 @@ public class PlayerMove : PlayerComponent
 
     void UseGravity()
     {
-        m_Velocity.y -= globalConfig.Gravity * Time.deltaTime;
-
-        RaycastHit hit;
-        var layerMask = 1 << LayerMask.NameToLayer("Ground");
-        if (Physics.Raycast(transform.position, Vector3.down, out hit, 0.5f, layerMask))
+        if (!m_CharacterController.isGrounded)
         {
-            if (m_Velocity.y < 0)
-                m_Velocity.y = 0;
-            jumpCount = 0;
-            if (!isGrounded)
-            {
-                isGrounded = true;
-                onGrounded?.Invoke();
-            }
-
+            m_Velocity.y -= globalConfig.Gravity * Time.deltaTime;
+            isGrounded = false;
         }
         else
         {
-            isGrounded = false;
+            m_Velocity.y -= 0f;
+            isGrounded = true;
+            jumpCount = 0;
         }
     }
 
+
     void Update()
     {
+        m_MovePosition = Vector3.zero;
+        m_InputVelocity = Vector3.zero;
         if (!isLocalPlayer) return;
         InputMove();
         InputDirect();
         UseGravity();
-        m_CharacterController.Move(m_Velocity * Time.deltaTime + m_MovePosition);
-        m_Velocity = m_CharacterController.velocity - m_MovePosition / Time.deltaTime;
-        var speed = m_Velocity.magnitude - globalConfig.Drag * Time.deltaTime;
-        if (speed < 0) speed = 0;
-        m_Velocity = m_Velocity.normalized * speed;
-        m_MovePosition = Vector3.zero;
-        m_InputVelocity = Vector3.zero;
+        m_CharacterController.Move(m_Velocity * Time.deltaTime + m_MovePosition + m_InputVelocity * Time.deltaTime);
+
+        // m_LastPosition = transform.position;
+    }
+
+    void LateUpdate()
+    {
+
     }
 
 }

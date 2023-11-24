@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccfcc2bb70e99ce4f897067e547feb76, type: 3}
+  m_Name: Attack_BlackBossAttack
+  m_EditorClassIdentifier: 
+  ForMyself: 0
+  TargetLayer:
+    serializedVersion: 2
+    m_Bits: 768
+  AttackRange: {fileID: 11400000, guid: 43ee2e6636de914489df2d435369db4c, type: 2}
+  Damage: 10
+  KnockbackDistance: {x: 0, y: 0, z: 5}
+  KnockbackDuration: 0.3
+  KnockoffInitialVelocity: {x: 0, y: 0, z: 0}
+  KnockoffDuration: 0
+  ShootBullet: {fileID: 0}
+  Buffs: []

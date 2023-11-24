@@ -14,7 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterName: BlackBoss
   Description: "\u9ED1\u56E2\u56E2"
+  Identity: 7
+  MaxHealth: 100
   MoveSpeed: 6
   Mass: 50
   JumpSpeeds:
   - 8
+  Skills:
+  - {fileID: 11400000, guid: cbcdc56e0194bff4494e090bf1d98fa8, type: 2}
+  - {fileID: 11400000, guid: 05ef55c6eef06f040bc2a019e8b1f96a, type: 2}
+  - {fileID: 11400000, guid: dfd6b6f5032c7e540a9a8e8364dfe981, type: 2}
+  - {fileID: 11400000, guid: dfd6b6f5032c7e540a9a8e8364dfe981, type: 2}

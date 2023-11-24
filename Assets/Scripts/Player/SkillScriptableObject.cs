@@ -6,7 +6,7 @@ using System;
 using UnityEditor;
 #endif
 
-[SerializeField]
+[Serializable]
 public struct AttackEvent
 {
     public float time;
@@ -27,7 +27,7 @@ class XLSXAttackEventList : IXLSXFiledAttribute
             {
                 if (str != "")
                 {
-                    str += "|";
+                    str += "\n";
                 }
                 str += $"[{attackEvent.time}]{attackEvent.attack.name}";
             }
@@ -37,7 +37,7 @@ class XLSXAttackEventList : IXLSXFiledAttribute
         reader = (string str) =>
         {
             List<AttackEvent> attackEvents = new List<AttackEvent>();
-            var attackEventStrings = str.Split('|');
+            var attackEventStrings = str.Split('\n');
             if (attackEventStrings.Length == 1 && attackEventStrings[0] == "")
             {
                 return attackEvents;
@@ -64,14 +64,15 @@ class XLSXAttackEventList : IXLSXFiledAttribute
 
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/SkillScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "Skill_", menuName = "ScriptableObjects/SkillScriptableObject", order = 1)]
 #endif
+[XLSXLocal]
 public class SkillScriptableObject : ScriptableObject
 {
     public bool AutoAttack;
     public AttackRangeScriptableObject AutoPrepareRange;
     public AttackRangeScriptableObject AutoAttackRange;
-    public LayerMask AutoTargetLayer;
+    public LayerMask AutoTargetLayer = 1 << 8 | 1 << 9;
     public float Duration;
     public float CoolDown;
 

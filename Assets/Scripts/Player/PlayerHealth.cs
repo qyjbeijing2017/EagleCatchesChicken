@@ -21,6 +21,8 @@ public class PlayerHealth : PlayerComponent
         }
     }
 
+    public float healthPercent => (float)health / playerConfig.MaxHealth;
+
     [SerializeField]
     private Transform m_HealthBar;
     public Transform healthBar => m_HealthBar;

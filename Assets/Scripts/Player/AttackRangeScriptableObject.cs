@@ -8,8 +8,9 @@ public enum AttackRangeType
 }
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "Player", menuName = "ScriptableObjects/AttackRangeScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "AttackRange_", menuName = "ScriptableObjects/AttackRangeScriptableObject", order = 1)]
 #endif
+[XLSXLocal]
 public class AttackRangeScriptableObject : ScriptableObject
 {
     public AttackRangeType AttackRangeType;
