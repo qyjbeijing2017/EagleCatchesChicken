@@ -1,27 +1,43 @@
+using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 
-
+[RequireComponent(typeof(NetworkIdentity))]
 [RequireComponent(typeof(SphereCollider))]
-public class Bullet : MonoBehaviour
+public class Bullet : NetworkBehaviour
 {
     public BulletScriptableObject BulletConfig;
 
     public float StartTime;
 
     public PlayerController Owner;
+    
+
+    [SyncVar]
+    private float m_IsKnockedBackTime;
+    public bool isKnockedBack => m_IsKnockedBackTime > 0;
 
     void OnTriggerEnter(Collider collider)
     {
-        if(collider.gameObject == Owner.gameObject) return;
-        if((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) == 0) Destroy(gameObject);
+        if (collider.gameObject == Owner.gameObject) return;
+        if ((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) == 0) Destroy(gameObject);
         var playerHealth = collider.GetComponent<PlayerHealth>();
         if (playerHealth != null)
         {
-            playerHealth.BeAttacked(BulletConfig, Owner);
+            StartCoroutine(AttackHandler(playerHealth));
         }
     }
+
+    IEnumerator AttackHandler(PlayerHealth health)
+    {
+        health.BeAttacked(BulletConfig, Owner);
+        m_IsKnockedBackTime = BulletConfig.KnockbackDuration;
+        yield return new WaitForSeconds(BulletConfig.KnockbackDuration);
+    }
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +51,13 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(isKnockedBack)
+        {
+            m_IsKnockedBackTime -= Time.deltaTime;
+        } else
+        {
+            transform.position += transform.forward * BulletConfig.Speed * Time.deltaTime;
+        }
         if (Time.time - StartTime > BulletConfig.During)
         {
             Destroy(gameObject);
@@ -43,7 +66,7 @@ public class Bullet : MonoBehaviour
 
     List<PlayerHealth> SomeOneInRange(AttackRangeScriptableObject range, LayerMask mask)
     {
-        if(range == null) return new List<PlayerHealth>();
+        if (range == null) return new List<PlayerHealth>();
         var result = new List<PlayerHealth>();
         var dir = Quaternion.AngleAxis(range.OffsetAngle, Vector3.up) * transform.forward;
         switch (range.AttackRangeType)

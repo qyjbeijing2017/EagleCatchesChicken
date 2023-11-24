@@ -85,29 +85,7 @@ public class PlayerSkill : PlayerComponent
             var attackEvent = attackEvents[i];
             yield return new WaitForSeconds(attackEvent.time - lastTime);
             var attack = attackEvent.attack;
-            if (attack.ForMyself)
-            {
-                m_PlayerHealth.BeAttacked(attack, player);
-            }
-            else
-            {
-                var targets = SomeOneInRange(attack.AttackRange, attack.TargetLayer);
-                foreach (var target in targets)
-                {
-                    target.BeAttacked(attack, player);
-                }
-                m_IsKnockedBackTime = attack.KnockbackDuration;
-                yield return new WaitForSeconds(attack.KnockbackDuration);
-
-            }
-            
-            if(attack.ShootBullet != null) {
-                var bulletConfig = attack.ShootBullet.GetComponent<Bullet>().BulletConfig;
-                var dir = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.forward;
-                var bulletObj = Instantiate(attack.ShootBullet, transform.position + dir * bulletConfig.Size, Quaternion.LookRotation(dir));
-                bulletObj.GetComponent<Bullet>().Owner = player;
-            }
-
+            StartCoroutine(AttackHandler(attack));
             lastTime = attackEvent.time;
         }
 
@@ -197,5 +175,41 @@ public class PlayerSkill : PlayerComponent
     [Server]
     void OnAttack(string magic)
     {
+        var magicSplit = magic.Split(':');
+        var skillNo = int.Parse(magicSplit[0]);
+        var attackNo = int.Parse(magicSplit[1]);
+        var skill = playerConfig.Skills[skillNo];
+        var attack = skill.AttackEvents[attackNo].attack;
+        StartCoroutine(AttackHandler(attack));
+
+    }
+
+    IEnumerator AttackHandler(AttackScriptableObject attack)
+    {
+        if (attack.ForMyself)
+        {
+            m_PlayerHealth.BeAttacked(attack, player);
+        }
+        else
+        {
+            var targets = SomeOneInRange(attack.AttackRange, attack.TargetLayer);
+            foreach (var target in targets)
+            {
+                target.BeAttacked(attack, player);
+            }
+            if (targets.Count > 0)
+            {
+                m_IsKnockedBackTime = attack.KnockbackDuration;
+                yield return new WaitForSeconds(attack.KnockbackDuration);
+            }
+        }
+
+        if (attack.ShootBullet != null)
+        {
+            var bulletConfig = attack.ShootBullet.GetComponent<Bullet>().BulletConfig;
+            var dir = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.forward;
+            var bulletObj = Instantiate(attack.ShootBullet, transform.position + dir * bulletConfig.Size, Quaternion.LookRotation(dir));
+            bulletObj.GetComponent<Bullet>().Owner = player;
+        }
     }
 }

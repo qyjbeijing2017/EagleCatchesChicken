@@ -193,6 +193,15 @@
             "id": "15515805-ec17-4ce5-a81e-a0744f44762e",
             "actions": [
                 {
+                    "name": "Skill0",
+                    "type": "Button",
+                    "id": "b5ec674c-da33-44ec-9bf3-248125d4f596",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Skill1",
                     "type": "Button",
                     "id": "50593476-1320-4404-8655-f53eabba002a",
@@ -251,6 +260,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Skill3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d91d6cd8-745a-48c7-9e90-a8edd7d7c7bc",
+                    "path": "",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill0",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

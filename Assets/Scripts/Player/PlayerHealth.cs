@@ -59,6 +59,10 @@ public class PlayerHealth : PlayerComponent
             m_HealthBar.SetParent(transform);
             m_HealthBar.localPosition = new Vector3(0, 2.8f, 0);
         }
+        if (isServer)
+        {
+            health = playerConfig.MaxHealth;
+        }
     }
 
     [Server]

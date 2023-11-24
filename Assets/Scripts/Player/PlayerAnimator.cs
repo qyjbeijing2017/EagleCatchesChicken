@@ -19,7 +19,7 @@ public class PlayerAnimator : PlayerComponent
         m_PlayerMove.onJump += () => {
             m_Animator.SetTrigger("OnJump");
         };
-        m_PlayerSkill.OnSkill += (index) => m_Animator.SetTrigger($"OnSkill{index + 1}");
+        m_PlayerSkill.OnSkill += (index) => m_Animator.SetTrigger($"OnSkill{index}");
     }
 
     // Update is called once per frame
