@@ -60,6 +60,8 @@ public class XLSXIgnoreAttribute : IXLSXFiledAttribute
     public override bool isReadOnly => true;
     public override bool isWriteOnly => true;
 }
+
+
 #endregion
 
 public class XLSXTools

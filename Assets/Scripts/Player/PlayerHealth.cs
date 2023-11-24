@@ -1,3 +1,4 @@
+using System.Collections;
 using Mirror;
 using UnityEngine;
 
@@ -64,10 +65,16 @@ public class PlayerHealth : PlayerComponent
     public void BeAttacked(IAttack attack, PlayerController owner)
     {
         if (m_IsDead) return;
+        StartCoroutine(HandleAttack(attack, owner));
+    }
+
+    IEnumerator HandleAttack(IAttack attack, PlayerController owner)
+    {
         m_Health -= attack.Damage;
         if (attack.KnockbackDuration > 0)
         {
             m_IsKnockedBackTime = attack.KnockbackDuration;
+            yield return new WaitForSeconds(attack.KnockbackDuration);
             var backWorldPosition = owner.transform.TransformPoint(attack.KnockbackDistance);
             m_PlayerMove.AddMovePosition(backWorldPosition);
         }
@@ -81,6 +88,7 @@ public class PlayerHealth : PlayerComponent
         {
             BuffPool.getSingleton(buff).Get(this.transform.position, this.transform.rotation).StartBuff(m_PlayerBuff, owner);
         }
+        yield return null;
     }
 
     public void Update()

@@ -34,4 +34,4 @@ MonoBehaviour:
     m_RotationOrder: 4
   AttackEvents:
   - time: 0.2
-    attack: {fileID: 0}
+    attack: {fileID: 11400000, guid: f8aa3059129dcd04899aff5a20855c67, type: 2}

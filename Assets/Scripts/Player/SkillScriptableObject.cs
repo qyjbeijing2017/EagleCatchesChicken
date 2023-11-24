@@ -29,7 +29,7 @@ class XLSXAttackEventList : IXLSXFiledAttribute
                 {
                     str += "\n";
                 }
-                str += $"[{attackEvent.time}]{attackEvent.attack.name}";
+                str += $"[{attackEvent.time}]{attackEvent.attack.name.Replace("Attack_", "")}";
             }
             return str;
         };

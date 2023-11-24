@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
+using UnityEditor.Experimental.GraphView;
 public class PlayerSkill : PlayerComponent
 {
     [SerializeField]
@@ -24,6 +25,12 @@ public class PlayerSkill : PlayerComponent
     PlayerInputAction m_InputActions;
 
     public event Action<int> OnSkill;
+
+    private PlayerHealth m_PlayerHealth;
+
+    [SyncVar]
+    private float m_IsKnockedBackTime;
+    public bool isKnockedBack => m_IsKnockedBackTime > 0;
 
     void Start()
     {
@@ -55,6 +62,7 @@ public class PlayerSkill : PlayerComponent
             }
 
         }
+        m_PlayerHealth = GetComponent<PlayerHealth>();
     }
 
     [Command]
@@ -75,14 +83,31 @@ public class PlayerSkill : PlayerComponent
         for (var i = 0; i < attackEvents.Count; ++i)
         {
             var attackEvent = attackEvents[i];
-            if(skill.Duration < attackEvent.time) break;
             yield return new WaitForSeconds(attackEvent.time - lastTime);
             var attack = attackEvent.attack;
-            var targets = SomeOneInRange(attack.AttackRange, attack.TargetLayer);
-            foreach (var target in targets)
+            if (attack.ForMyself)
             {
-                target.BeAttacked(attack, player);
+                m_PlayerHealth.BeAttacked(attack, player);
             }
+            else
+            {
+                var targets = SomeOneInRange(attack.AttackRange, attack.TargetLayer);
+                foreach (var target in targets)
+                {
+                    target.BeAttacked(attack, player);
+                }
+                m_IsKnockedBackTime = attack.KnockbackDuration;
+                yield return new WaitForSeconds(attack.KnockbackDuration);
+
+            }
+            
+            if(attack.ShootBullet != null) {
+                var bulletConfig = attack.ShootBullet.GetComponent<Bullet>().BulletConfig;
+                var dir = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.forward;
+                var bulletObj = Instantiate(attack.ShootBullet, transform.position + dir * bulletConfig.Size, Quaternion.LookRotation(dir));
+                bulletObj.GetComponent<Bullet>().Owner = player;
+            }
+
             lastTime = attackEvent.time;
         }
 
@@ -94,6 +119,11 @@ public class PlayerSkill : PlayerComponent
     void Update()
     {
         if (!isServer) return;
+        if (isKnockedBack)
+        {
+            m_IsKnockedBackTime -= Time.deltaTime;
+        }
+
         for (int i = 0; i < playerConfig.Skills.Count; i++)
         {
             var skill = playerConfig.Skills[i];
@@ -112,6 +142,7 @@ public class PlayerSkill : PlayerComponent
 
     List<PlayerHealth> SomeOneInRange(AttackRangeScriptableObject range, LayerMask mask)
     {
+        if (range == null) return new List<PlayerHealth>();
         var result = new List<PlayerHealth>();
         var dir = Quaternion.AngleAxis(range.OffsetAngle, Vector3.up) * transform.forward;
         switch (range.AttackRangeType)

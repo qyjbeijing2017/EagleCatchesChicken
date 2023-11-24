@@ -8,13 +8,14 @@ public class PlayerAnimator : PlayerComponent
     Animator m_Animator;
     PlayerMove m_PlayerMove;
     PlayerSkill m_PlayerSkill;
+    PlayerHealth m_PlayerHealth;
     // Start is called before the first frame update
     void Start()
     {
         m_Animator = GetComponent<Animator>();
         m_PlayerMove = GetComponent<PlayerMove>();
         m_PlayerSkill = GetComponent<PlayerSkill>();
-
+        m_PlayerHealth = GetComponent<PlayerHealth>();
         m_PlayerMove.onJump += () => {
             m_Animator.SetTrigger("OnJump");
         };
@@ -28,6 +29,14 @@ public class PlayerAnimator : PlayerComponent
         var localVelocity = transform.worldToLocalMatrix * m_PlayerMove.inputVelocity / playerConfig.MoveSpeed;
         if (isLocalPlayer)
         {
+            if (m_PlayerHealth.isKnockedBack || m_PlayerHealth.isKnockedOff)
+            {
+                m_Animator.speed = 0;
+            }
+            else
+            {
+                m_Animator.speed = 1;
+            }
             m_Animator.SetFloat("Forward", localVelocity.z);
             m_Animator.SetFloat("Right", localVelocity.x);
             m_Animator.SetBool("IsGrounded", m_PlayerMove.isGrounded);

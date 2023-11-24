@@ -15,6 +15,12 @@ public class Bullet : MonoBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if(collider.gameObject == Owner.gameObject) return;
+        if((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) == 0) Destroy(gameObject);
+        var playerHealth = collider.GetComponent<PlayerHealth>();
+        if (playerHealth != null)
+        {
+            playerHealth.BeAttacked(BulletConfig, Owner);
+        }
     }
 
     // Start is called before the first frame update
@@ -37,6 +43,7 @@ public class Bullet : MonoBehaviour
 
     List<PlayerHealth> SomeOneInRange(AttackRangeScriptableObject range, LayerMask mask)
     {
+        if(range == null) return new List<PlayerHealth>();
         var result = new List<PlayerHealth>();
         var dir = Quaternion.AngleAxis(range.OffsetAngle, Vector3.up) * transform.forward;
         switch (range.AttackRangeType)

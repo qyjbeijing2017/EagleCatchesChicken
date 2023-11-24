@@ -33,8 +33,7 @@ class XLSXBullet : IXLSXFiledAttribute
                 try
                 {
                     bulletObj = PrefabUtility.SaveAsPrefabAsset(gameObject, bulletPath);
-                }
-                catch (Exception e)
+                } catch (Exception e)
                 {
                     throw e;
                 }
@@ -69,6 +68,8 @@ public class BulletScriptableObject : ScriptableObject, IAttack
     public float During = 10f;
     public float Speed = 10f;
     public float Size = 1f;
+
+    public float OffsetAngle = 0f;
 
     public LayerMask TargetLayer = 1 << 8 | 1 << 9;
     public int Damage = 0;
