@@ -215,15 +215,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             ""id"": ""15515805-ec17-4ce5-a81e-a0744f44762e"",
             ""actions"": [
                 {
-                    ""name"": ""Skill0"",
-                    ""type"": ""Button"",
-                    ""id"": ""b5ec674c-da33-44ec-9bf3-248125d4f596"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Skill1"",
                     ""type"": ""Button"",
                     ""id"": ""50593476-1320-4404-8655-f53eabba002a"",
@@ -255,7 +246,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8eed3358-4837-4c58-a09b-a1b5bf96d147"",
-                    ""path"": ""<Keyboard>/e"",
+                    ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -266,7 +257,7 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e46b7cec-cac1-414f-8ee2-c33cf721028f"",
-                    ""path"": ""<Keyboard>/q"",
+                    ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -284,17 +275,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""Skill3"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""d91d6cd8-745a-48c7-9e90-a8edd7d7c7bc"",
-                    ""path"": """",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Skill0"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -309,7 +289,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Move_Look = m_Move.FindAction("Look", throwIfNotFound: true);
         // Skill
         m_Skill = asset.FindActionMap("Skill", throwIfNotFound: true);
-        m_Skill_Skill0 = m_Skill.FindAction("Skill0", throwIfNotFound: true);
         m_Skill_Skill1 = m_Skill.FindAction("Skill1", throwIfNotFound: true);
         m_Skill_Skill2 = m_Skill.FindAction("Skill2", throwIfNotFound: true);
         m_Skill_Skill3 = m_Skill.FindAction("Skill3", throwIfNotFound: true);
@@ -444,7 +423,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     // Skill
     private readonly InputActionMap m_Skill;
     private List<ISkillActions> m_SkillActionsCallbackInterfaces = new List<ISkillActions>();
-    private readonly InputAction m_Skill_Skill0;
     private readonly InputAction m_Skill_Skill1;
     private readonly InputAction m_Skill_Skill2;
     private readonly InputAction m_Skill_Skill3;
@@ -452,7 +430,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     {
         private @PlayerInputAction m_Wrapper;
         public SkillActions(@PlayerInputAction wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Skill0 => m_Wrapper.m_Skill_Skill0;
         public InputAction @Skill1 => m_Wrapper.m_Skill_Skill1;
         public InputAction @Skill2 => m_Wrapper.m_Skill_Skill2;
         public InputAction @Skill3 => m_Wrapper.m_Skill_Skill3;
@@ -465,9 +442,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_SkillActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_SkillActionsCallbackInterfaces.Add(instance);
-            @Skill0.started += instance.OnSkill0;
-            @Skill0.performed += instance.OnSkill0;
-            @Skill0.canceled += instance.OnSkill0;
             @Skill1.started += instance.OnSkill1;
             @Skill1.performed += instance.OnSkill1;
             @Skill1.canceled += instance.OnSkill1;
@@ -481,9 +455,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
 
         private void UnregisterCallbacks(ISkillActions instance)
         {
-            @Skill0.started -= instance.OnSkill0;
-            @Skill0.performed -= instance.OnSkill0;
-            @Skill0.canceled -= instance.OnSkill0;
             @Skill1.started -= instance.OnSkill1;
             @Skill1.performed -= instance.OnSkill1;
             @Skill1.canceled -= instance.OnSkill1;
@@ -519,7 +490,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     }
     public interface ISkillActions
     {
-        void OnSkill0(InputAction.CallbackContext context);
         void OnSkill1(InputAction.CallbackContext context);
         void OnSkill2(InputAction.CallbackContext context);
         void OnSkill3(InputAction.CallbackContext context);

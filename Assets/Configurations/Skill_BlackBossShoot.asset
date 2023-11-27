@@ -18,15 +18,16 @@ MonoBehaviour:
   AutoTargetLayer:
     serializedVersion: 2
     m_Bits: 0
-  Duration: 3
-  CoolDown: 3
-  Speed:
+  ForceMove: 1
+  Duration: 0.3
+  CoolDown: 0.2
+  DashSpeed:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RotationY:
+  DashRotationY:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2

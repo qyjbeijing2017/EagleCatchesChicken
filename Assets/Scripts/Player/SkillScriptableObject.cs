@@ -72,14 +72,15 @@ public class SkillScriptableObject : ScriptableObject
     public bool AutoAttack;
     public AttackRangeScriptableObject AutoPrepareRange;
     public AttackRangeScriptableObject AutoAttackRange;
-    public LayerMask AutoTargetLayer = 1 << 8 | 1 << 9;
+    public LayerMask AutoTargetLayer = 1 << 8 | 1 << 9 | 1 << 10;
+    public bool ForceMove = true;
     public float Duration;
     public float CoolDown;
 
     [XLSXWriteOnly]
-    public AnimationCurve Speed;
+    public AnimationCurve DashSpeed;
     [XLSXWriteOnly]
-    public AnimationCurve RotationY;
+    public AnimationCurve DashRotationY;
     [XLSXAttackEventList]
     public List<AttackEvent> AttackEvents;
 }

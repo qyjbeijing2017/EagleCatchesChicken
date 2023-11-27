@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using System;
-using UnityEditor.Experimental.GraphView;
+
 public class PlayerSkill : PlayerComponent
 {
     [SerializeField]
@@ -22,11 +22,29 @@ public class PlayerSkill : PlayerComponent
 
     public bool isAnySkillRunning => RunningSkills.Contains(true);
 
+    public bool isForceMoving
+    {
+        get
+        {
+            for (int i = 0; i < playerConfig.Skills.Count; i++)
+            {
+                var skill = playerConfig.Skills[i];
+                if (skill.ForceMove && RunningSkills[i])
+                {
+                    return true;
+                }
+            }
+            return isAnySkillRunning || isKnockedBack;
+        }
+    }
+
+
     PlayerInputAction m_InputActions;
 
     public event Action<int> OnSkill;
 
     private PlayerHealth m_PlayerHealth;
+    private PlayerMove m_PlayerMove;
 
     [SyncVar]
     private float m_IsKnockedBackTime;
@@ -46,8 +64,8 @@ public class PlayerSkill : PlayerComponent
                 {
                     if (IsReady(index))
                     {
-                        SkillExec(index);
                         OnSkill?.Invoke(index);
+                        SkillExec(index);
                     }
                 };
             }
@@ -63,6 +81,7 @@ public class PlayerSkill : PlayerComponent
 
         }
         m_PlayerHealth = GetComponent<PlayerHealth>();
+        m_PlayerMove = GetComponent<PlayerMove>();
     }
 
     [Command]
@@ -70,6 +89,7 @@ public class PlayerSkill : PlayerComponent
     {
         if (!IsReady(skillNo)) return;
         StartCoroutine(SkillRunning(skillNo));
+        StartCoroutine(SkillForceMoving(skillNo));
     }
 
     [Server]
@@ -85,13 +105,32 @@ public class PlayerSkill : PlayerComponent
             var attackEvent = attackEvents[i];
             yield return new WaitForSeconds(attackEvent.time - lastTime);
             var attack = attackEvent.attack;
-            StartCoroutine(AttackHandler(attack));
+            yield return StartCoroutine(AttackHandler(attack));
             lastTime = attackEvent.time;
         }
 
         yield return new WaitForSeconds(skill.Duration - lastTime);
         RunningSkills[skillNo] = false;
         SkillStartCoolDownTimes[skillNo] = Time.time;
+    }
+
+    IEnumerator SkillForceMoving(int skillNo)
+    {
+        var skill = playerConfig.Skills[skillNo];
+        if (!skill.ForceMove) yield break;
+
+        var currentTime = 0.0f;
+
+        while (RunningSkills[skillNo] || isKnockedBack)
+        {
+            var rotateY = skill.DashRotationY.Evaluate(currentTime);
+            var speed = skill.DashSpeed.Evaluate(currentTime);
+            transform.rotation *= Quaternion.AngleAxis(rotateY, Vector3.up);
+            m_PlayerMove.AddMovePosition(transform.forward * speed * Time.deltaTime);
+            yield return null;
+            currentTime += Time.deltaTime;
+        }
+
     }
 
     void Update()
@@ -207,8 +246,9 @@ public class PlayerSkill : PlayerComponent
         if (attack.ShootBullet != null)
         {
             var bulletConfig = attack.ShootBullet.GetComponent<Bullet>().BulletConfig;
-            var dir = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.forward;
-            var bulletObj = Instantiate(attack.ShootBullet, transform.position + dir * bulletConfig.Size, Quaternion.LookRotation(dir));
+            var rotation = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.rotation;
+            var position = transform.position + rotation * bulletConfig.OffsetPosition;
+            var bulletObj = Instantiate(attack.ShootBullet, position, rotation);
             bulletObj.GetComponent<Bullet>().Owner = player;
         }
     }

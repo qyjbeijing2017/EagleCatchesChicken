@@ -27,7 +27,7 @@ public class PlayerAnimator : PlayerComponent
     {
         // Move
         var localVelocity = transform.worldToLocalMatrix * m_PlayerMove.inputVelocity / playerConfig.MoveSpeed;
-        if (isLocalPlayer)
+        if (isLocalPlayer || isOwned || isServer && identity == PlayerIdentity.Dummy)
         {
             if (m_PlayerHealth.isKnockedBack || m_PlayerHealth.isKnockedOff)
             {
@@ -43,9 +43,9 @@ public class PlayerAnimator : PlayerComponent
             for (var i = 0; i < m_PlayerSkill.RunningSkills.Count; i++)
             {
                 if (m_PlayerSkill.RunningSkills[i])
-                    m_Animator.SetBool($"Skill{i + 1}", true);
+                    m_Animator.SetBool($"Skill{i}", true);
                 else
-                    m_Animator.SetBool($"Skill{i + 1}", false);
+                    m_Animator.SetBool($"Skill{i}", false);
             }
         }
     }

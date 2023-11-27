@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Mirror;
@@ -13,7 +14,7 @@ public class Bullet : NetworkBehaviour
     public float StartTime;
 
     public PlayerController Owner;
-    
+
 
     [SyncVar]
     private float m_IsKnockedBackTime;
@@ -22,19 +23,28 @@ public class Bullet : NetworkBehaviour
     void OnTriggerEnter(Collider collider)
     {
         if (collider.gameObject == Owner.gameObject) return;
-        if ((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) == 0) Destroy(gameObject);
-        var playerHealth = collider.GetComponent<PlayerHealth>();
-        if (playerHealth != null)
+        if ((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) != 0)
         {
-            StartCoroutine(AttackHandler(playerHealth));
+            Debug.Log("Hit");
+            var playerHealth = collider.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                StartCoroutine(AttackHandler(playerHealth));
+            }
+
+        } else {
+            Destroy(gameObject);
         }
+
+        return;
     }
 
     IEnumerator AttackHandler(PlayerHealth health)
     {
-        health.BeAttacked(BulletConfig, Owner);
+        health.BeAttacked(BulletConfig, Owner, this);
         m_IsKnockedBackTime = BulletConfig.KnockbackDuration;
         yield return new WaitForSeconds(BulletConfig.KnockbackDuration);
+        Destroy(gameObject);
     }
 
 
@@ -51,10 +61,11 @@ public class Bullet : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(isKnockedBack)
+        if (isKnockedBack)
         {
             m_IsKnockedBackTime -= Time.deltaTime;
-        } else
+        }
+        else
         {
             transform.position += transform.forward * BulletConfig.Speed * Time.deltaTime;
         }

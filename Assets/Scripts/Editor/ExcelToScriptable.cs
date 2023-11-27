@@ -13,6 +13,7 @@ public class ExcelToScriptable : Editor
     static List<Type> s_ScriptableTypes = new List<Type>(){
         typeof(AttackRangeScriptableObject),
         typeof(BuffScriptableObject),
+        typeof(BulletScriptableObject),
         typeof(AttackScriptableObject),
         typeof(SkillScriptableObject),
         typeof(CharacterScriptableObject),

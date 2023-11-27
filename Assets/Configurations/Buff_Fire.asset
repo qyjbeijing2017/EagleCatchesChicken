@@ -12,16 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf69e67d7ead913469ac1ba64621ad58, type: 3}
   m_Name: Buff_Fire
   m_EditorClassIdentifier: 
-  Duration: 3
+  Duration: 0.2
   SpeedMultiplier: 0
   SpeedAddition: 0
   DamageMultiplier: 0
   DamageAddition: 0
   BeHurtMultiplier: 0
   BeHurtAddition: 0
-  BeStunning: 0
-  Interval: 0.3
-  BeDamageOverTime: 10
+  BeStunning: 1
+  Interval: 1
+  BeDamageOverTime: 1
   KnockbackDistance: {x: 0, y: 0, z: 0}
   KnockbackDuration: 0
   KnockoffInitialVelocity: {x: 0, y: 0, z: 0}

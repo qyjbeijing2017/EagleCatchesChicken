@@ -1,6 +1,7 @@
 using System.Collections;
 using Mirror;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 public class PlayerHealth : PlayerComponent
 {
@@ -66,31 +67,36 @@ public class PlayerHealth : PlayerComponent
     }
 
     [Server]
-    public void BeAttacked(IAttack attack, PlayerController owner)
+    public void BeAttacked(IAttack attack, PlayerController owner, Bullet bullet = null)
     {
         if (m_IsDead) return;
-        StartCoroutine(HandleAttack(attack, owner));
+        StartCoroutine(HandleAttack(attack, owner, bullet));
     }
 
-    IEnumerator HandleAttack(IAttack attack, PlayerController owner)
+    IEnumerator HandleAttack(IAttack attack, PlayerController owner, Bullet bullet)
     {
         m_Health -= attack.Damage;
+        var originTransfrom = bullet == null ? owner.transform : bullet.transform;
         if (attack.KnockbackDuration > 0)
         {
             m_IsKnockedBackTime = attack.KnockbackDuration;
             yield return new WaitForSeconds(attack.KnockbackDuration);
-            var backWorldPosition = owner.transform.TransformPoint(attack.KnockbackDistance);
+            var backWorldPosition = originTransfrom.rotation * attack.KnockbackDistance;
             m_PlayerMove.AddMovePosition(backWorldPosition);
         }
         if (attack.KnockoffDuration > 0)
         {
             m_IsKnockedOffTime = attack.KnockoffDuration;
-            var offWorldVelocity = owner.transform.TransformVector(attack.KnockoffInitialVelocity);
+            var offWorldVelocity = originTransfrom.rotation * attack.KnockoffInitialVelocity;
             m_PlayerMove.AddVelocity(offWorldVelocity);
         }
         foreach (var buff in attack.Buffs)
         {
-            BuffPool.getSingleton(buff).Get(this.transform.position, this.transform.rotation).StartBuff(m_PlayerBuff, owner);
+            if(buff == null)
+            {
+                continue;
+            }
+            Instantiate(buff, transform.position, Quaternion.identity).StartBuff(m_PlayerBuff, owner);
         }
         yield return null;
     }

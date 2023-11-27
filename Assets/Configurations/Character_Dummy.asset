@@ -9,9 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 106debccf8bcd854e87bc1abd326fba3, type: 3}
-  m_Name: CharacterList
+  m_Script: {fileID: 11500000, guid: 3660dfd7ca6b59e44a8a45e35c3d8794, type: 3}
+  m_Name: Character_Dummy
   m_EditorClassIdentifier: 
-  Characters:
-  - {fileID: 6161941416334169848, guid: ea8277cd3b9f34a469bca1d722cd3eda, type: 3}
-  - {fileID: 6161941416334169848, guid: bec6dddf05065354291ea30995c4ae3b, type: 3}
+  CharacterName: Dummy
+  Description: Dummy
+  Identity: 10
+  MaxHealth: 100
+  MoveSpeed: 6
+  Mass: 50
+  JumpSpeeds:
+  - 8
+  Skills: []

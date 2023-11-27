@@ -6,10 +6,11 @@ public enum PlayerIdentity
     Eagle = 7,
     Mom = 8,
     Baby = 9,
+    Dummy = 10,
 }
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "Character_", menuName = "ScriptableObjects/PlayerListScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "Character_", menuName = "ScriptableObjects/CharacterScriptableObject", order = 1)]
 #endif
 [XLSXLocal]
 public class CharacterScriptableObject : ScriptableObject

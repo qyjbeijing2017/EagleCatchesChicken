@@ -17,16 +17,17 @@ MonoBehaviour:
   AutoAttackRange: {fileID: 11400000, guid: 6cb77b9c20d4905469643ddf28f203b9, type: 2}
   AutoTargetLayer:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 1792
+  ForceMove: 1
   Duration: 0.4
   CoolDown: 1
-  Speed:
+  DashSpeed:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RotationY:
+  DashRotationY:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2

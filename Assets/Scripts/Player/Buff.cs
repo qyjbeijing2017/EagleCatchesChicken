@@ -66,7 +66,7 @@ public class Buff : NetworkBehaviour
     {
         m_StartTime = -1000;
         m_Target.Buffs.Remove(this);
-        BuffPool.getSingleton(this).Return(this);
+        Destroy(gameObject);
     }
 
     // Start is called before the first frame update

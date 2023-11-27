@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -16,7 +15,12 @@ public class BuffPool : MonoBehaviour
         }
         else
         {
-            var pool = new GameObject($"{buff.name}Pool").AddComponent<BuffPool>();
+            var gameObject = new GameObject($"{buff.name}_Pool", typeof(BuffPool));
+            var pool = gameObject.GetComponent<BuffPool>();
+            if(pool == null)
+            {
+                pool = gameObject.AddComponent<BuffPool>();
+            }
             pool.m_Prefab = buff;
             m_BuffPools.Add(buff, pool);
             return pool;
@@ -79,6 +83,10 @@ public class BuffPool : MonoBehaviour
 
     void OnDestroy()
     {
+        if(m_Prefab == null)
+        {
+            return;
+        }
         if (m_BuffPools.ContainsKey(m_Prefab))
         {
             m_BuffPools.Remove(m_Prefab);

@@ -54,8 +54,7 @@ public class PlayerController : NetworkBehaviour
     void Start()
     {
         identity = PlayerConfig.Identity;
+        gameObject.layer = (int)identity;
     }
-
-
 
 }

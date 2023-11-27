@@ -18,25 +18,26 @@ MonoBehaviour:
   AutoTargetLayer:
     serializedVersion: 2
     m_Bits: 0
+  ForceMove: 1
   Duration: 0.7
-  CoolDown: 5
-  Speed:
+  CoolDown: 1
+  DashSpeed:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 4.3120284
-      outSlope: 4.3120284
+      time: 0.0162351
+      value: 14.984858
+      inSlope: 3.4907765
+      outSlope: 3.4907765
       tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.9203459
-      value: 3.9685578
-      inSlope: 4.3120284
-      outSlope: 4.3120284
+      time: 0.99260604
+      value: 18.39315
+      inSlope: 3.4907765
+      outSlope: 3.4907765
       tangentMode: 34
       weightedMode: 0
       inWeight: 0.33333334
@@ -44,18 +45,9 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RotationY:
+  DashRotationY:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 3.962137
-      outSlope: 3.962137
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0.33333334
+    m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4

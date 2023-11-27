@@ -71,6 +71,9 @@ public class BulletScriptableObject : ScriptableObject, IAttack
 
     public float OffsetAngle = 0f;
 
+    public Vector3 OffsetPosition = new Vector3(0, 1.2f, 2f);
+
+    // [Range((int)PlayerIdentity.Mom, (int)PlayerIdentity.Dummy)]
     public LayerMask TargetLayer = 1 << 8 | 1 << 9;
     public int Damage = 0;
     public Vector3 KnockbackDistance = Vector3.zero;

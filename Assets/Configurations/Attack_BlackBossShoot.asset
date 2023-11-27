@@ -15,11 +15,11 @@ MonoBehaviour:
   ForMyself: 0
   TargetLayer:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 1792
   AttackRange: {fileID: 11400000, guid: 43ee2e6636de914489df2d435369db4c, type: 2}
-  Damage: 10
-  KnockbackDistance: {x: 0, y: 0, z: 5}
-  KnockbackDuration: 0.3
+  Damage: 0
+  KnockbackDistance: {x: 0, y: 0, z: 0}
+  KnockbackDuration: 0
   KnockoffInitialVelocity: {x: 0, y: 0, z: 0}
   KnockoffDuration: 0
   ShootBullet: {fileID: 2117463143745152128, guid: d434f85d31d84704b93ceb3059f6e23b,

@@ -13,7 +13,10 @@ public class PlayerMove : PlayerComponent
     PlayerInputAction m_InputActions;
     PlayerHealth m_PlayerHealth;
     PlayerBuff m_PlayerBuff;
+    PlayerSkill m_PlayerSkill;
+    [SyncVar]
     Vector3 m_Velocity;
+    [SyncVar]
     Vector3 m_MovePosition;
     Vector3 m_InputVelocity;
 
@@ -41,26 +44,28 @@ public class PlayerMove : PlayerComponent
         }
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("OnColliderEnter");
-    }
-
     public int jumpCount { get; private set; }
 
     public bool isGrounded { get; private set; }
 
+    public bool isFreezeInput =>
+    m_PlayerSkill.isKnockedBack ||
+    m_PlayerSkill.isForceMoving ||
+    m_PlayerHealth.isDead ||
+    m_PlayerBuff.beStunning ||
+    m_PlayerHealth.isKnockedBack ||
+    m_PlayerHealth.isKnockedOff;
+
     public event Action onJump;
-    Vector3 m_LastPosition;
 
     void Start()
     {
+        m_CharacterController = GetComponent<CharacterController>();
+        m_PlayerBuff = GetComponent<PlayerBuff>();
+        m_PlayerHealth = GetComponent<PlayerHealth>();
+        m_PlayerSkill = GetComponent<PlayerSkill>();
         if (isLocalPlayer)
         {
-            m_LastPosition = transform.position;
-            m_CharacterController = GetComponent<CharacterController>();
-            m_PlayerBuff = GetComponent<PlayerBuff>();
-            m_PlayerHealth = GetComponent<PlayerHealth>();
             m_InputActions = new PlayerInputAction();
             m_InputActions.Move.Enable();
             m_InputActions.Move.Jump.performed += OnInputJump;
@@ -69,10 +74,7 @@ public class PlayerMove : PlayerComponent
 
     void OnInputJump(InputAction.CallbackContext context)
     {
-        if (m_PlayerBuff.beStunning) return;
-        if (m_PlayerHealth.isDead) return;
-        if (m_PlayerHealth.isKnockedBack) return;
-        if (m_PlayerHealth.isKnockedOff) return;
+        if (isFreezeInput) return;
         if (jumpCount >= playerConfig.JumpSpeeds.Count) return;
         var jumpSpeed = playerConfig.JumpSpeeds[jumpCount];
         m_Velocity.y = jumpSpeed;
@@ -92,10 +94,7 @@ public class PlayerMove : PlayerComponent
 
     void InputMove()
     {
-        if (m_PlayerHealth.isDead) return;
-        if (m_PlayerHealth.isKnockedBack) return;
-        if (m_PlayerHealth.isKnockedOff) return;
-        if (m_PlayerBuff.beStunning) return;
+        if (isFreezeInput) return;
 
         var inputAxis = m_InputActions.Move.Move.ReadValue<Vector2>();
 
@@ -107,10 +106,7 @@ public class PlayerMove : PlayerComponent
 
     void InputDirect()
     {
-        if (m_PlayerHealth.isDead) return;
-        if (m_PlayerHealth.isKnockedBack) return;
-        if (m_PlayerHealth.isKnockedOff) return;
-        if (m_PlayerBuff.beStunning) return;
+        if (isFreezeInput) return;
         var inputForward = m_InputActions.Move.Look.ReadValue<Vector2>();
         if (inputForward.magnitude > 0f)
         {
@@ -147,20 +143,26 @@ public class PlayerMove : PlayerComponent
 
     void Update()
     {
-        m_MovePosition = Vector3.zero;
-        m_InputVelocity = Vector3.zero;
-        if (!isLocalPlayer) return;
-        InputMove();
-        InputDirect();
-        UseGravity();
-        m_CharacterController.Move(m_Velocity * Time.deltaTime + m_MovePosition + m_InputVelocity * Time.deltaTime);
 
-        // m_LastPosition = transform.position;
+        if (isLocalPlayer)
+        {
+            InputMove();
+            InputDirect();
+        }
+        if (isOwned || isServer && identity == PlayerIdentity.Dummy)
+        {
+            UseGravity();
+        }
     }
 
     void LateUpdate()
     {
-
+        if (isOwned || isServer && identity == PlayerIdentity.Dummy)
+        {
+            m_CharacterController.Move(m_Velocity * Time.deltaTime + m_MovePosition + m_InputVelocity * Time.deltaTime);
+            m_MovePosition = Vector3.zero;
+            m_InputVelocity = Vector3.zero;
+        }
     }
 
 }

@@ -20,7 +20,7 @@ class XLSXCharacterList : IXLSXFiledAttribute
             {
                 if (str != "")
                 {
-                    str += "|";
+                    str += "\n";
                 }
                 str += buff.name;
             }
@@ -30,7 +30,7 @@ class XLSXCharacterList : IXLSXFiledAttribute
         reader = (string str) =>
         {
             List<GameObject> buffs = new List<GameObject>();
-            var buffNames = str.Split('|');
+            var buffNames = str.Split('\n');
             if (buffNames.Length == 1 && buffNames[0] == "")
             {
                 return buffs;
@@ -68,7 +68,7 @@ class XLSXCharacterList : IXLSXFiledAttribute
 }
 
 #if UNITY_EDITOR
-[CreateAssetMenu(fileName = "CharacterList", menuName = "ScriptableObjects/PlayerListScriptableObject", order = 1)]
+[CreateAssetMenu(fileName = "CharacterList", menuName = "ScriptableObjects/CharacterListScriptableObject", order = 1)]
 #endif
 public class CharacterListScriptableObject : ScriptableObject
 {
