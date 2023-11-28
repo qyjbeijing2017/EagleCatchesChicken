@@ -64,7 +64,6 @@ public class PlayerSkill : PlayerComponent
                 {
                     if (IsReady(index))
                     {
-                        OnSkill?.Invoke(index);
                         SkillExec(index);
                     }
                 };
@@ -88,6 +87,7 @@ public class PlayerSkill : PlayerComponent
     void SkillExec(int skillNo)
     {
         if (!IsReady(skillNo)) return;
+        OnSkill?.Invoke(skillNo);
         StartCoroutine(SkillRunning(skillNo));
         StartCoroutine(SkillForceMoving(skillNo));
     }
@@ -114,6 +114,21 @@ public class PlayerSkill : PlayerComponent
         SkillStartCoolDownTimes[skillNo] = Time.time;
     }
 
+    private bool isAutoSkillRunning
+    {
+        get
+        {
+            for (int i = 0; i < playerConfig.Skills.Count; i++)
+            {
+                if(RunningSkills[i] && playerConfig.Skills[i].AutoAttack) {
+                    Debug.Log("auto Attack");
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     IEnumerator SkillForceMoving(int skillNo)
     {
         var skill = playerConfig.Skills[skillNo];
@@ -121,8 +136,12 @@ public class PlayerSkill : PlayerComponent
 
         var currentTime = 0.0f;
 
-        while (RunningSkills[skillNo] || isKnockedBack)
+        while (RunningSkills[skillNo])
         {
+            if (isKnockedBack || isAutoSkillRunning) {
+                yield return null;
+                continue;
+            }
             var rotateY = skill.DashRotationY.Evaluate(currentTime);
             var speed = skill.DashSpeed.Evaluate(currentTime);
             transform.rotation *= Quaternion.AngleAxis(rotateY, Vector3.up);
@@ -138,6 +157,7 @@ public class PlayerSkill : PlayerComponent
         if (!isServer) return;
         if (isKnockedBack)
         {
+            Debug.Log("knockback");
             m_IsKnockedBackTime -= Time.deltaTime;
         }
 
@@ -145,14 +165,18 @@ public class PlayerSkill : PlayerComponent
         {
             var skill = playerConfig.Skills[i];
 
-            if (skill.AutoAttack && IsReady(i))
+            if (skill.AutoAttack && IsReady(i) || RunningSkills[i])
             {
                 SkillPreparing[i] = SomeOneInRange(skill.AutoPrepareRange, skill.AutoTargetLayer).Count > 0;
                 if (SkillPreparing[i])
                 {
                     if (SomeOneInRange(skill.AutoAttackRange, skill.AutoTargetLayer).Count > 0)
-                        StartCoroutine(SkillRunning(i));
+                        SkillExec(i);
                 }
+            }
+            else
+            {
+                SkillPreparing[i] = false;
             }
         }
     }

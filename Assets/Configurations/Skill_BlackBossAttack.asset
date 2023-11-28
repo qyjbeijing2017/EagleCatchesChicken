@@ -19,8 +19,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1792
   ForceMove: 1
-  Duration: 0.4
-  CoolDown: 1
+  Duration: 0.5
+  CoolDown: 3
   DashSpeed:
     serializedVersion: 2
     m_Curve: []
@@ -34,5 +34,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   AttackEvents:
-  - time: 0.2
+  - time: 0.1
     attack: {fileID: 11400000, guid: f8aa3059129dcd04899aff5a20855c67, type: 2}

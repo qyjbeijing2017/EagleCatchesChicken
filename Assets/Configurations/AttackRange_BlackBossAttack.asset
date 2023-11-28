@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AttackRangeType: 1
   NearDistance: 0
-  FarDistance: 0
-  SectorAngle: 0
+  FarDistance: 2
+  SectorAngle: 120
   Width: 0
   OffsetAngle: 0

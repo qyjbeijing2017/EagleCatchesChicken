@@ -1,5 +1,6 @@
 using UnityEngine;
 using Mirror;
+using System;
 
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(NetworkAnimator))]
@@ -29,8 +30,9 @@ public class PlayerAnimator : PlayerComponent
         var localVelocity = transform.worldToLocalMatrix * m_PlayerMove.inputVelocity / playerConfig.MoveSpeed;
         if (isLocalPlayer || isOwned || isServer && identity == PlayerIdentity.Dummy)
         {
-            if (m_PlayerHealth.isKnockedBack || m_PlayerHealth.isKnockedOff)
+            if (m_PlayerHealth.isKnockedBack || m_PlayerSkill.isKnockedBack)
             {
+                Debug.Log(gameObject.name);
                 m_Animator.speed = 0;
             }
             else
@@ -46,6 +48,11 @@ public class PlayerAnimator : PlayerComponent
                     m_Animator.SetBool($"Skill{i}", true);
                 else
                     m_Animator.SetBool($"Skill{i}", false);
+
+                if(m_PlayerSkill.SkillPreparing[i])
+                    m_Animator.SetBool($"Skill{i}_Preparing", true);
+                else
+                    m_Animator.SetBool($"Skill{i}_Preparing", false);
             }
         }
     }
