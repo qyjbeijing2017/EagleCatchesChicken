@@ -1,9 +1,9 @@
+using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 #if UNITY_EDITOR
-using System;
 using UnityEditor;
-using System.Collections.Generic;
 #endif
 
 class XLSXBullet : IXLSXFiledAttribute

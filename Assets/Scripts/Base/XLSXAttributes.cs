@@ -66,6 +66,8 @@ public class XLSXIgnoreAttribute : IXLSXFiledAttribute
 
 public class XLSXTools
 {
+
+#if UNITY_EDITOR
     public static string TypeToString(Type t, object instance)
     {
 
@@ -274,7 +276,7 @@ public class XLSXTools
 
         return JsonUtility.FromJson(value, t);
     }
-
+#endif
     public static List<Type> AllTypes()
     {
         var types = typeof(ScriptableObject)

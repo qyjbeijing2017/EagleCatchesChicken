@@ -36,7 +36,7 @@ public partial class NetworkController
         foreach (var assetId in assetIds)
         {
             if (IsRegisteredSpawn(assetId)) continue;
-            var handler = Addressables.LoadAsset<GameObject>(m_NetworkPrefabs.GetInfo(assetId).Path);
+            var handler = Addressables.LoadAssetAsync<GameObject>(m_NetworkPrefabs.GetInfo(assetId).Path);
             yield return handler;
             var obj = handler.Result;
             if (obj == null)

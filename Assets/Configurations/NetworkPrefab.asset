@@ -13,63 +13,15 @@ MonoBehaviour:
   m_Name: NetworkPrefab
   m_EditorClassIdentifier: 
   prefabInfo:
-  - Name: FireBuffExample
-    ID: 2093473897
-    Path: Assets/Prefabs/Buff/FireBuffExample.prefab
-  - Name: IceBuffExample
-    ID: 2737803754
-    Path: Assets/Prefabs/Buff/IceBuffExample.prefab
-  - Name: FireBall
-    ID: 3298020442
-    Path: Assets/Prefabs/Bullet/FireBall.prefab
+  - Name: Fire
+    ID: 1556163566
+    Path: Assets/Prefabs/Buffs/Fire.prefab
+  - Name: BlackBullet
+    ID: 2553873253
+    Path: Assets/Prefabs/Bullets/BlackBullet.prefab
   - Name: BlackBoss
     ID: 3552132377
     Path: Assets/Prefabs/Characters/BlackBoss.prefab
-  - Name: Baby
-    ID: 3019281079
-    Path: Assets/Prefabs/Charactor/Baby.prefab
-  - Name: Character
-    ID: 4133940207
-    Path: Assets/Prefabs/Charactor/Character.prefab
-  - Name: CharacterExample
-    ID: 504623618
-    Path: Assets/Prefabs/Charactor/CharacterExample.prefab
-  - Name: Eagle
-    ID: 3103489466
-    Path: Assets/Prefabs/Charactor/Eagle.prefab
-  - Name: Mom
-    ID: 328946675
-    Path: Assets/Prefabs/Charactor/Mom.prefab
-  - Name: MyTestPlayer
-    ID: 2239586818
-    Path: Assets/Prefabs/Charactor/MyTestPlayer.prefab
-  - Name: Player
-    ID: 2100708268
-    Path: Assets/Prefabs/Charactor/Player.prefab
-  - Name: EmptyPlayer 1
-    ID: 619005188
-    Path: Assets/Prefabs/CharactorV2/EmptyPlayer 1.prefab
-  - Name: EmptyPlayer
-    ID: 320469304
-    Path: Assets/Prefabs/CharactorV2/EmptyPlayer.prefab
-  - Name: BurnBuff
-    ID: 2235642898
-    Path: Assets/Prefabs/Example/BurnBuff.prefab
-  - Name: EagleExample
-    ID: 3555599939
-    Path: Assets/Prefabs/Example/EagleExample.prefab
-  - Name: FireBallEagleExample
-    ID: 1096054513
-    Path: Assets/Prefabs/Example/FireBallEagleExample.prefab
-  - Name: FireBallMomExample
-    ID: 1681392008
-    Path: Assets/Prefabs/Example/FireBallMomExample.prefab
-  - Name: MomExample
-    ID: 3273369817
-    Path: Assets/Prefabs/Example/MomExample.prefab
-  - Name: PlayerExample
-    ID: 749872214
-    Path: Assets/Prefabs/Example/PlayerExample.prefab
-  - Name: SlowDownBuff
-    ID: 1958464012
-    Path: Assets/Prefabs/Example/SlowDownBuff.prefab
+  - Name: Dummy
+    ID: 3751740005
+    Path: Assets/Prefabs/Characters/Dummy.prefab
