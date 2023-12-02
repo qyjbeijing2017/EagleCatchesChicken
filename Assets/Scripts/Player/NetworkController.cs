@@ -38,6 +38,7 @@ public partial class NetworkController : NetworkManager
         }
         InitClientResponsible();
         InitSpawnRegister();
+        yield return StartCoroutine(PerRegister());
 
         // yield return RegisterSpawns(registeredSpawnIds);
         yield return null;

@@ -22,6 +22,7 @@ public class Bullet : NetworkBehaviour
 
     void OnTriggerEnter(Collider collider)
     {
+        if(!isServer) return;
         if (collider.gameObject == Owner.gameObject) return;
         if ((BulletConfig.TargetLayer.value & (1 << collider.gameObject.layer)) != 0)
         {

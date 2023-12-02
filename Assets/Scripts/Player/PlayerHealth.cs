@@ -96,7 +96,9 @@ public class PlayerHealth : PlayerComponent
             {
                 continue;
             }
-            Instantiate(buff, transform.position, Quaternion.identity).StartBuff(m_PlayerBuff, owner);
+            var buffInstance = Instantiate(buff, transform.position, Quaternion.identity);
+            NetworkServer.Spawn(buffInstance.gameObject);
+            buffInstance.StartBuff(m_PlayerBuff, owner);
         }
         yield return null;
     }

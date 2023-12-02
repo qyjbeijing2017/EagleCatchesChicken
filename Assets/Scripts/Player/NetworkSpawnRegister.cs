@@ -11,6 +11,22 @@ public partial class NetworkController
     NetworkPrefabScriptableObject m_NetworkPrefabs;
     HashSet<uint> registeredSpawnIds = new HashSet<uint>();
 
+    IEnumerator PerRegister(){
+        foreach (var prefabInfo in m_NetworkPrefabs.prefabInfo)
+        {
+            var handler = Addressables.LoadAssetAsync<GameObject>(prefabInfo.Path);
+            yield return handler;
+            var obj = handler.Result;
+            if (obj == null)
+            {
+                Debug.LogError($"Can't find Object {prefabInfo.Path}");
+                continue;
+            }
+            NetworkClient.RegisterPrefab(obj);
+            registeredSpawnIds.Add(prefabInfo.ID);
+        }
+    }
+
     void InitSpawnRegister()
     {
         if (playerPrefab != null)

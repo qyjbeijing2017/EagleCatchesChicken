@@ -273,6 +273,7 @@ public class PlayerSkill : PlayerComponent
             var rotation = Quaternion.AngleAxis(bulletConfig.OffsetAngle, Vector3.up) * transform.rotation;
             var position = transform.position + rotation * bulletConfig.OffsetPosition;
             var bulletObj = Instantiate(attack.ShootBullet, position, rotation);
+            NetworkServer.Spawn(bulletObj);
             bulletObj.GetComponent<Bullet>().Owner = player;
         }
     }
