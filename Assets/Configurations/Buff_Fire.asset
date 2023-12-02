@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf69e67d7ead913469ac1ba64621ad58, type: 3}
   m_Name: Buff_Fire
   m_EditorClassIdentifier: 
-  Duration: 0.2
+  Duration: 3
   SpeedMultiplier: 0
   SpeedAddition: 0
   DamageMultiplier: 0
@@ -20,8 +20,8 @@ MonoBehaviour:
   BeHurtMultiplier: 0
   BeHurtAddition: 0
   BeStunning: 1
-  Interval: 1
-  BeDamageOverTime: 1
+  Interval: 0.5
+  BeDamageOverTime: 3
   KnockbackDistance: {x: 0, y: 0, z: 0}
   KnockbackDuration: 0
   KnockoffInitialVelocity: {x: 0, y: 0, z: 0}
