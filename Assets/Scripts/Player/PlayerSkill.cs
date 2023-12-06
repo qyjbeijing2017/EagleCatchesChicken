@@ -6,7 +6,6 @@ using System;
 
 public class PlayerSkill : PlayerComponent
 {
-    [SerializeField]
     public readonly SyncList<bool> RunningSkills = new SyncList<bool>();
     public readonly SyncList<float> SkillStartCoolDownTimes = new SyncList<float>();
     public readonly SyncList<bool> SkillPreparing = new SyncList<bool>();
@@ -50,6 +49,42 @@ public class PlayerSkill : PlayerComponent
     private float m_IsKnockedBackTime;
     public bool isKnockedBack => m_IsKnockedBackTime > 0;
 
+    public override void OnStartClient()
+    {
+        RunningSkills.Callback += OnInventoryUpdated;
+        
+        // Process initial SyncList payload
+        for (int index = 0; index < RunningSkills.Count; index++)
+            OnInventoryUpdated(SyncList<bool>.Operation.OP_ADD, index, false, RunningSkills[index]);
+    }
+
+    void OnInventoryUpdated(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
+    {
+        switch (op)
+        {
+            case SyncList<bool>.Operation.OP_ADD:
+                // index is where it was added into the list
+                // newItem is the new item
+                break;
+            case SyncList<bool>.Operation.OP_INSERT:
+                // index is where it was inserted into the list
+                // newItem is the new item
+                break;
+            case SyncList<bool>.Operation.OP_REMOVEAT:
+                // index is where it was removed from the list
+                // oldItem is the item that was removed
+                break;
+            case SyncList<bool>.Operation.OP_SET:
+                // index is of the item that was changed
+                // oldItem is the previous value for the item at the index
+                // newItem is the new value for the item at the index
+                break;
+            case SyncList<bool>.Operation.OP_CLEAR:
+                // list got cleared
+                break;
+        }
+    }
+
     void Start()
     {
         if (isLocalPlayer)
@@ -83,13 +118,17 @@ public class PlayerSkill : PlayerComponent
         m_PlayerMove = GetComponent<PlayerMove>();
     }
 
-    [Command]
-    void SkillExec(int skillNo)
-    {
+    void SkillExec(int skillNo) {
         if (!IsReady(skillNo)) return;
         OnSkill?.Invoke(skillNo);
-        StartCoroutine(SkillRunning(skillNo));
         StartCoroutine(SkillForceMoving(skillNo));
+        CmdSkillExec(skillNo);
+    }
+
+    [Command]
+    void CmdSkillExec(int skillNo)
+    {
+        StartCoroutine(SkillRunning(skillNo));
     }
 
     [Server]
@@ -133,6 +172,7 @@ public class PlayerSkill : PlayerComponent
     {
         var skill = playerConfig.Skills[skillNo];
         if (!skill.ForceMove) yield break;
+
 
         var currentTime = 0.0f;
 

@@ -13,14 +13,27 @@ public class PlayerAnimator : PlayerComponent
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<NetworkAnimator>().syncDirection = SyncDirection.ClientToServer;
         m_Animator = GetComponent<Animator>();
         m_PlayerMove = GetComponent<PlayerMove>();
         m_PlayerSkill = GetComponent<PlayerSkill>();
         m_PlayerHealth = GetComponent<PlayerHealth>();
         m_PlayerMove.onJump += () => {
             m_Animator.SetTrigger("OnJump");
+            if(isClientOnly) {
+                CmdSetTrigger("OnJump");
+            }
         };
-        m_PlayerSkill.OnSkill += (index) => m_Animator.SetTrigger($"OnSkill{index}");
+        m_PlayerSkill.OnSkill += (index) => {
+            m_Animator.SetTrigger($"OnSkill{index}");
+            if(isClientOnly) {
+                CmdSetTrigger($"OnSkill{index}");
+            }
+        };
+    }
+    [Command]
+    void CmdSetTrigger(string triggerName){
+        m_Animator.SetTrigger(triggerName);
     }
 
     // Update is called once per frame
