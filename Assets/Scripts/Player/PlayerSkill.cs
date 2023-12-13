@@ -6,13 +6,14 @@ using System;
 
 public class PlayerSkill : PlayerComponent
 {
+    [SerializeField]
     public readonly SyncList<bool> RunningSkills = new SyncList<bool>();
-    public readonly SyncList<float> SkillStartCoolDownTimes = new SyncList<float>();
+    public readonly SyncList<float> SkillCoolDowns = new SyncList<float>();
     public readonly SyncList<bool> SkillPreparing = new SyncList<bool>();
 
     public bool IsReady(int index)
     {
-        if (SkillStartCoolDownTimes[index] + playerConfig.Skills[index].CoolDown < Time.time && !RunningSkills[index])
+        if (SkillCoolDowns[index] <= 0 && !RunningSkills[index])
         {
             return true;
         }
@@ -46,45 +47,9 @@ public class PlayerSkill : PlayerComponent
     private PlayerMove m_PlayerMove;
 
     [SyncVar]
+    [SerializeField]
     private float m_IsKnockedBackTime;
     public bool isKnockedBack => m_IsKnockedBackTime > 0;
-
-    public override void OnStartClient()
-    {
-        RunningSkills.Callback += OnInventoryUpdated;
-        
-        // Process initial SyncList payload
-        for (int index = 0; index < RunningSkills.Count; index++)
-            OnInventoryUpdated(SyncList<bool>.Operation.OP_ADD, index, false, RunningSkills[index]);
-    }
-
-    void OnInventoryUpdated(SyncList<bool>.Operation op, int index, bool oldItem, bool newItem)
-    {
-        switch (op)
-        {
-            case SyncList<bool>.Operation.OP_ADD:
-                // index is where it was added into the list
-                // newItem is the new item
-                break;
-            case SyncList<bool>.Operation.OP_INSERT:
-                // index is where it was inserted into the list
-                // newItem is the new item
-                break;
-            case SyncList<bool>.Operation.OP_REMOVEAT:
-                // index is where it was removed from the list
-                // oldItem is the item that was removed
-                break;
-            case SyncList<bool>.Operation.OP_SET:
-                // index is of the item that was changed
-                // oldItem is the previous value for the item at the index
-                // newItem is the new value for the item at the index
-                break;
-            case SyncList<bool>.Operation.OP_CLEAR:
-                // list got cleared
-                break;
-        }
-    }
-
     void Start()
     {
         if (isLocalPlayer)
@@ -109,7 +74,7 @@ public class PlayerSkill : PlayerComponent
             for (int i = 0; i < playerConfig.Skills.Count; i++)
             {
                 RunningSkills.Add(false);
-                SkillStartCoolDownTimes.Add(-1000);
+                SkillCoolDowns.Add(0);
                 SkillPreparing.Add(false);
             }
 
@@ -150,7 +115,7 @@ public class PlayerSkill : PlayerComponent
 
         yield return new WaitForSeconds(skill.Duration - lastTime);
         RunningSkills[skillNo] = false;
-        SkillStartCoolDownTimes[skillNo] = Time.time;
+        SkillCoolDowns[skillNo] = skill.CoolDown;
     }
 
     private bool isAutoSkillRunning
@@ -168,17 +133,32 @@ public class PlayerSkill : PlayerComponent
         }
     }
 
+    [ClientRpc]
+    void RpcSkillExec(int skillNo)
+    {
+        StartCoroutine(SkillRunning(skillNo));
+    }
+
     IEnumerator SkillForceMoving(int skillNo)
     {
         var skill = playerConfig.Skills[skillNo];
         if (!skill.ForceMove) yield break;
 
+        var time = Time.time;
+        while(!RunningSkills[skillNo])
+        {
+            yield return null;
+            if(Time.time - time > 1f) {
+                yield break;
+            }
+        }
+
 
         var currentTime = 0.0f;
-
         while (RunningSkills[skillNo])
         {
             if (isKnockedBack || isAutoSkillRunning) {
+
                 yield return null;
                 continue;
             }
@@ -204,6 +184,10 @@ public class PlayerSkill : PlayerComponent
         for (int i = 0; i < playerConfig.Skills.Count; i++)
         {
             var skill = playerConfig.Skills[i];
+
+            if(SkillCoolDowns[i] > 0) {
+                SkillCoolDowns[i] -= Time.deltaTime;
+            }
 
             if (skill.AutoAttack && IsReady(i) || RunningSkills[i])
             {
