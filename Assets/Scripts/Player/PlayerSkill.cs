@@ -136,7 +136,7 @@ public class PlayerSkill : PlayerComponent
     [ClientRpc]
     void RpcSkillExec(int skillNo)
     {
-        StartCoroutine(SkillRunning(skillNo));
+        SkillExec(skillNo);
     }
 
     IEnumerator SkillForceMoving(int skillNo)
@@ -195,7 +195,7 @@ public class PlayerSkill : PlayerComponent
                 if (SkillPreparing[i])
                 {
                     if (SomeOneInRange(skill.AutoAttackRange, skill.AutoTargetLayer).Count > 0)
-                        SkillExec(i);
+                        RpcSkillExec(i);
                 }
             }
             else
