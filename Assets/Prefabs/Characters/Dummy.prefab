@@ -181,6 +181,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
+  m_IsKnockedBackTime: 0
 --- !u!95 &6296317040733539092
 Animator:
   serializedVersion: 5
