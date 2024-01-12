@@ -97,66 +97,6 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 725576c2d48ec4f2d84a2d3484141850
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCLoading.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 5f7c23c3a8be14623afed283dfd8efb4
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCLoading.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1deaf10fcc0bf4b0bbf52ce634f29484
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCMainMenu.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: f2262474b2b1c4c5f9bac35ed7801608
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCMainMenu.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 1a6e4c98705c9435d92df510719b28f5
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCPlayer.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6ac70ebd5d2c04ea9bde50face30b185
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCPlayer.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 73410b0b0513f4561bff164c68cd06fc
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCPractice.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 605463e7700ff45f7b06319dc67e176d
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCPractice.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 16d6a1a0457ed4f5287f029027202096
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCRoom.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: c802380fe516e441ba1bd74746001e48
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCRoom.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 6eb0b75e04bc544d899799dcbc0edaa0
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCTestHybird.dll.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 8b98141ebd5754aa5b6f8a6a191fdbea
-    m_Address: Assets/HotFix/StandaloneOSXUniversal/ECCTestHybird.pdb.bytes
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: e87f258c327bd544a874b78b0c06f927, type: 2}
   m_SchemaSet:
